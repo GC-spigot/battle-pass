@@ -2,9 +2,9 @@ package io.github.battlepass.objects.quests;
 
 import com.google.common.collect.Sets;
 import io.github.battlepass.objects.quests.variable.Variable;
+import me.hyfe.simplespigot.annotations.Nullable;
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 
 public class Quest {

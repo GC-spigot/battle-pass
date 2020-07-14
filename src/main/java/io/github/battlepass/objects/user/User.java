@@ -2,9 +2,9 @@ package io.github.battlepass.objects.user;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import me.hyfe.simplespigot.annotations.Nullable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.util.Map;
