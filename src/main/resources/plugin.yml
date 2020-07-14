@@ -1,0 +1,46 @@
+name: BattlePass
+version: 3.2.2
+main: io.github.battlepass.BattlePlugin
+api-version: 1.13
+soft-depend:
+  - AdvancedEnchantments
+  - ASkyBlock
+  - AuctionHouse
+  - Bedwars1058
+  - BuildBattle
+  - ChatReaction
+  - ChestShop
+  - Clans
+  - ClueScrolls
+  - CrateReloaded
+  - CratesPlus
+  - CrazyCrates
+  - CrazyEnvoy
+  - DiscordMinecraft
+  - Factions
+  - Jobs
+  - SkillAPI
+  - KoTH
+  - Lands
+  - PlaceholderAPI
+  - MoneyHunters
+  - PlotSquared
+  - ProCosmetics
+  - Shopkeepers
+  - StrikePractice
+  - SuperiorSkyblock2
+  - TheLab
+  - TokenEnchant
+  - USkyBlock
+  - Votifier
+  - LuxuryQuests
+
+commands:
+  battlepass:
+    aliases: [bp, battlep, bpass]
+  battlepassadmin:
+    aliases: [bpa, battlepassa, bpadmin]
+
+permissions:
+  battlepass.admin:
+    description: none

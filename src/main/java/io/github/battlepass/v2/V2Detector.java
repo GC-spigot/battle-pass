@@ -1,0 +1,53 @@
+package io.github.battlepass.v2;
+
+import com.google.common.collect.Sets;
+import io.github.battlepass.BattlePlugin;
+import me.hyfe.simplespigot.text.Text;
+import org.bukkit.Bukkit;
+
+import java.nio.file.Path;
+import java.util.Set;
+import java.util.logging.Level;
+
+public class V2Detector {
+    private final BattlePlugin plugin;
+
+    public V2Detector(BattlePlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public boolean runV2Operations() {
+        if (this.isV2()) {
+            Bukkit.getLogger().log(Level.SEVERE, " ");
+            Bukkit.getLogger().log(Level.SEVERE, " ");
+            Bukkit.getLogger().log(Level.SEVERE, " ");
+            Bukkit.getLogger().log(Level.SEVERE, " ");
+            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4----- [BattlePass v3] -----"));
+            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4 "));
+            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4BattlePass v3 could not load. You have v2 configurations present."));
+            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4 "));
+            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4Please read https://github.com/Hyfe-JavaDebug/battlepass-wiki-v3/wiki/Moving-from-v2--to--v3 for information."));
+            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4As BattlePass v3 is not a drop-in replacement for v2. Join our Discord https://discord.gg/hsedh6n for more help."));
+            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4You can still download v2 from the Version History on Spigot if you're not ready to update yet."));
+            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4 "));
+            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4----- [BattlePass v3] -----"));
+            Bukkit.getLogger().log(Level.SEVERE, " ");
+            Bukkit.getLogger().log(Level.SEVERE, " ");
+            Bukkit.getLogger().log(Level.SEVERE, " ");
+            Bukkit.getLogger().log(Level.SEVERE, " ");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isV2() {
+        Path dataPath = this.plugin.getDataFolder().toPath();
+        Set<Path> checkPaths = Sets.newHashSet(dataPath.resolve("config.yml"), dataPath.resolve("do-not-touch.yml"), dataPath.resolve("menus").resolve("dailymissions-menu.yml"));
+        for (Path path : checkPaths) {
+            if (path.toFile().exists()) {
+                return true;
+            }
+        }
+        return false;
+    }
+}

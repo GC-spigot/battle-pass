@@ -1,0 +1,74 @@
+package io.github.battlepass.menus.menus;
+
+import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.api.BattlePassApi;
+import io.github.battlepass.cache.QuestCache;
+import io.github.battlepass.lang.Lang;
+import io.github.battlepass.menus.UserDependent;
+import io.github.battlepass.menus.service.extensions.PageableConfigMenu;
+import io.github.battlepass.objects.user.User;
+import io.github.battlepass.quests.workers.reset.DailyQuestReset;
+import me.hyfe.simplespigot.config.Config;
+import me.hyfe.simplespigot.item.SpigotItem;
+import me.hyfe.simplespigot.menu.item.MenuItem;
+import me.hyfe.simplespigot.menu.service.MenuService;
+import me.hyfe.simplespigot.tuple.ImmutablePair;
+import org.bukkit.entity.Player;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements UserDependent {
+    private final BattlePassApi api;
+    private final QuestCache questCache;
+    private final DailyQuestReset dailyQuestReset;
+    private final User user;
+    private final Lang lang;
+
+    public QuestOverviewMenu(BattlePlugin plugin, Config config, Player player) {
+        super(plugin, config, player, replacer -> replacer);
+        this.api = plugin.getLocalApi();
+        this.questCache = plugin.getQuestCache();
+        this.dailyQuestReset = plugin.getDailyQuestReset();
+        this.user = plugin.getUserCache().getOrThrow(player.getUniqueId());
+        this.lang = plugin.getLang();
+        this.addUpdater(plugin, 20);
+    }
+
+    @Override
+    public void redraw() {
+        this.drawPageableItems(() -> this.drawConfigItems(replacer -> replacer.set("daily_time_left", this.dailyQuestReset.asString())));
+    }
+
+    @Override
+    public MenuItem pageableItem(Integer weekInt) {
+        boolean isWeekUnlocked = weekInt <= this.api.currentWeek();
+        boolean userBypasses = this.user.bypassesLockedWeeks();
+        return MenuItem
+                .builderOf(SpigotItem
+                        .toItem(this.config, "static-items.".concat(this.config.has("static-items.locked-week-item") && !isWeekUnlocked ? "locked-week" : "week").concat("-item")
+                                , replacer -> replacer
+                                .set("week", weekInt)
+                                .set("status", this.lang.external("week-status-".concat(isWeekUnlocked || userBypasses ? "un" : "").concat("locked")).asString()
+                                        .concat(userBypasses ? " &o&7(&cBYPASSING&7)" : ""))
+                        ))
+                .onClick((menuItem, clickType) -> {
+                    if (isWeekUnlocked || userBypasses) {
+                        WeekMenu weekMenu = new WeekMenu(this.plugin, this.plugin.getConfig("week-menu"), this.player, weekInt);
+                        weekMenu.show();
+                    }
+                })
+                .build();
+    }
+
+    @Override
+    public ImmutablePair<Collection<Integer>, Collection<Integer>> elementalValues() {
+        return ImmutablePair.of(IntStream.range(1, this.questCache.getMaxWeek() + 1).boxed().collect(Collectors.toSet()), MenuService.parseSlots(this, this.config, "week-slots"));
+    }
+
+    @Override
+    public boolean isUserViable() {
+        return this.user != null;
+    }
+}

@@ -1,0 +1,72 @@
+# BattlePass settings.yml
+
+# Do not change this version unless instructed to.
+config-version: 1
+
+# Fill out this information if you are using a database connection (MySQL).
+storage-options:
+  # This will delay the loading of user data for half a second to make sure the server the user came from has saved their data.
+  # Use this if you are using ANY database that is not directly file based. JSON does not need this.
+  bungee-fix: false
+
+  # How many seconds that are between each save, therefore avoiding data loss.
+  auto-save-interval: 180
+
+  # How the plugin stores data. Either JSON (flat file) or MySQL (database).
+  storage-method: JSON
+
+  # The address used for connection.
+  address: localhost
+
+  # Text that is prefixed before the table names
+  prefix: battlePass-
+
+  # The name of the database that BattlePass will use.
+  # You must create this as it will not be automatically generated.
+  database: battlePass
+
+  # The information used to log in.
+  username: battlepassuser
+  password: 'verySafe'
+
+  # These are additional settings for MySQL connections.
+  # You should only change these settings if you know what you're doing.
+  pool-settings:
+    maximum-pool-size: 10
+    minimum-idle: 10
+    maximum-lifetime: 1800000
+    connection-timeout: 5000
+
+  # These properties will most likely not need changing unless you encounter issues.
+  connection-properties:
+
+    # You may want to disable this if you are getting SSL errors,
+    # However, we always recommend you use SSL where possible.
+    useSSL: true
+
+battle-pass-aliases:
+  - 'pass'
+  - 'bp'
+
+# This is provided in seconds, you can not use decimals
+join-message-delay: 5
+
+# Set as [] at the end to disable either.
+whitelisted-worlds: [] # Use the same format as blacklisted worlds if you wish to use whitelisted worlds. You can use both at the same time.
+blacklisted-worlds: # World names where quests cannot be progressed.
+  - 'world_with_no_quests'
+  - 'another_world'
+
+current-season:
+  time-zone: 'Europe/Oslo' # The timezone for week releases to be based off.
+  start-date: '06/06/2020' # This is what all of the week releases are based off. Format: dd/mm/yyyy
+  start-time: '20:00' # The time of day week releases are based off.
+  notification-method: 'action bar & chat' # How notifications will be sent to players. Options: action bar, chat, action bar & chat or none.
+  auto-receive-rewards: false # If this value is set to false players will need to click a reward in the gui to claim it
+  daily-quest-reset-time: '12:00'
+  daily-quest-amount: 9 # Amount of daily quests that will be available at one time
+  daily-quests-enabled: true # If this value is set to false it will disable calculation of daily quests
+  notify-at-percentages: [10, 25, 50, 75, 100]
+  unlocks:
+    require-previous-completion: false # Whether the user must complete all missions in the previous week to start the next week.
+    lock-previous-weeks: false # Whether previous weeks will be locked when a new week is released.
