@@ -58,16 +58,28 @@ public class QuestController {
         return this.getQuestProgress(user, quest);
     }
 
-    public int addQuestProgress(User user, Quest quest, int progress) {
+    /**
+     * Adds progress to a quest and
+     * @param user The user to apply to
+     * @param quest The quest to add progress for
+     * @param progress The amount of progress to add
+     * @param reward Whether to give the player points from this or not (default is no).
+     * @return The new progress of the quest.
+     */
+    public int addQuestProgress(User user, Quest quest, int progress, boolean reward) {
         int initialProgress = this.getQuestProgress(user, quest);
         if (initialProgress < quest.getRequiredProgress()) {
             int modifiedProgress = this.setQuestProgress(user, quest, Math.min(initialProgress + progress, quest.getRequiredProgress()));
-            if (modifiedProgress >= quest.getRequiredProgress()) {
+            if (modifiedProgress >= quest.getRequiredProgress() && reward) {
                 user.updatePoints(current -> current.add(BigInteger.valueOf(quest.getPoints())));
             }
             return modifiedProgress;
         }
         return initialProgress;
+    }
+
+    public int addQuestProgress(User user, Quest quest, int progress) {
+        return this.addQuestProgress(user, quest, progress, false);
     }
 
     private void fillFailedIndexes(User user, Quest quest) {
