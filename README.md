@@ -14,3 +14,7 @@ We're open to people fixing issues, helping add new features or letting us know 
 Trying to compile this? It won't work out of the box because of the massive amount of dependencies we have which we of course won't release, they're premium plugins. You can delete the classes from the quests.quests.external package named {plugin-name}Quests. You will also need to delete them from the QuestRegistry class.
 
 If you want the list of all the plugins in our hidden lib folder, here you go (more may have been added, current as of 14/07/2020): AdvancedEnchantments, AuctionHouse by kludgemonkey, AuctionMaster, AutoSell API, Benzimmer's KoTH/API addon, BossShopPro, BossTM-API-Only, buildbattle, ChatReaction, ChestShop, Clans, CounterStrike-Fr33style, CrateReloaded, CratesPlus, CrazyAuctions, CrazyCrates, CrazyEnvoy, DiscordMinecraft, FactionsUUID, FogusCore, GadgetsMenu, HungerGames by Shanebee, Jobs, KoTH by Subside, MarriageMaster, MoneyHunters, MythicMobs, NuVotifier, PlotSquared, ProCosmetics, ScreamingBedwars, Shopkeepers, SkillAPI, SkyWars by daboross, StrikePractice,  SuperiorSkyblock2, TheLabAPI, TokenEnchantAPI, uSkyBlock, WildStacker.
+
+## About our contributions
+
+If you go to contribution history, you can see I commited all the code here. This is not realistic and at least 75% - 80% of the code is by Hyfe as I simply just moved the code over from a private to a public repo.
