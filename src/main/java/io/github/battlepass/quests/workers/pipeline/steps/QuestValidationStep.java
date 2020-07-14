@@ -57,11 +57,13 @@ public class QuestValidationStep {
             }
             Variable subVariable = quest.getVariable();
             if (!this.controller.isQuestDone(user, quest) && questResult.isEligible(player, subVariable)) {
+                System.out.println("Quest is done & eligible: ".concat(quest.getCategoryId()).concat(" :: ").concat(quest.getId()));
                 int week = Category.stripWeek(quest.getCategoryId());
-                if (!user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
+                boolean isDaily = week == 0;
+                if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
                     continue;
                 }
-                if (this.requirePreviousCompletion && !user.bypassesLockedWeeks()) {
+                if (this.requirePreviousCompletion && !isDaily && !user.bypassesLockedWeeks()) {
                     String targetedCategoryId = "week-" + (week - 1);
                     if (this.questCache.getSubCache().asMap().containsKey(targetedCategoryId)) {
                         boolean failed = false;
@@ -81,7 +83,10 @@ public class QuestValidationStep {
                 this.plugin.runSync(() -> {
                     Bukkit.getPluginManager().callEvent(event);
                 });
-                event.ifNotCancelled(eventConsumer -> this.completionStep.process(user, quest, questProgress, eventConsumer.getProgression(), overrideUpdate));
+                event.ifNotCancelled(eventConsumer -> {
+                    System.out.println("Running progression for ".concat(quest.getCategoryId()).concat(" :: ").concat(quest.getId()).concat(" progressing ").concat(String.valueOf(eventConsumer.getProgression())));
+                    this.completionStep.process(user, quest, questProgress, eventConsumer.getProgression(), overrideUpdate);
+                });
             }
         }
     }
