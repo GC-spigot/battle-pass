@@ -7,6 +7,8 @@ import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.loader.PassLoader;
 import org.bukkit.entity.Player;
 
+import java.math.BigInteger;
+
 public class StatsSub extends BpSubCommand<Player> {
     private final UserCache userCache;
     private final PassLoader passLoader;
@@ -32,10 +34,10 @@ public class StatsSub extends BpSubCommand<Player> {
                 String passDisplayName = this.passLoader.passTypeOfId(userPassId).getName();
                 int tier = user.getTier();
                 int totalPoints = 0;
-                for (int i = 1; i <= tier; i++) {
+                for (int i = 1; i < tier; i++) {
                     totalPoints += this.api.getRequiredPoints(i, userPassId);
                 }
-                int finalTotalPoints = totalPoints;
+                BigInteger finalTotalPoints = user.getPoints().add(new BigInteger(String.valueOf(totalPoints)));
                 this.lang.external("stats-command", replacer -> replacer
                         .set("player", sender.getName())
                         .set("pass_type", passDisplayName)
@@ -43,7 +45,7 @@ public class StatsSub extends BpSubCommand<Player> {
                         .set("tier", tier)
                         .set("points", user.getPoints())
                         .set("required_points", this.api.getRequiredPoints(tier, userPassId))
-                        .set("total_points", finalTotalPoints))
+                        .set("total_points", finalTotalPoints.toString()))
                         .to(sender);
             });
         });
