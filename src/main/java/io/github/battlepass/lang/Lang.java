@@ -2,6 +2,7 @@ package io.github.battlepass.lang;
 
 import com.google.common.collect.Maps;
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.logger.Zone;
 import io.github.battlepass.objects.quests.Quest;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.text.Replace;
@@ -39,26 +40,30 @@ public class Lang {
         this.localLang.put("target-toggle-lock-bypass-off", "&cYou no longer bypass week locks.");
         this.localLang.put("user-data-deleted", "&aYou have successfully deleted %s's data.");
         this.localLang.put("target-user-data-deleted", "&cYour quest data has been wiped.");
+        this.localLang.put("debug-dumped", "&cDumped the debug information to a file called %s");
         this.load();
     }
 
     public void load() {
         Config config = this.plugin.getConfig("lang");
         for (String key : config.keys("", true)) {
-            this.externalLang.put(key, this.getCompatibleString(config, key));
-        }
-        for (String key : config.keys("quests", false)) {
-            this.externalLang.put("quests.".concat(key), this.getCompatibleString(config, "quests.".concat(key)));
+            String value = this.getCompatibleString(config, key);
+            this.externalLang.put(key, value);
+            this.plugin.log(Zone.START, "Loaded lang value '" + key + "' as " + value + ".");
         }
     }
 
     public void reload() {
+        this.plugin.log(Zone.RELOAD, "Reloading Lang.");
         this.externalLang.clear();
+        this.plugin.log(Zone.RELOAD, "Loading Lang.");
         this.load();
     }
 
     public boolean has(String section) {
-        return this.externalLang.containsKey(section);
+        boolean contains = this.externalLang.containsKey(section);
+        this.plugin.log("(LANG) Looked for " + section + "with " + contains + "output.");
+        return contains;
     }
 
     public LangSub of(String section) {

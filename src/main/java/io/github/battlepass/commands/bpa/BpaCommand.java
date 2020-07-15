@@ -17,6 +17,7 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                 new ReloadSub(plugin),
                 new QuestIdsSub(plugin),
                 new DailyQuestIdsSub(plugin),
+                new DebugDumpSub(plugin),
                 new ProgressQuestSub(plugin),
                 new ProgressDailyQuestSub(plugin),
                 new DeleteUserSub(plugin),
@@ -36,6 +37,7 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                 .concat("\n&bBattlePass Admin Help:\n")
                 .concat("/bpa - This page.")
                 .concat("/bpa reload - Reloads all the reloadable files.")
+                .concat("/bpa debug dump - Dumps a debug log with lots of information.")
                 .concat("/bpa set pass <player> <pass type> - Sets a players pass type.")
                 .concat("/bpa set points <player> <points> - Set a players points.")
                 .concat("/bpa give points <player> <points> - Give a player points.")

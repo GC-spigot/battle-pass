@@ -17,6 +17,8 @@ import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.lang.Lang;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.logger.DebugLogger;
+import io.github.battlepass.logger.Zone;
+import io.github.battlepass.logger.containers.LogContainer;
 import io.github.battlepass.menus.MenuFactory;
 import io.github.battlepass.menus.service.MenuIllustrator;
 import io.github.battlepass.objects.user.User;
@@ -170,6 +172,14 @@ public final class BattlePlugin extends SpigotPlugin {
         this.debugLogger.log(message);
     }
 
+    public void log(LogContainer container) {
+        this.debugLogger.log(container);
+    }
+
+    public void log(Zone zone, String message) {
+        this.debugLogger.log(zone, message);
+    }
+
     public void reload() {
         this.getConfigStore().reloadReloadableConfigs();
         this.lang.reload();
@@ -251,6 +261,7 @@ public final class BattlePlugin extends SpigotPlugin {
     }
 
     private void configRelations() {
+        this.log(Zone.START, "Initializing config relations.");
         this.getConfigStore()
                 .config("settings", Path::resolve, true)
                 .config("lang", Path::resolve, true)
@@ -261,6 +272,7 @@ public final class BattlePlugin extends SpigotPlugin {
                 .config("week-menu", (path, name) -> path.resolve("menus").resolve("week"), true)
                 .config("rewards-menu", (path, name) -> path.resolve("menus").resolve("rewards"), true)
                 .common("storage-type", "settings", config -> config.string("storage-options.storage-method"));
+        this.log(Zone.START, "Loading Lang.");
         this.lang = new Lang(this);
     }
 

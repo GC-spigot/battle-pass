@@ -2,6 +2,7 @@ package io.github.battlepass.v2;
 
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.logger.Zone;
 import me.hyfe.simplespigot.text.Text;
 import org.bukkit.Bukkit;
 
@@ -17,6 +18,7 @@ public class V2Detector {
     }
 
     public boolean runV2Operations() {
+        this.plugin.log(Zone.START, "Starting v2 operations.");
         if (this.isV2()) {
             Bukkit.getLogger().log(Level.SEVERE, " ");
             Bukkit.getLogger().log(Level.SEVERE, " ");
@@ -41,13 +43,18 @@ public class V2Detector {
     }
 
     public boolean isV2() {
+        this.plugin.log(Zone.START, "Checking if v2.");
         Path dataPath = this.plugin.getDataFolder().toPath();
         Set<Path> checkPaths = Sets.newHashSet(dataPath.resolve("config.yml"), dataPath.resolve("do-not-touch.yml"), dataPath.resolve("menus").resolve("dailymissions-menu.yml"));
         for (Path path : checkPaths) {
+            this.plugin.log(Zone.START, "Checking path ".concat(path.toAbsolutePath().toString()));
             if (path.toFile().exists()) {
+                this.plugin.log(Zone.START, "v2 path ".concat(path.toAbsolutePath().toString()).concat(" is present."));
                 return true;
             }
+            this.plugin.log(Zone.START, "Path not present.");
         }
+        this.plugin.log(Zone.START, "Concluded, plugin has a low chance of v2 files.");
         return false;
     }
 }

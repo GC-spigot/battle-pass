@@ -1,6 +1,7 @@
 package io.github.battlepass.registry;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.QuestExecutor;
 import io.github.battlepass.quests.quests.external.*;
@@ -15,12 +16,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.logging.Level;
 
 public class QuestRegistry implements Registry {
     private final BattlePlugin plugin;
+    private final Set<String> registeredHooks = Sets.newHashSet();
     private final Map<String, ImmutablePair<AtomicInteger, Integer>> attempts = Maps.newHashMap();
 
     public QuestRegistry(BattlePlugin plugin) {
@@ -105,6 +108,7 @@ public class QuestRegistry implements Registry {
         if (Bukkit.getPluginManager().isPluginEnabled(plugin)) {
             Bukkit.getPluginManager().registerEvents(function.apply(this.plugin), this.plugin);
             Bukkit.getLogger().log(Level.INFO, "Hooked into ".concat(plugin));
+            this.registeredHooks.add(plugin);
             return true;
         }
         this.runRepeatingCheck(plugin, () -> {
@@ -120,6 +124,7 @@ public class QuestRegistry implements Registry {
             if (Bukkit.getPluginManager().getPlugin(plugin).getDescription().getAuthors().contains(author)) {
                 Bukkit.getPluginManager().registerEvents(function.apply(this.plugin), this.plugin);
                 Bukkit.getLogger().log(Level.INFO, "Hooked into ".concat(plugin));
+                this.registeredHooks.add(plugin);
                 return true;
             }
         }
@@ -138,6 +143,7 @@ public class QuestRegistry implements Registry {
             if (versionCheck.apply(version)) {
                 pluginManager.registerEvents(function.apply(this.plugin), this.plugin);
                 Bukkit.getLogger().log(Level.INFO, "Hooked into ".concat(plugin));
+                this.registeredHooks.add(plugin);
             } else {
                 Bukkit.getLogger().log(Level.INFO, plugin.concat(" was present but its version is not supported."));
             }
@@ -160,6 +166,7 @@ public class QuestRegistry implements Registry {
                 if (versionCheck.apply(version)) {
                     pluginManager.registerEvents(function.apply(this.plugin), this.plugin);
                     Bukkit.getLogger().log(Level.INFO, "Hooked into ".concat(plugin));
+                    this.registeredHooks.add(plugin);
                 } else {
                     Bukkit.getLogger().log(Level.INFO, plugin.concat(" was present but its version is not supported."));
                 }
@@ -205,5 +212,9 @@ public class QuestRegistry implements Registry {
             return Double.parseDouble(builder.toString().split(" ")[0]);
         }
         return Double.parseDouble(pluginVersion);
+    }
+
+    public Set<String> getRegisteredHooks() {
+        return this.registeredHooks;
     }
 }
