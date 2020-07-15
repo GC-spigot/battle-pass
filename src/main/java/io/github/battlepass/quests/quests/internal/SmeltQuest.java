@@ -25,7 +25,7 @@ public class SmeltQuest extends QuestExecutor {
         ItemStack currentItem = event.getCurrentItem();
         ItemStack cursorItem = event.getCursor();
 
-        if (!event.getInventory().getType().toString().contains("furnace")
+        if (!event.getInventory().getType().toString().contains("FURNACE")
                 || !event.getSlotType().equals(InventoryType.SlotType.RESULT)
                 || cursorItem == null
                 || currentItem == null) {
