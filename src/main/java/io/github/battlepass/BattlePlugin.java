@@ -4,6 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import io.github.battlepass.actions.Action;
 import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.RewardCache;
@@ -15,9 +16,9 @@ import io.github.battlepass.commands.bpa.BpaCommand;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.lang.Lang;
 import io.github.battlepass.loader.PassLoader;
+import io.github.battlepass.logger.DebugLogger;
 import io.github.battlepass.menus.MenuFactory;
 import io.github.battlepass.menus.service.MenuIllustrator;
-import io.github.battlepass.actions.Action;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.placeholders.PlaceholderApiHook;
 import io.github.battlepass.quests.workers.pipeline.QuestPipeline;
@@ -45,6 +46,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class BattlePlugin extends SpigotPlugin {
     private static BattlePassApi api;
+    private DebugLogger debugLogger;
     private BattlePassApi localApi;
     private PassLoader passLoader;
     private UserCache userCache;
@@ -65,6 +67,7 @@ public final class BattlePlugin extends SpigotPlugin {
 
     @Override
     public void onEnable() {
+        this.debugLogger = new DebugLogger(this);
         V2Detector v2Detector = new V2Detector(this);
         if (v2Detector.runV2Operations()) {
             this.getPluginLoader().disablePlugin(this);
@@ -88,6 +91,10 @@ public final class BattlePlugin extends SpigotPlugin {
 
     public BattlePassApi getLocalApi() {
         return this.localApi;
+    }
+
+    public DebugLogger getDebugLogger() {
+        return this.debugLogger;
     }
 
     public PassLoader getPassLoader() {
@@ -157,6 +164,10 @@ public final class BattlePlugin extends SpigotPlugin {
     public boolean areDailyQuestsEnabled() {
         Config settings = this.getConfig("settings");
         return !settings.has("daily-quests-enabled") || settings.bool("daily-quests-enabled");
+    }
+
+    public void log(String message) {
+        this.debugLogger.log(message);
     }
 
     public void reload() {

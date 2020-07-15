@@ -48,7 +48,7 @@ public class QuestValidationStep {
             return;
         }
         for (Quest quest : quests) {
-            if (!name.equalsIgnoreCase(quest.getType())) { ;
+            if (!name.equalsIgnoreCase(quest.getType())) {
                 continue;
             }
             Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
