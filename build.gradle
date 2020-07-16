@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
-    implementation 'com.github.Hyfe-JavaDebug:simple-spigot:1.0.9.8'
+    implementation 'com.github.Hyfe-JavaDebug:simple-spigot:1.0.9.10'
     compileOnly fileTree(include: ['*.jar'], dir: 'lib') // Add everything in the lib folder.
     compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
     compileOnly 'org.projectlombok:lombok:1.18.12'

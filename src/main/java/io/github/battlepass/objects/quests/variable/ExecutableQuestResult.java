@@ -1,6 +1,5 @@
 package io.github.battlepass.objects.quests.variable;
 
-import me.hyfe.simplespigot.version.ServerVersion;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

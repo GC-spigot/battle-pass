@@ -28,7 +28,7 @@ public class Variable {
         String[] materialSplit = this.root.split(":");
         ItemStack itemStack = MultiMaterial.parseItem(this.root.toUpperCase().replace(":ALL", ":0"));
         this.material = itemStack.getType().toString();
-        this.data = materialSplit.length > 1 ? materialSplit[1].equalsIgnoreCase("all") ? -1 : Byte.parseByte(materialSplit[1]) : 0;
+        this.data = materialSplit.length > 1 ? materialSplit[1].equalsIgnoreCase("all") ? -1 : Byte.parseByte(materialSplit[1]) : (byte) 0; // Casting to byte is an attempted fix
         this.root = materialSplit[0];
     }
 }
