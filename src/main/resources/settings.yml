@@ -47,6 +47,8 @@ storage-options:
 battle-pass-aliases:
   - 'pass'
   - 'bp'
+  - 'bpass'
+  - 'battlep'
 
 # This is provided in seconds, you can not use decimals
 join-message-delay: 5
