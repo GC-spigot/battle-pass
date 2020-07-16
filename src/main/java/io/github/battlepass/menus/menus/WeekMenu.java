@@ -63,8 +63,8 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
         return ImmutablePair.of(this.questCache.getQuests(Category.WEEKLY.id(this.week)).values(), MenuService.parseSlots(this, this.config, "quest-slots"));
     }
 
-    private String getPercentage(int progress, int requiredProgress) {
-        return String.valueOf((progress / requiredProgress) * 100);
+    private String getPercentage(double progress, double requiredProgress) {
+        return String.valueOf((int) ((progress / requiredProgress) * 100));
     }
 
     private String getProgressBar(int progress, int requiredProgress) {

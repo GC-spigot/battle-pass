@@ -73,7 +73,7 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
         return this.user != null;
     }
 
-    private String getPercentage(int progress, int requiredProgress) {
+    private String getPercentage(double progress, double requiredProgress) {
         return String.valueOf((progress / requiredProgress) * 100);
     }
 

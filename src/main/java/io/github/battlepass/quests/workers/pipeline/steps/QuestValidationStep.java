@@ -61,6 +61,11 @@ public class QuestValidationStep {
             }
             Variable subVariable = quest.getVariable();
             if (!this.controller.isQuestDone(user, quest) && questResult.isEligible(player, subVariable)) {
+                String exclusiveTo = quest.getExclusiveTo();
+                if (exclusiveTo != null && ((exclusiveTo.equalsIgnoreCase("premium") && !user.hasPassId("premium")) || exclusiveTo.equalsIgnoreCase("free") && user.hasPassId("premium"))) {
+                    continue;
+                }
+
                 int week = Category.stripWeek(quest.getCategoryId());
                 boolean isDaily = week == 0;
                 if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
@@ -68,7 +73,7 @@ public class QuestValidationStep {
                 }
                 if (this.requirePreviousCompletion && !isDaily && !user.bypassesLockedWeeks()) {
                     String targetedCategoryId = "week-" + (week - 1);
-                    if (this.questCache.getSubCache().asMap().containsKey(targetedCategoryId)) {
+                    if (this.questCache.keySet().contains(targetedCategoryId)) {
                         boolean failed = false;
                         for (Quest requiredQuest : this.questCache.getQuests(targetedCategoryId).values()) {
                             if (!this.controller.isQuestDone(user, requiredQuest)) {
