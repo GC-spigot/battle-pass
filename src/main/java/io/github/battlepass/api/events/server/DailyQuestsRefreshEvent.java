@@ -1,9 +1,9 @@
 package io.github.battlepass.api.events.server;
 
 import io.github.battlepass.objects.quests.Quest;
+import me.hyfe.simplespigot.annotations.NotNull;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -20,7 +20,8 @@ public class DailyQuestsRefreshEvent extends Event {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public @NotNull
+    HandlerList getHandlers() {
         return HANDLER_LIST;
     }
 }

@@ -8,7 +8,7 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.logger.containers.BasicContainer;
 import io.github.battlepass.logger.containers.LogContainer;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import me.hyfe.simplespigot.tuple.ImmutablePair;
 import org.bukkit.Bukkit;
 
 import java.io.File;

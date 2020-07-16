@@ -1,10 +1,10 @@
 package io.github.battlepass.api.events.user;
 
 import io.github.battlepass.objects.user.User;
+import me.hyfe.simplespigot.annotations.NotNull;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -52,7 +52,8 @@ public class UserPassChangeEvent extends Event implements Cancellable {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public @NotNull
+    HandlerList getHandlers() {
         return HANDLER_LIST;
     }
 }
