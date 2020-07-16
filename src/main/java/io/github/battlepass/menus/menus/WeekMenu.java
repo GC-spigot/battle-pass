@@ -64,7 +64,7 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
     }
 
     private String getPercentage(double progress, double requiredProgress) {
-        return String.valueOf((progress / requiredProgress) * 100);
+        return String.valueOf((int) ((progress / requiredProgress) * 100));
     }
 
     private String getProgressBar(int progress, int requiredProgress) {
