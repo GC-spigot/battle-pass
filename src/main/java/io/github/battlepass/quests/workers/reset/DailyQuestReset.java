@@ -68,7 +68,7 @@ public class DailyQuestReset {
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
             this.reset();
             this.start();
-            for (User user : this.plugin.getUserCache().getSubCache().asMap().values()) {
+            for (User user : this.plugin.getUserCache().values()) {
                 Player player = Bukkit.getPlayer(user.getUuid());
                 if (player != null && player.isOnline()) {
                     this.plugin.getLang().external("daily-quest-reset").to(player);

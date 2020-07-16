@@ -68,14 +68,14 @@ public class UserCache extends FutureCache<UUID, User> implements Savable {
 
     public void asyncModifyAll(Consumer<User> consumer) {
         this.plugin.runAsync(() -> {
-            for (User user : this.getSubCache().asMap().values()) {
+            for (User user : this.values()) {
                 consumer.accept(user);
             }
             for (User user : this.storage.loadAll()) {
                 if (user == null) {
                     continue;
                 }
-                if (!this.getSubCache().asMap().containsKey(user.getUuid())) {
+                if (!this.keySet().contains(user.getUuid())) {
                     consumer.accept(user);
                     this.storage.save(user.getUuid().toString(), user);
                 }
@@ -100,7 +100,7 @@ public class UserCache extends FutureCache<UUID, User> implements Savable {
 
     @Override
     public void save() {
-        for (User user : this.getSubCache().asMap().values()) {
+        for (User user : this.values()) {
             this.storage.save(FastUuid.toString(user.getUuid()), user);
         }
     }
