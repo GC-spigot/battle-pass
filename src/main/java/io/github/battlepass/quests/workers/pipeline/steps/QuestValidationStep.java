@@ -55,6 +55,10 @@ public class QuestValidationStep {
             if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
                 continue;
             }
+            int questProgress = this.controller.getQuestProgress(user, quest);
+            if (overrideUpdate && questProgress == progress) {
+                continue;
+            }
             Variable subVariable = quest.getVariable();
             if (!this.controller.isQuestDone(user, quest) && questResult.isEligible(player, subVariable)) {
                 int week = Category.stripWeek(quest.getCategoryId());
@@ -77,7 +81,6 @@ public class QuestValidationStep {
                         }
                     }
                 }
-                int questProgress = this.controller.getQuestProgress(user, quest);
                 UserQuestProgressionEvent event = new UserQuestProgressionEvent(user, quest, progress);
                 this.plugin.runSync(() -> {
                     Bukkit.getPluginManager().callEvent(event);
