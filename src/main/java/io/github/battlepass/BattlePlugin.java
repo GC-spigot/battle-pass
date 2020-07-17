@@ -247,6 +247,7 @@ public final class BattlePlugin extends SpigotPlugin {
         this.userCache.getSubCache().invalidateAll();
         this.resetStorage.save("daily-data", this.dailyQuestReset);
         this.userStorage.closeBack();
+        this.resetStorage.closeBack();
     }
 
     private void placeholders() {
