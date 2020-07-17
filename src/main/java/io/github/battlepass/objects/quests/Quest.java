@@ -11,7 +11,6 @@ public class Quest {
     private final String id;
     private final String categoryId;
     private final String name;
-    private final ItemStack itemStack;
     private final String type;
     private final int requiredProgress;
     private final Variable variable;
@@ -20,6 +19,7 @@ public class Quest {
     private final Set<String> whitelistedWorlds;
     private final Set<String> blacklistedWorlds;
     private final String exclusiveTo;
+    private ItemStack itemStack;
 
     public Quest(String id,
                  String categoryId,
@@ -61,10 +61,6 @@ public class Quest {
         return this.name;
     }
 
-    public ItemStack getItemStack() {
-        return this.itemStack;
-    }
-
     public String getType() {
         return this.type;
     }
@@ -95,5 +91,13 @@ public class Quest {
 
     public String getExclusiveTo() {
         return this.exclusiveTo;
+    }
+
+    public ItemStack getItemStack() {
+        return this.itemStack;
+    }
+
+    public void setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
     }
 }

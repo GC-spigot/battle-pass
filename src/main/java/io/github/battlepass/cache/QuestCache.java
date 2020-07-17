@@ -29,6 +29,7 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
     private final Path dataFolder;
     private final Set<Quest> weeklyQuests = Sets.newHashSet();
     private final Set<String> placeholderTypes = Sets.newHashSet();
+    private boolean questsFinishedLoading = false;
     private int maxWeek = 0;
 
     public QuestCache(BattlePlugin plugin) {
@@ -45,7 +46,12 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
     }
 
     public Quest getQuest(String categoryId, String questId) {
-        return this.getQuests(categoryId).get(questId);
+        Quest output = this.getQuests(categoryId).get(questId);
+        if (!this.questsFinishedLoading) {
+            this.plugin.log("(QuestCache) MAJOR -> getQuest method called before quests finished loading.");
+        }
+        this.plugin.log("(QuestCache) getQuest method returned ".concat(output == null ? "null" : String.valueOf(output)));
+        return output;
     }
 
     public Map<String, Quest> getQuests(String categoryId) {
@@ -77,7 +83,7 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
             AtomicInteger failureCounter = new AtomicInteger();
             for (String key : questsConfig.keys("quests", false)) {
                 Quest quest = this.parseSection(questsConfig, key, id, "quests.".concat(key).concat("."));
-                if (!this.questValidator.checkQuest(quest)) {
+                if (!this.questValidator.checkQuest(quest, failureCounter)) {
                     failureCounter.incrementAndGet();
                     continue;
                 }
@@ -101,6 +107,7 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
             Bukkit.getLogger().info("Finished loading the ".concat(id).concat(" quests. ").concat(failureCounter.intValue() == 0 ? "All quests loaded successfully."
                     : failureCounter.toString().concat(" quests failed to load. See the console for more info.")));
         }
+        this.questsFinishedLoading = true;
     }
 
     private Quest parseSection(Config config, String questId, String categoryId, String section) {

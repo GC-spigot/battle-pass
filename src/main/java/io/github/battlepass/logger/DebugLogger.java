@@ -16,7 +16,6 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -62,11 +61,10 @@ public class DebugLogger {
 
     @SneakyThrows
     public String dump() {
-
         ImmutablePair<String, FileWriter> filePair = this.makeDebugFile();
         FileWriter writer = filePair.getValue();
-        Map<Long, LogContainer> orderedBacklog = Maps.newTreeMap(Collections.reverseOrder());
-        this.backlog.asMap().putAll(orderedBacklog);
+        Map<Long, LogContainer> orderedBacklog = Maps.newTreeMap();
+        orderedBacklog.putAll(this.backlog.asMap());
 
         this.writeRunningInfo(writer);
         for (String line : this.startupLog) {
