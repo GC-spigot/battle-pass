@@ -1,6 +1,8 @@
 package io.github.battlepass.commands.bpa;
 
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.commands.bpa.debugger.DebugDumpSub;
+import io.github.battlepass.commands.bpa.debugger.PlayerDebugDumpSub;
 import io.github.battlepass.commands.bpa.materialsub.MaterialBlockSub;
 import io.github.battlepass.commands.bpa.materialsub.MaterialItemSub;
 import me.hyfe.simplespigot.command.command.SimpleCommand;
@@ -13,11 +15,12 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
         super(plugin, "battlepassadmin", "battlepass.admin", true);
         this.noPermissionLang(sender -> plugin.getLang().external("no-permission").asString());
         this.setSubCommands(
+                new DebugDumpSub(plugin),
+                new PlayerDebugDumpSub(plugin),
                 new BypassLockedQuestsSub(plugin),
                 new ReloadSub(plugin),
                 new QuestIdsSub(plugin),
                 new DailyQuestIdsSub(plugin),
-                new DebugDumpSub(plugin),
                 new ProgressQuestSub(plugin),
                 new ProgressDailyQuestSub(plugin),
                 new DeleteUserSub(plugin),

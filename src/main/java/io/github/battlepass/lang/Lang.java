@@ -62,7 +62,7 @@ public class Lang {
 
     public boolean has(String section) {
         boolean contains = this.externalLang.containsKey(section);
-        this.plugin.log("(LANG) Looked for " + section + "with " + contains + "output.");
+        this.plugin.log("(LANG) Looked for " + section + " with " + contains + "output.");
         return contains;
     }
 

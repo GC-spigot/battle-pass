@@ -4,6 +4,7 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.logger.DebugLogger;
+import io.github.battlepass.logger.containers.LogContainer;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.workers.pipeline.steps.QuestValidationStep;
 import me.hyfe.simplespigot.text.Replacer;
@@ -27,7 +28,7 @@ public class QuestPipeline {
             this.logger.log("(PIPELINE) Player null issue for quest type ".concat(name));
             return;
         }
-        this.logger.log("(PIPELINE) Quest type " + name + " for player " + player.getName() + " has entered the pipeline.");
+        this.logger.log(LogContainer.of("(PIPELINE) Quest type " + name + " for player %s has entered the pipeline.", player));
         this.userCache.get(player.getUniqueId()).thenAccept(maybeUser -> maybeUser.ifPresent(user -> {
             this.questValidationStep.process(player, user, name, progress, questResult, this.questCache.getAllQuests(), overrideUpdate);
         })).exceptionally(ex -> {

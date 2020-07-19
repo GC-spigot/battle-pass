@@ -1,9 +1,7 @@
 package io.github.battlepass.logger;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.logger.containers.BasicContainer;
 import io.github.battlepass.logger.containers.LogContainer;
@@ -16,15 +14,17 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class DebugLogger {
     private final BattlePlugin plugin;
     private final SimpleDateFormat lineTimeFormat = new SimpleDateFormat("[hh:mm:ss]");
-    private final Cache<Long, LogContainer> backlog = CacheBuilder.newBuilder().maximumSize(30000).expireAfterWrite(15, TimeUnit.MINUTES).build();
+    private final Set<LogContainer> backlog = Sets.newConcurrentHashSet();
     private final List<String> startupLog = Lists.newArrayList();
     private final Path debugFolder;
     private boolean startupOccurred = false;
@@ -36,11 +36,11 @@ public class DebugLogger {
     }
 
     public void log(String message) {
-        this.backlog.put(System.currentTimeMillis(), new BasicContainer(message));
+        this.backlog.add(new BasicContainer(message));
     }
 
     public void log(LogContainer logContainer) {
-        this.backlog.put(System.currentTimeMillis(), logContainer);
+        this.backlog.add(logContainer);
     }
 
     public void log(Zone zone, String message) {
@@ -60,19 +60,28 @@ public class DebugLogger {
     }
 
     @SneakyThrows
-    public String dump() {
+    public String dump(Function<LogContainer, Boolean> filterFunction) {
         ImmutablePair<String, FileWriter> filePair = this.makeDebugFile();
         FileWriter writer = filePair.getValue();
-        Map<Long, LogContainer> orderedBacklog = Maps.newTreeMap();
-        orderedBacklog.putAll(this.backlog.asMap());
+        List<LogContainer> orderedBacklog = this.backlog.stream()
+                .sorted(Collections.reverseOrder())
+                .collect(Collectors.toList());
 
         this.writeRunningInfo(writer);
         for (String line : this.startupLog) {
             this.writeLine(writer, line);
         }
         writer.write(System.getProperty("line.separator"));
-        for (Map.Entry<Long, LogContainer> entry : orderedBacklog.entrySet()) {
-            this.writeLine(writer, this.lineTimeFormat.format(new Date(entry.getKey())).concat(" ").concat(entry.getValue().toString()));
+        if (filterFunction != null) {
+            for (LogContainer logContainer : orderedBacklog) {
+                if (filterFunction.apply(logContainer)) {
+                    this.writeLine(writer, this.lineTimeFormat.format(new Date(logContainer.getTime())).concat(" ").concat(logContainer.toString()));
+                }
+            }
+        } else {
+            for (LogContainer logContainer : orderedBacklog) {
+                this.writeLine(writer, this.lineTimeFormat.format(new Date(logContainer.getTime())).concat(" ").concat(logContainer.toString()));
+            }
         }
         writer.close();
         return filePair.getKey();
