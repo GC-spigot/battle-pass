@@ -220,7 +220,6 @@ public final class BattlePlugin extends SpigotPlugin {
 
         this.dailyQuestReset.start();
         this.getSavingController().addSavable(this.userCache, this.getConfig("settings").integer("storage-options.auto-save-interval") * 20);
-        this.placeholders();
 
         this.registerRegistries(
                 new ArgumentRegistry(this),
@@ -238,11 +237,13 @@ public final class BattlePlugin extends SpigotPlugin {
                     new BpaCommand(this),
                     new BpCommand(this)
             );
+            this.placeholders();
         });
     }
 
     private void unload() {
         HandlerList.unregisterAll(this);
+        Bukkit.getScheduler().cancelTasks(this);
         this.userCache.save();
         this.userCache.getSubCache().invalidateAll();
         this.resetStorage.save("daily-data", this.dailyQuestReset);
@@ -253,11 +254,10 @@ public final class BattlePlugin extends SpigotPlugin {
     private void placeholders() {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderApiHook(this).register();
-            return;
         }
-        if (this.placeholderRuns.intValue() < 5) {
+        if (this.placeholderRuns.intValue() < 10) {
             this.placeholderRuns.getAndIncrement();
-            Bukkit.getScheduler().runTaskLater(this, this::placeholders, 200);
+            Bukkit.getScheduler().runTaskLater(this, this::placeholders, 100);
         }
     }
 

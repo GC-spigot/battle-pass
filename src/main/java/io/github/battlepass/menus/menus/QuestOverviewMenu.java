@@ -3,6 +3,7 @@ package io.github.battlepass.menus.menus;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.cache.QuestCache;
+import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.lang.Lang;
 import io.github.battlepass.menus.UserDependent;
 import io.github.battlepass.menus.service.extensions.PageableConfigMenu;
@@ -22,6 +23,7 @@ import java.util.stream.IntStream;
 public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements UserDependent {
     private final BattlePassApi api;
     private final QuestCache questCache;
+    private final QuestController questController;
     private final DailyQuestReset dailyQuestReset;
     private final User user;
     private final Lang lang;
@@ -30,6 +32,7 @@ public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements Us
         super(plugin, config, player, replacer -> replacer);
         this.api = plugin.getLocalApi();
         this.questCache = plugin.getQuestCache();
+        this.questController = plugin.getQuestController();
         this.dailyQuestReset = plugin.getDailyQuestReset();
         this.user = plugin.getUserCache().getOrThrow(player.getUniqueId());
         this.lang = plugin.getLang();
@@ -43,23 +46,39 @@ public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements Us
 
     @Override
     public MenuItem pageableItem(Integer weekInt) {
-        boolean isWeekUnlocked = weekInt <= this.api.currentWeek();
+        boolean isWeekInPast = weekInt <= this.api.currentWeek();
+        boolean isPreviousWeekBlocked = this.isPreviousWeekOptionBlocked();
         boolean userBypasses = this.user.bypassesLockedWeeks();
         return MenuItem
                 .builderOf(SpigotItem
-                        .toItem(this.config, "static-items.".concat(this.config.has("static-items.locked-week-item") && !isWeekUnlocked ? "locked-week" : "week").concat("-item")
+                        .toItem(this.config, "static-items.".concat(this.config.has("static-items.locked-week-item") && !isWeekInPast ? "locked-week" :
+                                        isPreviousWeekBlocked ? "requires-previous-completion" : "week").concat("-item")
                                 , replacer -> replacer
                                 .set("week", weekInt)
-                                .set("status", this.lang.external("week-status-".concat(isWeekUnlocked || userBypasses ? "un" : "").concat("locked")).asString()
+                                .set("status", this.lang.external("week-status-".concat(isWeekInPast && !isPreviousWeekBlocked || userBypasses ? "un" : "").concat("locked")).asString()
                                         .concat(userBypasses ? " &o&7(&cBYPASSING&7)" : ""))
                         ))
                 .onClick((menuItem, clickType) -> {
-                    if (isWeekUnlocked || userBypasses) {
+                    if (isWeekInPast || userBypasses) {
                         WeekMenu weekMenu = new WeekMenu(this.plugin, this.plugin.getConfig("week-menu"), this.player, weekInt);
                         weekMenu.show();
                     }
                 })
                 .build();
+    }
+
+    private boolean isPreviousWeekOptionBlocked() {
+        Config config = this.plugin.getConfig("settings");
+        Config questOverviewConfig = this.plugin.getConfig("quest-overview-menu");
+        if (!config.bool("current-season.unlocks.require-previous-completion") || !questOverviewConfig.has("static-items.requires-previous-completion-item")) {
+            return false;
+        }
+        for (int i = 1; i < this.api.currentWeek(); i++) {
+            if (!this.questController.isWeekDone(this.user, i)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

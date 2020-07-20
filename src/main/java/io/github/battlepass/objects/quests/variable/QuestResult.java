@@ -14,5 +14,7 @@ public interface QuestResult {
 
     QuestResult none();
 
+    String getRoot();
+
     boolean isEligible(Player player, Variable variable);
 }
