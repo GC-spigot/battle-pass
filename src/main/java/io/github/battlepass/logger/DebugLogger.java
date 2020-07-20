@@ -41,6 +41,9 @@ public class DebugLogger {
 
     public void log(LogContainer logContainer) {
         this.backlog.add(logContainer);
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+            this.backlog.remove(logContainer);
+        }, 12000);
     }
 
     public void log(Zone zone, String message) {

@@ -7,6 +7,7 @@ import io.github.battlepass.api.events.user.UserQuestProgressionEvent;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.enums.Category;
+import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.objects.quests.variable.Variable;
@@ -22,6 +23,7 @@ public class QuestValidationStep {
     private final CompletionStep completionStep;
     private final BattlePlugin plugin;
     private final BattlePassApi api;
+    private final PassLoader passLoader;
     private final QuestController controller;
     private final QuestCache questCache;
     private final Set<String> whitelistedWorlds;
@@ -34,6 +36,7 @@ public class QuestValidationStep {
         this.completionStep = new CompletionStep(plugin);
         this.plugin = plugin;
         this.api = plugin.getLocalApi();
+        this.passLoader = plugin.getPassLoader();
         this.controller = plugin.getQuestController();
         this.questCache = plugin.getQuestCache();
         this.whitelistedWorlds = Sets.newHashSet(settings.stringList("whitelisted-worlds"));
@@ -62,7 +65,7 @@ public class QuestValidationStep {
             Variable subVariable = quest.getVariable();
             if (!this.controller.isQuestDone(user, quest) && questResult.isEligible(player, subVariable)) {
                 String exclusiveTo = quest.getExclusiveTo();
-                if (exclusiveTo != null && ((exclusiveTo.equalsIgnoreCase("premium") && !user.hasPassId("premium")) || exclusiveTo.equalsIgnoreCase("free") && user.hasPassId("premium"))) {
+                if (exclusiveTo != null && !exclusiveTo.equalsIgnoreCase(user.getPassId())) {
                     continue;
                 }
 
