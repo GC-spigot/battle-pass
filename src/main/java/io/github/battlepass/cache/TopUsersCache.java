@@ -15,16 +15,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 public class TopUsersCache {
+    private final BattlePlugin plugin;
     private final BattlePassApi api;
     private final UserCache userCache;
     private final DebugLogger debugLogger;
     private final List<StatsUser> topUsers = Lists.newCopyOnWriteArrayList();
-    private final Set<UUID> changedUuids = Sets.newHashSet();
+    private final Set<UUID> changedUuids = Sets.newConcurrentHashSet();
 
     public TopUsersCache(BattlePlugin plugin, Set<UUID> topUsers, Set<UUID> changedUuids) {
+        this.plugin = plugin;
         this.api = plugin.getLocalApi();
         this.userCache = plugin.getUserCache();
         this.debugLogger = plugin.getDebugLogger();
@@ -32,6 +33,7 @@ public class TopUsersCache {
     }
 
     public TopUsersCache(BattlePlugin plugin) {
+        this.plugin = plugin;
         this.api = plugin.getLocalApi();
         this.userCache = plugin.getUserCache();
         this.debugLogger = plugin.getDebugLogger();
@@ -47,24 +49,26 @@ public class TopUsersCache {
     }
 
     private void load(Set<UUID> lastTopUsers, Set<UUID> storedChangedUuids) {
-        long startTime = System.currentTimeMillis();
         storedChangedUuids.addAll(lastTopUsers);
         this.userCache.asyncMassModify(storedChangedUuids, user -> {
             this.topUsers.add(new StatsUser(user.getUuid(), Bukkit.getOfflinePlayer(user.getUuid()).getName(), user.getTier(), user.getPassId(), user.getPoints(), this.getTotalPoints(user)));
         });
-        this.sort();
-        this.cleanup();
-        Bukkit.getLogger().log(Level.INFO, "[BattlePass] Loaded users into the leaderboard in " + (System.currentTimeMillis() - startTime) + "ms (general load).");
+        // TODO because of async, the sort and cleanup is run before the users are inserted. Any onceDone method?
+        // All ordering is done tho.
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+            this.sort();
+            this.cleanup();
+        }, 60);
+        Bukkit.getLogger().log(Level.INFO, "[BattlePass] Loaded users into the leaderboard (general load).");
     }
 
     private void load() {
-        long startTime = System.currentTimeMillis();
         this.userCache.asyncModifyAll(user -> {
             this.topUsers.add(new StatsUser(user.getUuid(), Bukkit.getOfflinePlayer(user.getUuid()).getName(), user.getTier(), user.getPassId(), user.getPoints(), this.getTotalPoints(user)));
         });
         this.sort();
         this.cleanup();
-        Bukkit.getLogger().log(Level.INFO, "[BattlePass] Loaded users into the leaderboard in " + (System.currentTimeMillis() - startTime) + "ms (first time).");
+        Bukkit.getLogger().log(Level.INFO, "[BattlePass] Loaded users into the leaderboard (first time).");
     }
 
     public Set<UUID> getChangedUuids() {
@@ -76,7 +80,11 @@ public class TopUsersCache {
     }
 
     public String getSerializedChangedUuids() {
-        return this.changedUuids.parallelStream().map(UUID::toString).collect(Collectors.joining(";"));
+        StringBuilder builder = new StringBuilder();
+        for (UUID changedUuid : this.changedUuids) {
+            builder.append(changedUuid).append(";");
+        }
+        return builder.toString();
     }
 
     public List<StatsUser> getTopUsers() {
@@ -84,7 +92,11 @@ public class TopUsersCache {
     }
 
     public String getSerializedTopUuids() {
-        return this.topUsers.parallelStream().map(user -> user.getUuid().toString()).collect(Collectors.joining(";"));
+        StringBuilder builder = new StringBuilder();
+        for (StatsUser statsUser : this.topUsers) {
+            builder.append(statsUser.getUuid()).append(";");
+        }
+        return builder.toString();
     }
 
     private void sort() {
@@ -92,8 +104,8 @@ public class TopUsersCache {
     }
 
     private void cleanup() {
-        for (int i = 99; this.topUsers.size() >= i + 1; i++) {
-            this.topUsers.remove(i);
+        while (this.topUsers.size() > 100) {
+            this.topUsers.remove(100);
         }
     }
 
