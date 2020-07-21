@@ -1,6 +1,7 @@
 package io.github.battlepass.cache.listener;
 
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.cache.TopUsersCache;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.lang.Lang;
 import io.github.battlepass.objects.user.User;
@@ -11,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -19,12 +19,14 @@ import java.util.function.Predicate;
 public class ConnectionListener implements Listener {
     private final BattlePlugin plugin;
     private final UserCache userCache;
+    private final TopUsersCache topUsersCache;
     private final Lang lang;
     private final boolean bungeeFix;
 
     public ConnectionListener(BattlePlugin plugin) {
         this.plugin = plugin;
         this.userCache = plugin.getUserCache();
+        this.topUsersCache = plugin.getTopUsersCache();
         this.lang = plugin.getLang();
         this.bungeeFix = plugin.getConfig("settings").bool("storage-options.bungee-fix");
     }
@@ -39,6 +41,7 @@ public class ConnectionListener implements Listener {
         } else {
             this.loadPlayer(player);
         }
+        this.topUsersCache.addChangedUuid(player.getUniqueId());
     }
 
     @EventHandler

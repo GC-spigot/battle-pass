@@ -8,6 +8,7 @@ import io.github.battlepass.actions.Action;
 import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.RewardCache;
+import io.github.battlepass.cache.TopUsersCache;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.cache.listener.ConnectionListener;
 import io.github.battlepass.commands.AliasesListener;
@@ -28,6 +29,7 @@ import io.github.battlepass.quests.workers.reset.DailyQuestReset;
 import io.github.battlepass.registry.ArgumentRegistry;
 import io.github.battlepass.registry.QuestRegistry;
 import io.github.battlepass.storage.DailyQuestStorage;
+import io.github.battlepass.storage.TopUserStorage;
 import io.github.battlepass.storage.UserStorage;
 import io.github.battlepass.v2.V2Detector;
 import me.hyfe.simplespigot.config.Config;
@@ -54,6 +56,7 @@ public final class BattlePlugin extends SpigotPlugin {
     private UserCache userCache;
     private QuestCache questCache;
     private RewardCache rewardCache;
+    private TopUsersCache topUsersCache;
     private QuestPipeline questPipeline;
     private QuestRegistry questRegistry;
     private QuestController questController;
@@ -62,6 +65,7 @@ public final class BattlePlugin extends SpigotPlugin {
     private MenuIllustrator menuIllustrator;
     private Storage<User> userStorage;
     private Storage<DailyQuestReset> resetStorage;
+    private Storage<TopUsersCache> topUserStorage;
     private Cache<String, Map<Integer, Set<Action>>> actionCache;
     private Lang lang;
     private ZonedDateTime seasonStartDate;
@@ -115,6 +119,10 @@ public final class BattlePlugin extends SpigotPlugin {
         return this.rewardCache;
     }
 
+    public TopUsersCache getTopUsersCache() {
+        return this.topUsersCache;
+    }
+
     public QuestPipeline getQuestPipeline() {
         return this.questPipeline;
     }
@@ -145,6 +153,10 @@ public final class BattlePlugin extends SpigotPlugin {
 
     public Storage<DailyQuestReset> getResetStorage() {
         return this.resetStorage;
+    }
+
+    public Storage<TopUsersCache> getTopUserStorage() {
+        return this.topUserStorage;
     }
 
     public Lang getLang() {
@@ -194,11 +206,14 @@ public final class BattlePlugin extends SpigotPlugin {
 
         this.userStorage = new UserStorage(this);
         this.resetStorage = new DailyQuestStorage(this);
+        this.topUserStorage = new TopUserStorage(this);
         this.rewardCache = new RewardCache(this);
         this.passLoader = new PassLoader(this);
         this.questCache = new QuestCache(this);
         this.questController = new QuestController(this);
         this.userCache = new UserCache(this);
+        this.topUsersCache = this.topUserStorage.load("top-users");
+        this.topUsersCache = this.topUsersCache == null ? new TopUsersCache(this) : this.topUsersCache;
         this.menuFactory = new MenuFactory(this);
         this.questRegistry = new QuestRegistry(this);
 
@@ -246,9 +261,11 @@ public final class BattlePlugin extends SpigotPlugin {
         Bukkit.getScheduler().cancelTasks(this);
         this.userCache.save();
         this.userCache.getSubCache().invalidateAll();
+        this.topUserStorage.save("top-users", this.topUsersCache);
         this.resetStorage.save("daily-data", this.dailyQuestReset);
         this.userStorage.closeBack();
         this.resetStorage.closeBack();
+        this.topUserStorage.closeBack();
     }
 
     private void placeholders() {
