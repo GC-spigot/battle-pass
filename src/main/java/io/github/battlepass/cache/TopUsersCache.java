@@ -24,12 +24,12 @@ public class TopUsersCache {
     private final List<StatsUser> topUsers = Lists.newCopyOnWriteArrayList();
     private final Set<UUID> changedUuids = Sets.newConcurrentHashSet();
 
-    public TopUsersCache(BattlePlugin plugin, Set<UUID> topUsers, Set<UUID> changedUuids) {
+    public TopUsersCache(BattlePlugin plugin, Set<UUID> uuidsToLoad) {
         this.plugin = plugin;
         this.api = plugin.getLocalApi();
         this.userCache = plugin.getUserCache();
         this.debugLogger = plugin.getDebugLogger();
-        this.load(topUsers, changedUuids);
+        this.load(uuidsToLoad);
     }
 
     public TopUsersCache(BattlePlugin plugin) {
@@ -48,9 +48,8 @@ public class TopUsersCache {
         return statsUsers;
     }
 
-    private void load(Set<UUID> lastTopUsers, Set<UUID> storedChangedUuids) {
-        storedChangedUuids.addAll(lastTopUsers);
-        this.userCache.asyncMassModify(storedChangedUuids, user -> {
+    private void load(Set<UUID> uuidsToLoad) {
+        this.userCache.asyncMassModify(uuidsToLoad, user -> {
             this.topUsers.add(new StatsUser(user.getUuid(), Bukkit.getOfflinePlayer(user.getUuid()).getName(), user.getTier(), user.getPassId(), user.getPoints(), this.getTotalPoints(user)));
         });
         // TODO because of async, the sort and cleanup is run before the users are inserted. Any onceDone method?
@@ -79,22 +78,17 @@ public class TopUsersCache {
         this.changedUuids.add(uuid);
     }
 
-    public String getSerializedChangedUuids() {
-        StringBuilder builder = new StringBuilder();
-        for (UUID changedUuid : this.changedUuids) {
-            builder.append(changedUuid).append(";");
-        }
-        return builder.toString();
-    }
-
     public List<StatsUser> getTopUsers() {
         return this.topUsers;
     }
 
-    public String getSerializedTopUuids() {
+    public String getSerializedUuids() {
         StringBuilder builder = new StringBuilder();
         for (StatsUser statsUser : this.topUsers) {
             builder.append(statsUser.getUuid()).append(";");
+        }
+        for (UUID changedUuid : this.changedUuids) {
+            builder.append(changedUuid).append(";");
         }
         return builder.toString();
     }

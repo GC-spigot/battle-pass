@@ -22,8 +22,7 @@ public class TopUserStorage extends Storage<TopUsersCache> {
     @Override
     public Serializer<TopUsersCache> serializer() {
         return (cache, json, gson) -> {
-            json.addProperty("top-users", cache.getSerializedTopUuids());
-            json.addProperty("changed-uuids", cache.getSerializedChangedUuids());
+            json.addProperty("stored-uuids", cache.getSerializedUuids());
             return json;
         };
     }
@@ -31,22 +30,15 @@ public class TopUserStorage extends Storage<TopUsersCache> {
     @Override
     public Deserializer<TopUsersCache> deserializer() {
         return (json, gson) -> {
-            String topUsers = json.get("top-users").getAsString();
-            String changedStringUuids = json.get("changed-uuids").getAsString();
+            String serializedUuids = json.get("stored-uuids").getAsString();
 
-            Set<UUID> topUserUuids = Sets.newHashSet();
-            for (String stringUuid : topUsers.split(";")) {
+            Set<UUID> storedUuids = Sets.newHashSet();
+            for (String stringUuid : serializedUuids.split(";")) {
                 if (!(stringUuid.length() < 10)) {
-                    topUserUuids.add(FastUuid.parse(stringUuid));
+                    storedUuids.add(FastUuid.parse(stringUuid));
                 }
             }
-            Set<UUID> changedUuids = Sets.newHashSet();
-            for (String stringUuid : changedStringUuids.split(";")) {
-                if (!(stringUuid.length() < 10)) {
-                    changedUuids.add(FastUuid.parse(stringUuid));
-                }
-            }
-            return new TopUsersCache(this.plugin, topUserUuids, changedUuids);
+            return new TopUsersCache(this.plugin, storedUuids);
         };
     }
 }
