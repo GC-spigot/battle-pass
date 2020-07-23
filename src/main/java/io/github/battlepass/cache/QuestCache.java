@@ -104,8 +104,8 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
                     }
                 }
             }
-            Bukkit.getLogger().info("Finished loading the ".concat(id).concat(" quests. ").concat(failureCounter.intValue() == 0 ? "All quests loaded successfully."
-                    : failureCounter.toString().concat(" quests failed to load. See the console for more info.")));
+            Bukkit.getLogger().info("Finished loading the " + " quests. ".concat(failureCounter.intValue() == 0 ? "All quests loaded successfully."
+                    : failureCounter.toString() + " quests failed to load. See the console for more info."));
         }
         this.questsFinishedLoading = true;
     }
