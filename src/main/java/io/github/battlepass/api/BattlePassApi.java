@@ -54,6 +54,11 @@ public class BattlePassApi {
         return this.rewardCache.get(rewardId);
     }
 
+    public boolean hasSeasonEnded() {
+        ZonedDateTime startTime = this.plugin.getSeasonStartDate();
+        return ZonedDateTime.now().isAfter(startTime.plusWeeks(this.questCache.getMaxWeek()));
+    }
+
     public long currentWeek() {
         ZoneId zoneId = ZoneId.of(this.plugin.getConfig("settings").string("current-season.time-zone"));
         long daysBetween = ChronoUnit.DAYS.between(this.plugin.getSeasonStartDate(), ZonedDateTime.now().withZoneSameInstant(zoneId));

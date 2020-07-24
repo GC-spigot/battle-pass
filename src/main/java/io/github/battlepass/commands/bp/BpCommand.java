@@ -17,7 +17,7 @@ public class BpCommand extends SimpleCommand<Player> {
                 new LicenseSub(plugin),
                 new StatsSub(plugin),
                 new MenuSub(plugin, "portal"),
-                new MenuSub(plugin, "daily"),
+                new MenuSub(plugin, "daily-quests"),
                 new MenuSub(plugin, "quests"),
                 new MenuSub(plugin, "rewards")
         );
