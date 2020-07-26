@@ -11,6 +11,7 @@ soft-depend:
   - ChatReaction
   - ChestShop
   - Clans
+  - Citizens
   - ClueScrolls
   - CrateReloaded
   - CratesPlus
@@ -33,7 +34,9 @@ soft-depend:
   - TokenEnchant
   - USkyBlock
   - Votifier
+  - UltraSkyWars
   - LuxuryQuests
+  - LobbyPresents
 
 commands:
   battlepass:

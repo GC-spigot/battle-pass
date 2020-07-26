@@ -49,16 +49,16 @@ public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements Us
         Config settings = this.plugin.getConfig("settings");
         boolean isWeekInPast = weekInt <= this.api.currentWeek();
         boolean isWeekFuture = weekInt > this.api.currentWeek();
-        boolean isPreviousWeekBlocked = weekInt > 1 && settings.bool("current-season.unlocks.require-previous-completion") && this.config.has("static-items.requires-previous-completion-item") && this.questController.isWeekDone(this.user, weekInt);
+        boolean isPreviousWeekBlocked = isWeekInPast && settings.bool("current-season.unlocks.require-previous-completion") && this.config.has("static-items.requires-previous-completion-item") && this.questController.isWeekDone(this.user, weekInt - 1);
         boolean userBypasses = this.user.bypassesLockedWeeks();
         boolean locked = !userBypasses && (isWeekFuture || isPreviousWeekBlocked);
         return MenuItem.builderOf(SpigotItem.toItem(
                 this.config, "static-items." + (locked ? isWeekFuture ? "locked-week" : "requires-previous-completion" : "week") + "-item", replacer -> replacer
                         .set("week", weekInt)
-                        .set("status", this.lang.external("week-status-".concat(!locked || userBypasses ? "un" : "").concat("locked")).asString()
+                        .set("status", this.lang.external("week-status-".concat(!locked ? "un" : "").concat("locked")).asString()
                                 .concat(userBypasses ? " &o&7(&cBYPASSING&7)" : ""))))
                 .onClick((menuItem, clickType) -> {
-                    if (isWeekInPast || userBypasses) {
+                    if (!locked) {
                         WeekMenu weekMenu = new WeekMenu(this.plugin, this.plugin.getConfig("week-menu"), this.player, weekInt);
                         weekMenu.show();
                     }

@@ -84,7 +84,6 @@ public class QuestRegistry implements Registry {
         this.registerHook("KoTH", SubsideKothQuests::new, "SubSide");
         this.registerHook("MoneyHunters", MoneyHuntersQuests::new);
         this.registerHook("MythicMobs", MythicMobsQuests::new);
-        this.registerHook("Votifier", VotifierQuests::new);
         this.registerHook("PlaceholderApi", PlaceholderApiQuests::new);
         this.registerHook("PlotSquared", PlotSquaredQuests::new);
         this.registerHook("ProCosmetics", ProCosmeticsQuests::new);
@@ -95,7 +94,9 @@ public class QuestRegistry implements Registry {
         this.registerHook("SuperiorSkyblock2", SuperiorSkyblockQuests::new);
         this.registerHook("TheLab", TheLabQuests::new);
         this.registerHook("TokenEnchant", TokenEnchantQuests::new);
+        this.registerHook("UltraSkyWars", UltraSkyWarsQuests::new, "Leonardo0013YT");
         this.registerHook("uSkyBlock", USkyBlockQuests::new);
+        this.registerHook("Votifier", VotifierQuests::new);
     }
 
     @SafeVarargs
