@@ -3,6 +3,7 @@ package io.github.battlepass.quests.workers.reset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.api.events.server.DailyQuestsRefreshEvent;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.UserCache;
@@ -26,6 +27,7 @@ import java.util.function.Function;
 
 public class DailyQuestReset {
     private final BattlePlugin plugin;
+    private final BattlePassApi api;
     private final int amount;
     private final ZoneId timeZone;
     private ZonedDateTime whenReset;
@@ -37,6 +39,7 @@ public class DailyQuestReset {
     public DailyQuestReset(BattlePlugin plugin, Set<Quest> currentQuests, Function<DailyQuestReset, ZonedDateTime> whenReset) {
         Config settings = plugin.getConfig("settings");
         this.plugin = plugin;
+        this.api = plugin.getLocalApi();
         this.questCache = plugin.getQuestCache();
         this.userCache = plugin.getUserCache();
         this.currentQuests = currentQuests;
@@ -59,7 +62,9 @@ public class DailyQuestReset {
     }
 
     public void start() {
-        if (!this.plugin.areDailyQuestsEnabled()) {
+        Config settings = this.plugin.getConfig("settings");
+        String configKey = "season-finished.stop-daily-quests";
+        if (!this.shouldDoDailyQuests()) {
             return;
         }
         if (this.between() <= 0) {
@@ -78,7 +83,7 @@ public class DailyQuestReset {
     }
 
     public void reset() {
-        if (!this.plugin.areDailyQuestsEnabled()) {
+        if (!this.shouldDoDailyQuests()) {
             return;
         }
         this.userCache.asyncModifyAll(user -> user.getQuestStore().asMap().put(Category.DAILY.id(), Maps.newConcurrentMap()));
@@ -112,5 +117,11 @@ public class DailyQuestReset {
     private ZonedDateTime parseTime(ZonedDateTime date, String time) {
         String[] timeSplit = time.split(":");
         return date.withHour(StringUtils.isNumeric(timeSplit[0]) ? Integer.parseInt(timeSplit[0]) : 0).withMinute(timeSplit.length > 1 ? StringUtils.isNumeric(timeSplit[1]) ? Integer.parseInt(timeSplit[1]) : 0 : 0);
+    }
+
+    private boolean shouldDoDailyQuests() {
+        Config settings = this.plugin.getConfig("settings");
+        String configKey = "season-finished.stop-daily-quests";
+        return this.plugin.areDailyQuestsEnabled() && !(this.api.hasSeasonEnded() && settings.has(configKey) && settings.bool(configKey));
     }
 }
