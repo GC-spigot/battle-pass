@@ -1,8 +1,11 @@
 package io.github.battlepass.actions;
 
+import io.github.battlepass.BattlePlugin;
 import me.hyfe.simplespigot.annotations.Nullable;
+import me.hyfe.simplespigot.menu.Menu;
 import me.hyfe.simplespigot.text.Replacer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryHolder;
 
 public abstract class Action {
     protected final String condition;
@@ -28,12 +31,15 @@ public abstract class Action {
         }
     }
 
-    public static void executeSimple(Player player, Iterable<Action> actions, @Nullable Replacer replacer) {
+    public static void executeSimple(Player player, Iterable<Action> actions, @Nullable BattlePlugin plugin, @Nullable Replacer replacer) {
         for (Action action : actions) {
             if (action instanceof MessageAction) {
                 ((MessageAction) action).accept(player, replacer);
             } else if (action instanceof SoundAction) {
                 ((SoundAction) action).accept(player);
+            } else if (action instanceof MenuAction && plugin != null) {
+                InventoryHolder inventoryHolder = player.getOpenInventory().getTopInventory().getHolder();
+                ((MenuAction) action).accept(plugin.getMenuFactory(), inventoryHolder instanceof Menu ? (Menu) inventoryHolder : null, player);
             }
         }
     }

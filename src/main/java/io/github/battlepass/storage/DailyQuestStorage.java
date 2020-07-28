@@ -11,6 +11,7 @@ import me.hyfe.simplespigot.storage.storage.load.Serializer;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DailyQuestStorage extends Storage<DailyQuestReset> {
@@ -35,7 +36,11 @@ public class DailyQuestStorage extends Storage<DailyQuestReset> {
         return (json, gson) -> {
             List<String> currentQuests = gson.fromJson(json.get("current-quests").getAsString(), TypeTokens.findType());
             ZonedDateTime whenReset = ZonedDateTime.parse(json.get("current-date").getAsString());
-            return new DailyQuestReset(this.plugin, currentQuests.stream().map(id -> this.plugin.getQuestCache().getQuest(Category.DAILY.id(), id)).collect(Collectors.toSet()), questReset -> whenReset);
+            return new DailyQuestReset(this.plugin, currentQuests
+                    .stream()
+                    .map(id -> this.plugin.getQuestCache().getQuest(Category.DAILY.id(), id))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet()), questReset -> whenReset);
         };
     }
 }

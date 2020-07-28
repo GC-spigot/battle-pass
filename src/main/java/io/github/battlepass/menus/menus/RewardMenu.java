@@ -93,7 +93,7 @@ public class RewardMenu extends ConfigMenu implements PageMethods, UserDependent
         int iterations = 0;
         for (int slot : this.progressTrackSlots) {
             int tier = (this.page - 1) * this.progressTrackSlots.size() + iterations + 1;
-            if (tier > this.passLoader.getMaxTier() && !drawPastMaxTier) {
+            if (tier > this.passLoader.getMaxTier() && drawPastMaxTier) {
                 this.flush(slot);
             }
             this.item(MenuItem

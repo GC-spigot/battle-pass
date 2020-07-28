@@ -43,6 +43,7 @@ commands:
     description: Well. The main command I guess?
   battlepassadmin:
     aliases: [bpa, battlepassa, bpadmin]
+    permission: battlepass.admin
 
 permissions:
   battlepass.admin:
