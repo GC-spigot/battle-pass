@@ -30,6 +30,8 @@ import io.github.battlepass.registry.QuestRegistry;
 import io.github.battlepass.storage.DailyQuestStorage;
 import io.github.battlepass.storage.UserStorage;
 import io.github.battlepass.v2.V2Detector;
+import io.github.battlepass.validator.DailyQuestValidator;
+import io.github.battlepass.validator.QuestValidator;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.menu.listener.MenuListener;
 import me.hyfe.simplespigot.plugin.SpigotPlugin;
@@ -49,6 +51,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class BattlePlugin extends SpigotPlugin {
     private static BattlePassApi api;
     private DebugLogger debugLogger;
+    private DailyQuestValidator dailyQuestValidator;
+    private QuestValidator questValidator;
     private BattlePassApi localApi;
     private PassLoader passLoader;
     private UserCache userCache;
@@ -97,6 +101,14 @@ public final class BattlePlugin extends SpigotPlugin {
 
     public DebugLogger getDebugLogger() {
         return this.debugLogger;
+    }
+
+    public QuestValidator getQuestValidator() {
+        return this.questValidator;
+    }
+
+    public DailyQuestValidator getDailyQuestValidator() {
+        return this.dailyQuestValidator;
     }
 
     public PassLoader getPassLoader() {
@@ -191,6 +203,9 @@ public final class BattlePlugin extends SpigotPlugin {
     private void load() {
         this.setStorageSettings();
         this.setSeasonStartDate();
+
+        this.questValidator = new QuestValidator();
+        this.dailyQuestValidator = new DailyQuestValidator(this);
 
         this.userStorage = new UserStorage(this);
         this.resetStorage = new DailyQuestStorage(this);

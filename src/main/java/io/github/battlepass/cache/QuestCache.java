@@ -34,7 +34,7 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
 
     public QuestCache(BattlePlugin plugin) {
         this.plugin = plugin;
-        this.questValidator = new QuestValidator();
+        this.questValidator = plugin.getQuestValidator();
         this.notifyAt = Sets.newHashSet(plugin.getConfig("settings").list("current-season.notify-at-percentages"));
         this.dataFolder = plugin.getDataFolder().toPath();
     }

@@ -4,6 +4,7 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.enums.Category;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.quests.workers.reset.DailyQuestReset;
+import io.github.battlepass.validator.DailyQuestValidator;
 import me.hyfe.simplespigot.json.TypeTokens;
 import me.hyfe.simplespigot.storage.storage.Storage;
 import me.hyfe.simplespigot.storage.storage.load.Deserializer;
@@ -11,15 +12,16 @@ import me.hyfe.simplespigot.storage.storage.load.Serializer;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DailyQuestStorage extends Storage<DailyQuestReset> {
     private final BattlePlugin plugin;
+    private final DailyQuestValidator validator;
 
     public DailyQuestStorage(BattlePlugin plugin) {
         super(plugin, factory -> factory.create(plugin.getConfigStore().commons().get("storageMethod"), path -> path.resolve("misc-storage")));
         this.plugin = plugin;
+        this.validator = plugin.getDailyQuestValidator();
     }
 
     @Override
@@ -39,7 +41,7 @@ public class DailyQuestStorage extends Storage<DailyQuestReset> {
             return new DailyQuestReset(this.plugin, currentQuests
                     .stream()
                     .map(id -> this.plugin.getQuestCache().getQuest(Category.DAILY.id(), id))
-                    .filter(Objects::nonNull)
+                    .filter(this.validator::checkQuest)
                     .collect(Collectors.toSet()), questReset -> whenReset);
         };
     }
