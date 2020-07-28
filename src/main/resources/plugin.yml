@@ -1,5 +1,5 @@
 name: BattlePass
-version: 3.2.5
+version: 3.3
 main: io.github.battlepass.BattlePlugin
 api-version: 1.13
 soft-depend:
@@ -11,6 +11,7 @@ soft-depend:
   - ChatReaction
   - ChestShop
   - Clans
+  - Citizens
   - ClueScrolls
   - CrateReloaded
   - CratesPlus
@@ -33,13 +34,16 @@ soft-depend:
   - TokenEnchant
   - USkyBlock
   - Votifier
+  - UltraSkyWars
   - LuxuryQuests
+  - LobbyPresents
 
 commands:
   battlepass:
     description: Well. The main command I guess?
   battlepassadmin:
     aliases: [bpa, battlepassa, bpadmin]
+    permission: battlepass.admin
 
 permissions:
   battlepass.admin:

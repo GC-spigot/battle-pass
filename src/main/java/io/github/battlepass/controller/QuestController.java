@@ -30,6 +30,9 @@ public class QuestController {
     public boolean isWeekDone(User user, int week) {
         String categoryId = "week-".concat(String.valueOf(week));
         Map<String, Integer> weekQuests = this.getQuests(user, categoryId);
+        if (weekQuests == null) {
+            return true;
+        }
         for (Map.Entry<String, Integer> entry : weekQuests.entrySet()) {
             Quest quest = this.questCache.getQuest(categoryId, entry.getKey());
             if (entry.getValue() < quest.getRequiredProgress()) {

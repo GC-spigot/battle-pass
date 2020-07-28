@@ -30,7 +30,7 @@ quests:
   3: # Quest id
     name: 'Week 3 - Premium Social' # The name given to the quest.
     type: chat # The type of quest
-    variable: coal_ore:0 # The block the player must break.
+    variable: none # The block the player must break.
     required-progress: 150 # The amount of times the player should break the coal ore block.
     points: 10 # The amount of points that will be rewarded
     exclusive: premium

@@ -29,13 +29,13 @@ public class CompletionStep {
         this.lang = plugin.getLang();
     }
 
-    public void process(User user, Quest quest, int totalProgress, int progressIncrement, boolean overrideUpdate) {
+    public void process(User user, Quest quest, int originalProgress, int progressIncrement, boolean overrideUpdate) {
         Optional<Player> maybePlayer = Optional.ofNullable(Bukkit.getPlayer(user.getUuid()));
         int newTotalProgress = Math.min(progressIncrement, quest.getRequiredProgress());
         int updatedProgress = overrideUpdate ? this.controller.setQuestProgress(user, quest, newTotalProgress) : this.controller.addQuestProgress(user, quest, newTotalProgress);
         String methodType = this.settingsConfig.string("current-season.notification-method");
         for (int notifyAt : quest.getNotifyAt()) {
-            if (updatedProgress == notifyAt || (notifyAt > totalProgress && notifyAt < updatedProgress)) {
+            if (updatedProgress == notifyAt || (notifyAt > originalProgress && notifyAt < updatedProgress)) {
                 String message = this.lang.questProgressedMessage(quest, updatedProgress);
                 maybePlayer.ifPresent(player -> {
                     if (methodType.contains("chat")) {

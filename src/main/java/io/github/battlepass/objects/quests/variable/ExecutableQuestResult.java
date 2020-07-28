@@ -47,6 +47,11 @@ public class ExecutableQuestResult implements QuestResult {
     }
 
     @Override
+    public String getRoot() {
+        return this.material == null ? this.root : this.material + ":" + this.data;
+    }
+
+    @Override
     public boolean isEligible(Player player, Variable variable) {
         boolean noVariableRoot = variable.getRoot().equalsIgnoreCase("none");
         if (noVariableRoot) {

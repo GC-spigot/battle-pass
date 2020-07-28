@@ -25,9 +25,9 @@ public class AliasesListener implements Listener {
         for (String alias : this.lqAliases) {
             if (arguments[0].equalsIgnoreCase(alias)) {
                 event.setCancelled(true);
-                String preparedArguments = Arrays
+                String preparedArguments = arguments.length > 1 ? Arrays
                         .stream(arguments, 1, arguments.length)
-                        .collect(Collectors.joining(" "));
+                        .collect(Collectors.joining(" ")) : "";
                 player.performCommand("battlepass ".concat(preparedArguments));
                 break;
             }

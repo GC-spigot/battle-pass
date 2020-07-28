@@ -41,6 +41,7 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                 .concat("/bpa - This page.")
                 .concat("/bpa reload - Reloads all the reloadable files.")
                 .concat("/bpa debug dump - Dumps a debug log with lots of information.")
+                .concat("/bpa debug dump <playerName> - Dumps a debug log with player pertinent information.")
                 .concat("/bpa set pass <player> <pass type> - Sets a players pass type.")
                 .concat("/bpa set points <player> <points> - Set a players points.")
                 .concat("/bpa give points <player> <points> - Give a player points.")

@@ -19,6 +19,7 @@ public class MenuFactory {
         switch (menuName) {
             case "portal":
                 return new PortalMenu(this.plugin, this.plugin.getConfig("portal-menu"), player);
+            case "daily":
             case "daily-quests":
                 return new DailyQuestsMenu(this.plugin, this.plugin.getConfig("daily-quests-menu"), player);
             case "rewards":

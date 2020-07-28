@@ -30,6 +30,8 @@ import io.github.battlepass.registry.QuestRegistry;
 import io.github.battlepass.storage.DailyQuestStorage;
 import io.github.battlepass.storage.UserStorage;
 import io.github.battlepass.v2.V2Detector;
+import io.github.battlepass.validator.DailyQuestValidator;
+import io.github.battlepass.validator.QuestValidator;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.menu.listener.MenuListener;
 import me.hyfe.simplespigot.plugin.SpigotPlugin;
@@ -49,6 +51,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class BattlePlugin extends SpigotPlugin {
     private static BattlePassApi api;
     private DebugLogger debugLogger;
+    private DailyQuestValidator dailyQuestValidator;
+    private QuestValidator questValidator;
     private BattlePassApi localApi;
     private PassLoader passLoader;
     private UserCache userCache;
@@ -97,6 +101,14 @@ public final class BattlePlugin extends SpigotPlugin {
 
     public DebugLogger getDebugLogger() {
         return this.debugLogger;
+    }
+
+    public QuestValidator getQuestValidator() {
+        return this.questValidator;
+    }
+
+    public DailyQuestValidator getDailyQuestValidator() {
+        return this.dailyQuestValidator;
     }
 
     public PassLoader getPassLoader() {
@@ -192,6 +204,9 @@ public final class BattlePlugin extends SpigotPlugin {
         this.setStorageSettings();
         this.setSeasonStartDate();
 
+        this.questValidator = new QuestValidator();
+        this.dailyQuestValidator = new DailyQuestValidator(this);
+
         this.userStorage = new UserStorage(this);
         this.resetStorage = new DailyQuestStorage(this);
         this.rewardCache = new RewardCache(this);
@@ -220,7 +235,6 @@ public final class BattlePlugin extends SpigotPlugin {
 
         this.dailyQuestReset.start();
         this.getSavingController().addSavable(this.userCache, this.getConfig("settings").integer("storage-options.auto-save-interval") * 20);
-        this.placeholders();
 
         this.registerRegistries(
                 new ArgumentRegistry(this),
@@ -238,11 +252,13 @@ public final class BattlePlugin extends SpigotPlugin {
                     new BpaCommand(this),
                     new BpCommand(this)
             );
+            this.placeholders();
         });
     }
 
     private void unload() {
         HandlerList.unregisterAll(this);
+        Bukkit.getScheduler().cancelTasks(this);
         this.userCache.save();
         this.userCache.getSubCache().invalidateAll();
         this.resetStorage.save("daily-data", this.dailyQuestReset);
@@ -253,11 +269,10 @@ public final class BattlePlugin extends SpigotPlugin {
     private void placeholders() {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderApiHook(this).register();
-            return;
         }
-        if (this.placeholderRuns.intValue() < 5) {
+        if (this.placeholderRuns.intValue() < 10) {
             this.placeholderRuns.getAndIncrement();
-            Bukkit.getScheduler().runTaskLater(this, this::placeholders, 200);
+            Bukkit.getScheduler().runTaskLater(this, this::placeholders, 100);
         }
     }
 

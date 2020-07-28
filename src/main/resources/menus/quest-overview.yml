@@ -44,3 +44,9 @@ static-items:
     lore:
       - ''
       - '&7&o(( Click to view quests ))'
+  requires-previous-completion-item: # Only used if you have require previous completion set to true in your settings.yml.
+    material: writable_book:0
+    name: '&eWeek %week% &7(%status%&7)'
+    lore:
+      - ''
+      - '&7&o(( Click to view quests ))'

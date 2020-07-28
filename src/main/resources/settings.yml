@@ -59,6 +59,8 @@ blacklisted-worlds: # World names where quests cannot be progressed.
   - 'world_with_no_quests'
   - 'another_world'
 
+daily-quests-enabled: true
+
 current-season:
   time-zone: 'Europe/Oslo' # The timezone for week releases to be based off.
   start-date: '06/06/2020' # This is what all of the week releases are based off. Format: dd/mm/yyyy
@@ -72,3 +74,7 @@ current-season:
   unlocks:
     require-previous-completion: false # Whether the user must complete all missions in the previous week to start the next week.
     lock-previous-weeks: false # Whether previous weeks will be locked when a new week is released.
+
+season-finished:
+  stop-daily-quests: false # Whether once the season is finished, daily quests will stop being rolled / progress not counted.
+  stop-other-quests: false # If set to true, anything other than daily quests will not be progressable. Combine with the option above to block all quests.

@@ -19,6 +19,10 @@ public class DailyQuestsRefreshEvent extends Event {
         return this.newDailyQuests;
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
+    }
+
     @Override
     public @NotNull
     HandlerList getHandlers() {

@@ -20,7 +20,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
     public PlaceholderApiHook(BattlePlugin plugin) {
         this.userCache = plugin.getUserCache();
         this.passLoader = plugin.getPassLoader();
-        Bukkit.getLogger().log(Level.FINE, "Register PlaceholderAPI placeholders");
+        Bukkit.getLogger().log(Level.FINE, "[BattlePass] Register PlaceholderAPI placeholders");
     }
 
     @Override

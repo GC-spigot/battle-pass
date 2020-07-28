@@ -7,10 +7,10 @@ import org.bukkit.entity.Player;
 public class MenuSub extends BpSubCommand<Player> {
     private final String menuName;
 
-    public MenuSub(BattlePlugin plugin, String menuName) {
+    public MenuSub(BattlePlugin plugin, String menuName, String... aliases) {
         super(plugin, false);
         this.addFlatWithAliases("open", "menu");
-        this.addFlat(menuName);
+        this.addFlatWithAliases(menuName, aliases);
         this.menuName = menuName;
     }
 

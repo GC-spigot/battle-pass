@@ -49,6 +49,10 @@ public class UserRewardReceiveEvent extends Event implements Cancellable {
         this.isCancelled = cancel;
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
+    }
+
     @Override
     public @NotNull
     HandlerList getHandlers() {
