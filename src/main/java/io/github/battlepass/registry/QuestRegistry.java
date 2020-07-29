@@ -199,7 +199,7 @@ public class QuestRegistry implements Registry {
     }
 
     private double getFormattedVersion(String plugin) {
-        String pluginVersion = Bukkit.getPluginManager().getPlugin(plugin).getDescription().getVersion();
+        String pluginVersion = Bukkit.getPluginManager().getPlugin(plugin).getDescription().getVersion().replace("-", ".");
         if (pluginVersion.contains(".")) {
             String[] split = pluginVersion.split("\\.");
             StringBuilder builder = new StringBuilder();
