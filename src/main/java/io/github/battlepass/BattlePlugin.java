@@ -70,6 +70,7 @@ public final class BattlePlugin extends SpigotPlugin {
     private Lang lang;
     private ZonedDateTime seasonStartDate;
     private AtomicInteger placeholderRuns = new AtomicInteger();
+    private boolean successfulPlaceholderApiHook = false;
 
     @Override
     public void onEnable() {
@@ -269,8 +270,10 @@ public final class BattlePlugin extends SpigotPlugin {
     private void placeholders() {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderApiHook(this).register();
+            this.successfulPlaceholderApiHook = true;
+            return;
         }
-        if (this.placeholderRuns.intValue() < 10) {
+        if (!this.successfulPlaceholderApiHook && this.placeholderRuns.intValue() < 10) {
             this.placeholderRuns.getAndIncrement();
             Bukkit.getScheduler().runTaskLater(this, this::placeholders, 100);
         }
