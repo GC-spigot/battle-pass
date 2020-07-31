@@ -74,8 +74,12 @@ public class PassType {
     public ItemStack tierToItem(RewardCache rewardCache, User user, String passId, Tier tier, boolean hasTier) {
         boolean hasPass = user.hasPassId(passId);
         boolean hasClaimed = user.getPendingTiers(passId) != null && !user.getPendingTiers(passId).contains(tier.getTier());
-        ItemStack itemStack = SpigotItem.toItem(this.config, "items.".concat(hasPass ? hasTier ? hasClaimed ? "claimed-tier-item" : "unlocked-tier-item" : "locked-tier-item" : "doesnt-have-pass"),
+        ItemStack itemStack = SpigotItem.toItem(this.config, "items.".concat(hasPass ? (hasTier ? (hasClaimed ? "claimed-tier-item" : "unlocked-tier-item") : "locked-tier-item") : "doesnt-have-pass-item"),
                 replacer -> replacer.set("tier", tier.getTier()));
+        if (itemStack == null) {
+            itemStack = SpigotItem.toItem(this.config, "items.".concat(hasTier ? (hasClaimed ? "claimed-tier-item" : "unlocked-tier-item") : "locked-tier-item"),
+                    replacer -> replacer.set("tier", tier.getTier()));
+        }
         if (itemStack.getItemMeta() == null || itemStack.getItemMeta().getLore() == null) {
             return itemStack;
         }
