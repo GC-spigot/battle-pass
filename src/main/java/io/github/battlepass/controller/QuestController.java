@@ -31,7 +31,7 @@ public class QuestController {
         String categoryId = "week-".concat(String.valueOf(week));
         Map<String, Integer> weekQuests = this.getQuests(user, categoryId);
         if (weekQuests == null) {
-            return true;
+            return week == 0;
         }
         for (Map.Entry<String, Integer> entry : weekQuests.entrySet()) {
             Quest quest = this.questCache.getQuest(categoryId, entry.getKey());

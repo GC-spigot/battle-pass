@@ -47,11 +47,10 @@ public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements Us
     @Override
     public MenuItem pageableItem(Integer weekInt) {
         Config settings = this.plugin.getConfig("settings");
-        boolean isWeekInPast = weekInt < this.api.currentWeek();
         boolean isWeekFuture = weekInt > this.api.currentWeek();
-        boolean isPreviousWeekBlocked = isWeekInPast && settings.bool("current-season.unlocks.require-previous-completion") && this.config.has("static-items.requires-previous-completion-item") && this.questController.isWeekDone(this.user, weekInt - 1);
+        boolean isPreviousWeekBlocked = settings.bool("current-season.unlocks.require-previous-completion") && this.config.has("static-items.requires-previous-completion-item") && !this.questController.isWeekDone(this.user, weekInt - 1);
         boolean userBypasses = this.user.bypassesLockedWeeks();
-        boolean locked = !userBypasses && (isWeekFuture || isPreviousWeekBlocked) && settings.bool("current-season.unlocks.lock-previous-weeks");
+        boolean locked = !userBypasses && (isWeekFuture || isPreviousWeekBlocked);
         return MenuItem.builderOf(SpigotItem.toItem(
                 this.config, "static-items." + (locked ? isWeekFuture ? "locked-week" : "requires-previous-completion" : "week") + "-item", replacer -> replacer
                         .set("week", weekInt)
