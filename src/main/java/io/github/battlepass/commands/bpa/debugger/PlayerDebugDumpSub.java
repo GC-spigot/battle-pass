@@ -1,24 +1,21 @@
 package io.github.battlepass.commands.bpa.debugger;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.lang.Lang;
+import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.logger.DebugLogger;
 import io.github.battlepass.logger.containers.BasicPlayerContainer;
-import me.hyfe.simplespigot.command.command.SubCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.stream.Collectors;
 
-public class PlayerDebugDumpSub extends SubCommand<CommandSender> {
+public class PlayerDebugDumpSub extends BpSubCommand<CommandSender> {
     private final DebugLogger logger;
-    private final Lang lang;
 
     public PlayerDebugDumpSub(BattlePlugin plugin) {
         super(plugin, true);
         this.logger = plugin.getDebugLogger();
-        this.lang = plugin.getLang();
 
         this.inheritPermission();
         this.addFlats("debug", "dump");

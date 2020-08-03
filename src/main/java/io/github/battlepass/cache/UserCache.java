@@ -14,6 +14,7 @@ import me.hyfe.simplespigot.uuid.FastUuid;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -64,6 +65,12 @@ public class UserCache extends FutureCache<UUID, User> implements Savable {
             ex.printStackTrace();
             return null;
         });
+    }
+
+    public void asyncModifyMultiple(Consumer<User> consumer, Set<UUID> uuids) {
+        for (UUID uuid : uuids) {
+            this.load(uuid).thenAccept(consumer);
+        }
     }
 
     public void asyncModifyAll(Consumer<User> consumer) {

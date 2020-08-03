@@ -1,4 +1,4 @@
-package io.github.battlepass.commands.bpa;
+package io.github.battlepass.commands.bpa.setpass;
 
 import com.google.common.collect.Lists;
 import io.github.battlepass.BattlePlugin;

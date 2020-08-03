@@ -2,7 +2,6 @@ package io.github.battlepass.commands.bpa;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.commands.BpSubCommand;
-import io.github.battlepass.lang.Lang;
 import io.github.battlepass.objects.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -12,11 +11,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BypassLockedQuestsSub extends BpSubCommand<CommandSender> {
-    private final Lang lang;
 
     public BypassLockedQuestsSub(BattlePlugin plugin) {
         super(plugin);
-        this.lang = plugin.getLang();
         this.inheritPermission();
         this.addFlats("bypass", "locked", "quests");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()
