@@ -10,7 +10,11 @@ public interface QuestResult {
 
     QuestResult root(Block rootBlock);
 
+    //QuestResult root(Entity entity);
+
     QuestResult root(ItemStack rootItem);
+
+    //QuestResult subRoot(String subRoot, String value);
 
     QuestResult none();
 

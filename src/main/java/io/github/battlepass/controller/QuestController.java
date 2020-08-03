@@ -1,6 +1,5 @@
 package io.github.battlepass.controller;
 
-import com.google.common.collect.Maps;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.objects.quests.Quest;
@@ -8,12 +7,13 @@ import io.github.battlepass.objects.user.User;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class QuestController {
     private final QuestCache questCache;
-    private final Function<User, Map<String, Map<String, Integer>>> questMap = user -> user.getQuestStore().asMap();
+    private final Function<User, Map<String, ConcurrentHashMap<String, Integer>>> questMap = user -> user.getQuestStore().asMap();
 
     public QuestController(BattlePlugin plugin) {
         this.questCache = plugin.getQuestCache();
@@ -88,7 +88,7 @@ public class QuestController {
     private void fillFailedIndexes(User user, Quest quest) {
         Predicate<FailedIndex> failedIndex = index -> this.failedIndex(user, quest).equals(index);
         if (failedIndex.test(FailedIndex.CATEGORY_LAYER)) {
-            this.questMap.apply(user).put(quest.getCategoryId(), Maps.newConcurrentMap());
+            this.questMap.apply(user).put(quest.getCategoryId(), new ConcurrentHashMap<>());
         }
         if (failedIndex.test(FailedIndex.QUEST_LAYER)) {
             this.getQuests(user, quest.getCategoryId()).put(quest.getId(), 0);

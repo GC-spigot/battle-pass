@@ -1,7 +1,6 @@
 package io.github.battlepass.quests.workers.reset;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.api.events.server.DailyQuestsRefreshEvent;
@@ -22,6 +21,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -86,7 +86,7 @@ public class DailyQuestReset {
         if (!this.shouldDoDailyQuests()) {
             return;
         }
-        this.userCache.asyncModifyAll(user -> user.getQuestStore().asMap().put(Category.DAILY.id(), Maps.newConcurrentMap()));
+        this.userCache.asyncModifyAll(user -> user.getQuestStore().asMap().put(Category.DAILY.id(), new ConcurrentHashMap<>()));
         this.currentQuests.clear();
         int max = Math.min(this.questCache.getQuests(Category.DAILY.id()).size(), this.amount);
         int iterations = 0;

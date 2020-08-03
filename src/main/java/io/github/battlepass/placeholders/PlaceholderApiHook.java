@@ -8,7 +8,8 @@ import io.github.battlepass.objects.user.User;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.hyfe.simplespigot.uuid.FastUuid;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.logging.Level;
@@ -24,15 +25,15 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String placeholder) {
+    public String onRequest(OfflinePlayer offlinePlayer, String placeholder) {
         if (placeholder.equals("test")) {
             return "successful";
         }
-        if (player == null) {
-            Bukkit.getLogger().log(Level.WARNING, "Could not get placeholder ".concat(placeholder).concat(" for user ").concat(FastUuid.toString(player.getUniqueId())).concat(" (player null)"));
+        if (offlinePlayer == null) {
+            Bukkit.getLogger().log(Level.WARNING, "Could not get placeholder ".concat(placeholder).concat(" for user ").concat(FastUuid.toString(offlinePlayer.getUniqueId())).concat(" (player null)"));
             return "???";
         }
-        Optional<User> optionalUser = this.userCache.getSync(player.getUniqueId());
+        Optional<User> optionalUser = this.userCache.getSync(offlinePlayer.getUniqueId());
         if (!optionalUser.isPresent()) {
             return "??? User not present";
         }
@@ -52,18 +53,18 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "battlepass";
     }
 
     @Override
-    public String getAuthor() {
+    public @NotNull String getAuthor() {
         return "Hyfe/Zak";
     }
 
     @Override
-    public String getVersion() {
-        return "1.0";
+    public @NotNull String getVersion() {
+        return "1.1";
     }
 
     public void reload(BattlePlugin plugin) {

@@ -1,13 +1,12 @@
 package io.github.battlepass.objects.user;
 
-import com.google.common.collect.Maps;
-
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class QuestStore {
-    private final Map<String, Map<String, Integer>> quests = Maps.newConcurrentMap();
+    private final ConcurrentHashMap<String, ConcurrentHashMap<String, Integer>> quests = new ConcurrentHashMap<>();
 
-    public Map<String, Map<String, Integer>> asMap() {
+    public Map<String, ConcurrentHashMap<String, Integer>> asMap() {
         return this.quests;
     }
 }
