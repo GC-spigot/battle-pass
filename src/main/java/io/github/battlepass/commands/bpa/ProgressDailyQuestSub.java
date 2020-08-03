@@ -52,7 +52,7 @@ public class ProgressDailyQuestSub extends BpSubCommand<CommandSender> {
             return;
         }
         if (this.controller.isQuestDone(user, quest)) {
-            this.lang.local("quest-already-completed", args[2]);
+            this.lang.local("quest-already-done", args[2]);
             return;
         }
         this.completionStep.process(user, quest, this.controller.getQuestProgress(user, quest), amount, false);
