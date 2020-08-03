@@ -26,6 +26,10 @@ public abstract class Action {
                 return new MessageAction(condition, value);
             case "sound":
                 return new SoundAction(condition, value);
+            case "command":
+                return new CommandAction(condition, value);
+            case "console-command":
+                return new ConsoleCommandAction(condition, value);
             default:
                 return null;
         }
@@ -37,6 +41,10 @@ public abstract class Action {
                 ((MessageAction) action).accept(player, replacer);
             } else if (action instanceof SoundAction) {
                 ((SoundAction) action).accept(player);
+            } else if (action instanceof CommandAction) {
+                ((CommandAction) action).accept(player, replacer);
+            } else if (action instanceof ConsoleCommandAction) {
+                ((ConsoleCommandAction) action).accept(replacer);
             } else if (action instanceof MenuAction && plugin != null) {
                 InventoryHolder inventoryHolder = player.getOpenInventory().getTopInventory().getHolder();
                 ((MenuAction) action).accept(plugin.getMenuFactory(), inventoryHolder instanceof Menu ? (Menu) inventoryHolder : null, player);

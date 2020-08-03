@@ -10,6 +10,7 @@ import me.hyfe.simplespigot.menu.Menu;
 import me.hyfe.simplespigot.menu.item.MenuItem;
 import me.hyfe.simplespigot.menu.service.MenuService;
 import me.hyfe.simplespigot.text.Replace;
+import me.hyfe.simplespigot.text.Replacer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -52,6 +53,7 @@ public class MenuIllustrator {
                             .rawSlot(slot)
                             .item(config, String.format("menu.%s.item", key), replace)
                             .onClick((menuItem, clickType) -> {
+                                Replacer replacer = new Replacer().set("player", player.getName());
                                 for (Action action : actionSupplier.apply(slot)) {
                                     if (action instanceof MenuAction) {
                                         ((MenuAction) action).accept(menuFactory, menu, player);
@@ -59,6 +61,10 @@ public class MenuIllustrator {
                                         ((MessageAction) action).accept(player, null);
                                     } else if (action instanceof SoundAction) {
                                         ((SoundAction) action).accept(player);
+                                    } else if (action instanceof CommandAction) {
+                                        ((CommandAction) action).accept(player, replacer);
+                                    } else if (action instanceof ConsoleCommandAction) {
+                                        ((ConsoleCommandAction) action).accept(replacer);
                                     } else if (action instanceof DynamicAction) {
                                         for (Map.Entry<String, Runnable> customAction : customActions.entrySet()) {
                                             ((DynamicAction) action).accept(customAction.getKey(), customAction.getValue());
