@@ -46,7 +46,6 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public final class BattlePlugin extends SpigotPlugin {
     private static BattlePassApi api;
@@ -67,10 +66,10 @@ public final class BattlePlugin extends SpigotPlugin {
     private Storage<User> userStorage;
     private Storage<DailyQuestReset> resetStorage;
     private Cache<String, Map<Integer, Set<Action>>> actionCache;
+    private PlaceholderApiHook placeholderApiHook;
     private Lang lang;
     private ZonedDateTime seasonStartDate;
-    private AtomicInteger placeholderRuns = new AtomicInteger();
-    private boolean successfulPlaceholderApiHook = false;
+    private int placeholderRuns = 0;
 
     @Override
     public void onEnable() {
@@ -82,6 +81,7 @@ public final class BattlePlugin extends SpigotPlugin {
         }
         this.configRelations();
         this.load();
+        this.placeholders();
     }
 
     @Override
@@ -198,6 +198,12 @@ public final class BattlePlugin extends SpigotPlugin {
         this.lang.reload();
         this.unload();
         this.load();
+        if (this.placeholderApiHook == null) {
+            this.placeholderRuns = 0;
+            this.placeholders();
+        } else {
+            this.placeholderApiHook.reload(this);
+        }
         System.gc();
     }
 
@@ -253,7 +259,6 @@ public final class BattlePlugin extends SpigotPlugin {
                     new BpaCommand(this),
                     new BpCommand(this)
             );
-            this.placeholders();
         });
     }
 
@@ -269,12 +274,12 @@ public final class BattlePlugin extends SpigotPlugin {
 
     private void placeholders() {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            new PlaceholderApiHook(this).register();
-            this.successfulPlaceholderApiHook = true;
+            this.placeholderApiHook = new PlaceholderApiHook(this);
+            this.placeholderApiHook.register();
             return;
         }
-        if (!this.successfulPlaceholderApiHook && this.placeholderRuns.intValue() < 10) {
-            this.placeholderRuns.getAndIncrement();
+        if (this.placeholderApiHook == null && this.placeholderRuns < 10) {
+            this.placeholderRuns++;
             Bukkit.getScheduler().runTaskLater(this, this::placeholders, 100);
         }
     }

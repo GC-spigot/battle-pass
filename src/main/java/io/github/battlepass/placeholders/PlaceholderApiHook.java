@@ -14,8 +14,8 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 public class PlaceholderApiHook extends PlaceholderExpansion {
-    private final UserCache userCache;
-    private final PassLoader passLoader;
+    private UserCache userCache;
+    private PassLoader passLoader;
 
     public PlaceholderApiHook(BattlePlugin plugin) {
         this.userCache = plugin.getUserCache();
@@ -64,5 +64,10 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
     @Override
     public String getVersion() {
         return "1.0";
+    }
+
+    public void reload(BattlePlugin plugin) {
+        this.userCache = plugin.getUserCache();
+        this.passLoader = plugin.getPassLoader();
     }
 }
