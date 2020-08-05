@@ -7,7 +7,6 @@ import io.github.battlepass.api.events.user.UserQuestProgressionEvent;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.enums.Category;
-import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.objects.quests.variable.Variable;
@@ -23,7 +22,6 @@ public class QuestValidationStep {
     private final CompletionStep completionStep;
     private final BattlePlugin plugin;
     private final BattlePassApi api;
-    private final PassLoader passLoader;
     private final QuestController controller;
     private final QuestCache questCache;
     private final Set<String> whitelistedWorlds;
@@ -38,7 +36,6 @@ public class QuestValidationStep {
         this.completionStep = new CompletionStep(plugin);
         this.plugin = plugin;
         this.api = plugin.getLocalApi();
-        this.passLoader = plugin.getPassLoader();
         this.controller = plugin.getQuestController();
         this.questCache = plugin.getQuestCache();
         this.whitelistedWorlds = Sets.newHashSet(settings.stringList("whitelisted-worlds"));
@@ -109,5 +106,62 @@ public class QuestValidationStep {
                 event.ifNotCancelled(eventConsumer -> this.completionStep.process(user, quest, originalProgress, eventConsumer.getProgression(), overrideUpdate));
             }
         }
+    }
+
+    public boolean isQuestValid(Player player, User user, Quest quest, int progress, boolean overrideUpdate) {
+        String playerWorld = player.getWorld().getName();
+        boolean seasonEnded = this.api.hasSeasonEnded();
+        if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {
+            return false;
+        }
+        if ((!this.whitelistedWorlds.isEmpty() && !this.whitelistedWorlds.contains(playerWorld)) || this.blacklistedWorlds.contains(playerWorld)) {
+            return false;
+        }
+        if (seasonEnded) {
+            if ((quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd)) {
+                return false;
+            }
+        }
+        Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
+        if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
+            return false;
+        }
+        int originalProgress = this.controller.getQuestProgress(user, quest);
+        if (overrideUpdate && originalProgress == progress) {
+            return false;
+        }
+        if (!this.controller.isQuestDone(user, quest)) {
+            String exclusiveTo = quest.getExclusiveTo();
+            if (exclusiveTo != null && !exclusiveTo.equalsIgnoreCase(user.getPassId())) {
+                return false;
+            }
+
+            int week = Category.stripWeek(quest.getCategoryId());
+            boolean isDaily = week == 0;
+            if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
+                return false;
+            }
+            if (this.requirePreviousCompletion && !isDaily && !user.bypassesLockedWeeks()) {
+                String targetedCategoryId = "week-" + (week - 1);
+                if (this.questCache.keySet().contains(targetedCategoryId)) {
+                    boolean failed = false;
+                    for (Quest requiredQuest : this.questCache.getQuests(targetedCategoryId).values()) {
+                        if (!this.controller.isQuestDone(user, requiredQuest)) {
+                            failed = true;
+                            break;
+                        }
+                    }
+                    if (failed) {
+                        return false;
+                    }
+                }
+            }
+            UserQuestProgressionEvent event = new UserQuestProgressionEvent(user, quest, progress);
+            this.plugin.runSync(() -> {
+                Bukkit.getPluginManager().callEvent(event);
+            });
+            return !event.isCancelled();
+        }
+        return false;
     }
 }

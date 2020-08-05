@@ -8,6 +8,7 @@ import io.github.battlepass.enums.Category;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.quests.workers.pipeline.steps.CompletionStep;
+import io.github.battlepass.quests.workers.pipeline.steps.QuestValidationStep;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,12 +19,14 @@ import java.util.stream.Collectors;
 public class ProgressDailyQuestSub extends BpSubCommand<CommandSender> {
     private final QuestCache questCache;
     private final QuestController controller;
+    private final QuestValidationStep questValidationStep;
     private final CompletionStep completionStep;
 
     public ProgressDailyQuestSub(BattlePlugin plugin) {
         super(plugin);
         this.questCache = plugin.getQuestCache();
         this.controller = plugin.getQuestController();
+        this.questValidationStep = new QuestValidationStep(plugin);
         this.completionStep = new CompletionStep(plugin);
         this.inheritPermission();
         this.addFlats("progress", "daily", "quest");
@@ -38,10 +41,11 @@ public class ProgressDailyQuestSub extends BpSubCommand<CommandSender> {
     @Override
     public void onExecute(CommandSender sender, String[] args) {
         Optional<User> maybeUser = this.parseArgument(args, 3);
+        Player player = maybeUser.map(value -> Bukkit.getPlayer(value.getUuid())).orElse(null);
         String id = this.parseArgument(args, 4);
         int amount = this.parseArgument(args, 5);
 
-        if (!maybeUser.isPresent()) {
+        if (!maybeUser.isPresent() || player == null) {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
             return;
         }
@@ -55,6 +59,7 @@ public class ProgressDailyQuestSub extends BpSubCommand<CommandSender> {
             this.lang.local("quest-already-done", args[2]);
             return;
         }
+        this.questValidationStep.isQuestValid(player, user, quest, amount, false);
         this.completionStep.process(user, quest, this.controller.getQuestProgress(user, quest), amount, false);
         this.lang.local("successful-quest-progress", quest.getName());
     }
