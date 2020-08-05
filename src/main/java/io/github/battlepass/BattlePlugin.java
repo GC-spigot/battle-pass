@@ -38,6 +38,7 @@ import me.hyfe.simplespigot.plugin.SpigotPlugin;
 import me.hyfe.simplespigot.storage.StorageSettings;
 import me.hyfe.simplespigot.storage.storage.Storage;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
 import java.nio.file.Path;
@@ -45,6 +46,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public final class BattlePlugin extends SpigotPlugin {
@@ -270,6 +272,13 @@ public final class BattlePlugin extends SpigotPlugin {
         this.resetStorage.save("daily-data", this.dailyQuestReset);
         this.userStorage.closeBack();
         this.resetStorage.closeBack();
+        for (UUID uuid : this.menuFactory.getInsideMenu()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null) {
+                continue;
+            }
+            player.closeInventory();
+        }
     }
 
     private void placeholders() {
