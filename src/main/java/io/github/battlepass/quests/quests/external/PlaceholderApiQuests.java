@@ -2,11 +2,14 @@ package io.github.battlepass.quests.quests.external;
 
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.logger.DebugLogger;
+import io.github.battlepass.logger.containers.LogContainer;
 import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
@@ -20,12 +23,17 @@ public class PlaceholderApiQuests extends ExternalQuestExecutor {
     public PlaceholderApiQuests(BattlePlugin plugin) {
         super(plugin, "placeholderapi");
         this.plugin = plugin;
+        DebugLogger logger = plugin.getDebugLogger();
         for (String placeholder : plugin.getQuestCache().getPlaceholderTypes()) {
             String reducedPlaceholder = placeholder.substring(15);
             if (reducedPlaceholder.startsWith("integer_")) {
-                this.integerPlaceholders.add(reducedPlaceholder.substring(8));
+                String toAdd = reducedPlaceholder.substring(8);
+                logger.log(LogContainer.of("(PlaceholderAPI Quests) Adding placeholderapi integer quest with placeholder ".concat(toAdd)));
+                this.integerPlaceholders.add(toAdd);
             } else if (reducedPlaceholder.startsWith("match_")) {
-                this.matchPlaceholders.add(reducedPlaceholder.substring(6));
+                String toAdd = reducedPlaceholder.substring(6);
+                logger.log(LogContainer.of("(PlaceholderAPI Quests) Adding placeholderapi match quest with placeholder ".concat(toAdd)));
+                this.matchPlaceholders.add(toAdd);
             } else {
                 Bukkit.getLogger().log(Level.WARNING, "Failed to parse PlaceholderAPI quest variable: ".concat(placeholder));
             }
@@ -37,11 +45,11 @@ public class PlaceholderApiQuests extends ExternalQuestExecutor {
         Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 for (String placeholder : this.matchPlaceholders) {
-                    String placeholderValue = PlaceholderAPI.setPlaceholders(player, "%".concat(placeholder).concat("%"));
+                    String placeholderValue = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, "%".concat(placeholder).concat("%"));
                     this.execute("match_".concat(placeholder), player, result -> result.root(placeholderValue));
                 }
                 for (String placeholder : this.integerPlaceholders) {
-                    String placeholderValue = PlaceholderAPI.setPlaceholders(player, "%".concat(placeholder).concat("%"));
+                    String placeholderValue = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, "%".concat(placeholder).concat("%"));
                     if (StringUtils.isNumeric(placeholderValue)) {
                         this.execute("integer_".concat(placeholder), player, Integer.parseInt(placeholderValue), QuestResult::none,
                                 replace -> replace.set("placeholder_value", placeholderValue), true);

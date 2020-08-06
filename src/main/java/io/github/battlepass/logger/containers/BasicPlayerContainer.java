@@ -16,6 +16,6 @@ public class BasicPlayerContainer extends BasicContainer {
 
     @Override
     public String toString() {
-        return String.format(super.toString(), this.playerName);
+        return super.toString().replace("%player%", this.playerName);
     }
 }
