@@ -41,6 +41,7 @@ public class Lang {
         this.localLang.put("user-data-deleted", "&aYou have successfully deleted %s's data.");
         this.localLang.put("target-user-data-deleted", "&cYour quest data has been wiped.");
         this.localLang.put("debug-dumped", "&cDumped the debug information to a file called %s");
+        this.localLang.put("cooldown-has-seconds", "&cPlease wait %s seconds before using this again.");
         this.load();
     }
 

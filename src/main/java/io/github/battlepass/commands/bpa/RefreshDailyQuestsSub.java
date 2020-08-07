@@ -5,6 +5,7 @@ import io.github.battlepass.commands.BpSubCommand;
 import org.bukkit.command.CommandSender;
 
 public class RefreshDailyQuestsSub extends BpSubCommand<CommandSender> {
+    private long lastUseTime;
 
     public RefreshDailyQuestsSub(BattlePlugin plugin) {
         super(plugin);
@@ -13,8 +14,14 @@ public class RefreshDailyQuestsSub extends BpSubCommand<CommandSender> {
     }
 
     @Override
-    public void onExecute(CommandSender commandSender, String[] args) {
-        this.plugin.getDailyQuestReset().reset();
-        this.lang.local("successful-refresh-daily").to(commandSender);
+    public void onExecute(CommandSender sender, String[] args) {
+        long millisSinceUse = System.currentTimeMillis() - this.lastUseTime;
+        if (System.currentTimeMillis() - this.lastUseTime > 5000) {
+            this.lastUseTime = System.currentTimeMillis();
+            this.plugin.getDailyQuestReset().reset();
+            this.lang.local("successful-refresh-daily").to(sender);
+        } else {
+            this.lang.local("cooldown-has-seconds", Math.max(Integer.parseInt(String.valueOf(millisSinceUse / 1000)), 1)).to(sender);
+        }
     }
 }
