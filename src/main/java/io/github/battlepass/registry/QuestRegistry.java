@@ -109,7 +109,7 @@ public class QuestRegistry implements Registry {
     public boolean registerHook(String plugin, Function<BattlePlugin, ExternalQuestExecutor> function) {
         if (Bukkit.getPluginManager().isPluginEnabled(plugin)) {
             Bukkit.getPluginManager().registerEvents(function.apply(this.plugin), this.plugin);
-            Bukkit.getLogger().log(Level.INFO, "Hooked into ".concat(plugin));
+            Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(plugin));
             this.registeredHooks.add(plugin);
             return true;
         }
@@ -125,7 +125,7 @@ public class QuestRegistry implements Registry {
         if (Bukkit.getPluginManager().isPluginEnabled(plugin)) {
             if (Bukkit.getPluginManager().getPlugin(plugin).getDescription().getAuthors().contains(author)) {
                 Bukkit.getPluginManager().registerEvents(function.apply(this.plugin), this.plugin);
-                Bukkit.getLogger().log(Level.INFO, "Hooked into ".concat(plugin));
+                Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(plugin));
                 this.registeredHooks.add(plugin);
                 return true;
             }
@@ -144,7 +144,7 @@ public class QuestRegistry implements Registry {
             double version = this.getFormattedVersion(plugin);
             if (versionCheck.apply(version)) {
                 pluginManager.registerEvents(function.apply(this.plugin), this.plugin);
-                Bukkit.getLogger().log(Level.INFO, "Hooked into ".concat(plugin));
+                Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(plugin));
                 this.registeredHooks.add(plugin);
             } else {
                 Bukkit.getLogger().log(Level.INFO, plugin.concat(" was present but its version is not supported."));
@@ -167,7 +167,7 @@ public class QuestRegistry implements Registry {
                 Bukkit.getLogger().log(Level.INFO, "Using internal version as ".concat(String.valueOf(version)).concat(" for loading ").concat(plugin).concat("."));
                 if (versionCheck.apply(version)) {
                     pluginManager.registerEvents(function.apply(this.plugin), this.plugin);
-                    Bukkit.getLogger().log(Level.INFO, "Hooked into ".concat(plugin));
+                    Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(plugin));
                     this.registeredHooks.add(plugin);
                 } else {
                     Bukkit.getLogger().log(Level.INFO, plugin.concat(" was present but its version is not supported."));

@@ -4,21 +4,23 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Map;
+
 public interface QuestResult {
 
     QuestResult root(String root);
 
     QuestResult root(Block rootBlock);
 
-    //QuestResult root(Entity entity);
-
     QuestResult root(ItemStack rootItem);
 
-    //QuestResult subRoot(String subRoot, String value);
+    QuestResult subRoot(String subRoot, String value);
 
     QuestResult none();
 
+    boolean isEligible(Player player, Variable variable);
+
     String getRoot();
 
-    boolean isEligible(Player player, Variable variable);
+    Map<String, String> getSubRoots();
 }
