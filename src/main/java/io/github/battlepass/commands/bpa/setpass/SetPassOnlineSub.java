@@ -49,7 +49,7 @@ public class SetPassOnlineSub extends BpSubCommand<CommandSender> {
         }
         this.userCache.asyncModifyMultiple(user -> {
             UserPassChangeEvent event = new UserPassChangeEvent(user, passId);
-            Bukkit.getPluginManager().callEvent(event);
+            this.plugin.runSync(() -> Bukkit.getPluginManager().callEvent(event));
             event.ifNotCancelled(consumerEvent -> {
                 this.api.setPassId(user, consumerEvent.getNewPassId());
                 this.lang.local("successful-set-pass", args[2], passId).to(sender);
