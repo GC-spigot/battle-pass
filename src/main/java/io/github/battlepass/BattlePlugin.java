@@ -247,7 +247,7 @@ public final class BattlePlugin extends SpigotPlugin {
 
         this.registerRegistries(
                 new ArgumentRegistry(this),
-                new QuestRegistry(this)
+                this.questRegistry
         );
         this.registerListeners(
                 new AliasesListener(this),
