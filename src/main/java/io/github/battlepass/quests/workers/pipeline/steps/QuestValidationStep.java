@@ -1,5 +1,6 @@
 package io.github.battlepass.quests.workers.pipeline.steps;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.BattlePassApi;
@@ -12,11 +13,12 @@ import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.objects.quests.variable.Variable;
 import io.github.battlepass.objects.user.User;
 import me.hyfe.simplespigot.config.Config;
+import me.hyfe.simplespigot.service.Locks;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class QuestValidationStep {
     private final CompletionStep completionStep;
@@ -30,10 +32,13 @@ public class QuestValidationStep {
     private final boolean requirePreviousCompletion;
     private final boolean disableDailiesOnSeasonEnd;
     private final boolean disableNormalsOnSeasonEnd;
+    private final ReentrantLock questLock = Locks.newReentrantLock();
+
+    //private final Map<UUID, Map<String, Queue<Runnable>>> concurrentPipelineQueue = Maps.newConcurrentMap();
 
     public QuestValidationStep(BattlePlugin plugin) {
         Config settings = plugin.getConfig("settings");
-        this.completionStep = new CompletionStep(plugin);
+        this.completionStep = new CompletionStep(plugin, this);
         this.plugin = plugin;
         this.api = plugin.getLocalApi();
         this.controller = plugin.getQuestController();
@@ -68,78 +73,31 @@ public class QuestValidationStep {
             if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
                 continue;
             }
-            int originalProgress = this.controller.getQuestProgress(user, quest);
-            if (overrideUpdate && originalProgress == progress) {
-                continue;
-            }
-            Variable subVariable = quest.getVariable();
-            if (!this.controller.isQuestDone(user, quest) && questResult.isEligible(player, subVariable)) {
-                String exclusiveTo = quest.getExclusiveTo();
-                if (exclusiveTo != null && !exclusiveTo.equalsIgnoreCase(user.getPassId())) {
-                    continue;
-                }
-
-                int week = Category.stripWeek(quest.getCategoryId());
-                boolean isDaily = week == 0;
-                if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
-                    continue;
-                }
-                if (this.requirePreviousCompletion && !isDaily && !user.bypassesLockedWeeks()) {
-                    String targetedCategoryId = "week-" + (week - 1);
-                    if (this.questCache.keySet().contains(targetedCategoryId)) {
-                        boolean failed = false;
-                        for (Quest requiredQuest : this.questCache.getQuests(targetedCategoryId).values()) {
-                            if (!this.controller.isQuestDone(user, requiredQuest)) {
-                                failed = true;
-                                break;
-                            }
-                        }
-                        if (failed) {
-                            continue;
-                        }
-                    }
-                }
-                UserQuestProgressionEvent event = new UserQuestProgressionEvent(user, quest, progress);
-                this.plugin.runSync(() -> {
-                    Bukkit.getPluginManager().callEvent(event);
-                });
-                event.ifNotCancelled(eventConsumer -> this.completionStep.process(user, quest, originalProgress, eventConsumer.getProgression(), overrideUpdate));
+            this.questLock.lock();
+            try {
+                this.proceed(player, user, quest, progress, questResult, overrideUpdate);
+            } finally {
+                this.questLock.unlock();
             }
         }
     }
 
-    public boolean isQuestValid(Player player, User user, Quest quest, int progress, boolean overrideUpdate) {
-        String playerWorld = player.getWorld().getName();
-        boolean seasonEnded = this.api.hasSeasonEnded();
-        if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {
-            return false;
-        }
-        if ((!this.whitelistedWorlds.isEmpty() && !this.whitelistedWorlds.contains(playerWorld)) || this.blacklistedWorlds.contains(playerWorld)) {
-            return false;
-        }
-        if (seasonEnded) {
-            if ((quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd)) {
-                return false;
-            }
-        }
-        Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
-        if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
-            return false;
-        }
+    private void proceed(Player player, User user, Quest quest, int progress, QuestResult questResult, boolean overrideUpdate) {
         int originalProgress = this.controller.getQuestProgress(user, quest);
         if (overrideUpdate && originalProgress == progress) {
-            return false;
+            return;
         }
-        if (!this.controller.isQuestDone(user, quest)) {
+        Variable subVariable = quest.getVariable();
+        if (!this.controller.isQuestDone(user, quest) && questResult.isEligible(player, subVariable)) {
             String exclusiveTo = quest.getExclusiveTo();
             if (exclusiveTo != null && !exclusiveTo.equalsIgnoreCase(user.getPassId())) {
-                return false;
+                return;
             }
 
             int week = Category.stripWeek(quest.getCategoryId());
             boolean isDaily = week == 0;
             if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
-                return false;
+                return;
             }
             if (this.requirePreviousCompletion && !isDaily && !user.bypassesLockedWeeks()) {
                 String targetedCategoryId = "week-" + (week - 1);
@@ -152,7 +110,7 @@ public class QuestValidationStep {
                         }
                     }
                     if (failed) {
-                        return false;
+                        return;
                     }
                 }
             }
@@ -160,8 +118,91 @@ public class QuestValidationStep {
             this.plugin.runSync(() -> {
                 Bukkit.getPluginManager().callEvent(event);
             });
-            return !event.isCancelled();
+            event.ifNotCancelled(eventConsumer -> this.completionStep.process(user, quest, originalProgress, eventConsumer.getProgression(), overrideUpdate));
         }
-        return false;
     }
+
+    public void isQuestValid(Player player, User user, Quest quest, int progress, boolean overrideUpdate) {
+        String playerWorld = player.getWorld().getName();
+        boolean seasonEnded = this.api.hasSeasonEnded();
+        if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {
+            return;
+        }
+        if ((!this.whitelistedWorlds.isEmpty() && !this.whitelistedWorlds.contains(playerWorld)) || this.blacklistedWorlds.contains(playerWorld)) {
+            return;
+        }
+        if (seasonEnded) {
+            if ((quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd)) {
+                return;
+            }
+        }
+        Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
+        if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
+            return;
+        }
+        int originalProgress = this.controller.getQuestProgress(user, quest);
+        if (overrideUpdate && originalProgress == progress) {
+            return;
+        }
+        if (!this.controller.isQuestDone(user, quest)) {
+            String exclusiveTo = quest.getExclusiveTo();
+            if (exclusiveTo != null && !exclusiveTo.equalsIgnoreCase(user.getPassId())) {
+                return;
+            }
+
+            int week = Category.stripWeek(quest.getCategoryId());
+            boolean isDaily = week == 0;
+            if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
+                return;
+            }
+            if (this.requirePreviousCompletion && !isDaily && !user.bypassesLockedWeeks()) {
+                String targetedCategoryId = "week-" + (week - 1);
+                if (this.questCache.keySet().contains(targetedCategoryId)) {
+                    boolean failed = false;
+                    for (Quest requiredQuest : this.questCache.getQuests(targetedCategoryId).values()) {
+                        if (!this.controller.isQuestDone(user, requiredQuest)) {
+                            failed = true;
+                            break;
+                        }
+                    }
+                    if (failed) {
+                        return;
+                    }
+                }
+            }
+            UserQuestProgressionEvent event = new UserQuestProgressionEvent(user, quest, progress);
+            this.plugin.runSync(() -> {
+                Bukkit.getPluginManager().callEvent(event);
+            });
+        }
+    }
+
+    /*public synchronized void notifyPipelineCompletion(UUID uuid, String questId) {
+        if (this.concurrentPipelineQueue.get(uuid).containsKey(questId)) {
+            Queue<Runnable> innerQueue = this.concurrentPipelineQueue.get(uuid).get(questId);
+            if (innerQueue == null || innerQueue.isEmpty()) {
+                System.out.println("terminated queue");
+                this.concurrentPipelineQueue.get(uuid).remove(questId);
+            } else {
+                Runnable runnable = innerQueue.poll();
+                runnable.run();
+                System.out.println("execute");
+            }
+        }
+    }
+
+    private synchronized void synchronizedQueueComputation(UUID uuid, Player player, User user, Quest quest, QuestResult questResult, int progress, boolean overrideUpdate) {
+        System.out.println("start: " + quest.getId());
+        if (!this.concurrentPipelineQueue.containsKey(uuid)) {
+            System.out.println("init queue");
+            this.concurrentPipelineQueue.put(uuid, Maps.newConcurrentMap());
+        }
+        if (this.concurrentPipelineQueue.get(uuid).containsKey(quest.getId())) {
+            System.out.println("queue");
+            this.concurrentPipelineQueue.get(uuid).get(quest.getId()).add(() -> this.exitQueueAndProceed(player, user, quest, progress, questResult, overrideUpdate));
+        } else {
+            this.concurrentPipelineQueue.get(uuid).put(quest.getId(), Lists.newLinkedList());
+            this.exitQueueAndProceed(player, user, quest, progress, questResult, overrideUpdate);
+        //}
+    }*/
 }

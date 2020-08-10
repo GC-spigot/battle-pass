@@ -14,15 +14,20 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.UUID;
 
 public class CompletionStep {
+    private final QuestValidationStep questValidationStep;
     private final Config settingsConfig;
     private final RewardStep rewardStep;
     private final QuestController controller;
     private final Lang lang;
 
-    public CompletionStep(BattlePlugin plugin) {
+    public CompletionStep(BattlePlugin plugin, QuestValidationStep questValidationStep) {
+        this.questValidationStep = questValidationStep;
         this.settingsConfig = plugin.getConfig("settings");
         this.rewardStep = new RewardStep(plugin);
         this.controller = plugin.getQuestController();
@@ -48,6 +53,8 @@ public class CompletionStep {
                 break;
             }
         }
+        //this.questValidationStep.notifyPipelineCompletion(user.getUuid(), quest.getId());
+
         if (this.controller.isQuestDone(user, quest)) {
             if (updatedProgress >= quest.getRequiredProgress()) {
                 String message = this.lang.questCompleteMessage(quest);
