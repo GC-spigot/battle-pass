@@ -73,7 +73,6 @@ public class QuestRegistry implements Registry {
         this.registerHook("CratesPlus", CratesPlusQuests::new);
         this.registerHook("CrazyCrates", CrazyCratesQuests::new);
         this.registerHook("DiscordMinecraft", DiscordMinecraftQuests::new);
-        // this.registerHook("Factions", FactionsUuidQuests::new, "com.massivecraft.factions.event.FactionPlayerEvent");
         this.registerHook("Jobs", JobsQuests::new);
         this.registerHook("Lands", LandsQuests::new);
         this.registerHook("LobbyPresents", LobbyPresentsPoompkQuests::new, "poompk");
@@ -92,6 +91,11 @@ public class QuestRegistry implements Registry {
         this.registerHook("UltraSkyWars", UltraSkyWarsQuests::new, "Leonardo0013YT");
         this.registerHook("uSkyBlock", USkyBlockQuests::new);
         this.registerHook("Votifier", VotifierQuests::new);
+        this.registerPlaceholderApi(this.plugin.getQuestCache().getPlaceholderTypes());
+    }
+
+    public Set<String> getRegisteredHooks() {
+        return this.registeredHooks;
     }
 
     @SafeVarargs
@@ -133,7 +137,7 @@ public class QuestRegistry implements Registry {
         return false;
     }
 
-    public boolean registerHook(String plugin, Function<BattlePlugin, ExternalQuestExecutor> function, Function<Double, Boolean> versionCheck) {
+    /*public boolean registerHook(String plugin, Function<BattlePlugin, ExternalQuestExecutor> function, Function<Double, Boolean> versionCheck) {
         PluginManager pluginManager = Bukkit.getPluginManager();
         if (pluginManager.isPluginEnabled(plugin)) {
             double version = this.getFormattedVersion(plugin);
@@ -152,7 +156,7 @@ public class QuestRegistry implements Registry {
             }
         });
         return false;
-    }
+    }*/
 
     public boolean registerHook(String plugin, Function<BattlePlugin, ExternalQuestExecutor> function, String author, Function<Double, Boolean> versionCheck) {
         PluginManager pluginManager = Bukkit.getPluginManager();
@@ -178,7 +182,7 @@ public class QuestRegistry implements Registry {
         return false;
     }
 
-    public boolean registerPlaceholderApi(Set<String> placeholderTypes) {
+    private boolean registerPlaceholderApi(Set<String> placeholderTypes) {
         if (Bukkit.getPluginManager().isPluginEnabled(this.plugin)) {
             this.registeredHooks.add("PlaceholderAPI");
             new PlaceholderApiQuests(this.plugin, placeholderTypes);
@@ -223,9 +227,5 @@ public class QuestRegistry implements Registry {
             return Double.parseDouble(builder.toString().split(" ")[0]);
         }
         return Double.parseDouble(pluginVersion);
-    }
-
-    public Set<String> getRegisteredHooks() {
-        return this.registeredHooks;
     }
 }

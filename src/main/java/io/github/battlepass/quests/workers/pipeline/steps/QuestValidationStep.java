@@ -181,24 +181,19 @@ public class QuestValidationStep {
         if (this.concurrentPipelineQueue.get(uuid).containsKey(questId)) {
             Queue<Runnable> innerQueue = this.concurrentPipelineQueue.get(uuid).get(questId);
             if (innerQueue == null || innerQueue.isEmpty()) {
-                System.out.println("terminated queue");
                 this.concurrentPipelineQueue.get(uuid).remove(questId);
             } else {
                 Runnable runnable = innerQueue.poll();
                 runnable.run();
-                System.out.println("execute");
             }
         }
     }
 
     private synchronized void synchronizedQueueComputation(UUID uuid, Player player, User user, Quest quest, QuestResult questResult, int progress, boolean overrideUpdate) {
-        System.out.println("start: " + quest.getId());
         if (!this.concurrentPipelineQueue.containsKey(uuid)) {
-            System.out.println("init queue");
             this.concurrentPipelineQueue.put(uuid, Maps.newConcurrentMap());
         }
         if (this.concurrentPipelineQueue.get(uuid).containsKey(quest.getId())) {
-            System.out.println("queue");
             this.concurrentPipelineQueue.get(uuid).get(quest.getId()).add(() -> this.exitQueueAndProceed(player, user, quest, progress, questResult, overrideUpdate));
         } else {
             this.concurrentPipelineQueue.get(uuid).put(quest.getId(), Lists.newLinkedList());

@@ -14,11 +14,13 @@ import me.hyfe.simplespigot.menu.item.MenuItem;
 import me.hyfe.simplespigot.menu.service.MenuService;
 import me.hyfe.simplespigot.text.Text;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
+import java.util.logging.Level;
 
 public class WeekMenu extends PageableConfigMenu<Quest> {
     private final int week;
@@ -49,10 +51,9 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
                     .set("progress_bar", this.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()))))
                     .build();
         } catch (Exception e) {
-            System.out.println("Quest: ".concat(String.valueOf(quest)));
-            System.out.println("Error whilst building menu item for quest: ".concat(String.valueOf(quest.getId())).concat(" category ")
-                    .concat(String.valueOf(quest.getCategoryId())).concat(" name ").concat(String.valueOf(quest.getName())));
-            System.out.println("Quest Item: ".concat(String.valueOf(quest.getItemStack())));
+            Bukkit.getLogger().log(Level.INFO, "Quest: ".concat(String.valueOf(quest)));
+            Bukkit.getLogger().log(Level.INFO, "Error whilst building menu item for quest: " + quest.getId() + " category " + quest.getCategoryId() + " name " + quest.getName());
+            Bukkit.getLogger().log(Level.INFO, "Quest Item: ".concat(String.valueOf(quest.getItemStack())));
             e.printStackTrace();
             return MenuItem.builderOf(new ItemStack(Material.BARRIER)).build();
         }

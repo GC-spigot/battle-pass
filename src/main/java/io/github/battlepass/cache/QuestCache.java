@@ -24,18 +24,19 @@ import java.util.stream.Collectors;
 
 public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
     private final BattlePlugin plugin;
+    private final Path dataFolder;
     private final QuestValidator questValidator;
     private final Set<Integer> notifyAt;
-    private final Path dataFolder;
     private final Set<Quest> weeklyQuests = Sets.newHashSet();
+    private final Set<String> placeholderTypes = Sets.newHashSet();
     private boolean questsFinishedLoading = false;
     private int maxWeek = 0;
 
     public QuestCache(BattlePlugin plugin) {
         this.plugin = plugin;
+        this.dataFolder = plugin.getDataFolder().toPath();
         this.questValidator = plugin.getQuestValidator();
         this.notifyAt = Sets.newHashSet(plugin.getConfig("settings").list("current-season.notify-at-percentages"));
-        this.dataFolder = plugin.getDataFolder().toPath();
     }
 
     public Set<Quest> getAllQuests() {
@@ -64,7 +65,6 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
     @SneakyThrows
     public void cache() {
         this.createDefaultFiles();
-        Set<String> placeholderTypes = Sets.newHashSet();
         Set<File> questCollections = Files.walk(this.dataFolder.resolve("quests"))
                 .map(Path::toFile)
                 .filter(file -> file.getName().endsWith("-quests.yml"))
@@ -103,8 +103,11 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
             Bukkit.getLogger().info("Finished loading the " + " quests. ".concat(failureCounter.intValue() == 0 ? "All quests loaded successfully."
                     : failureCounter.toString() + " quests failed to load. See the console for more info."));
         }
-        this.plugin.getQuestRegistry().registerPlaceholderApi(placeholderTypes);
         this.questsFinishedLoading = true;
+    }
+
+    public Set<String> getPlaceholderTypes() {
+        return this.placeholderTypes;
     }
 
     private Quest parseSection(Config config, String questId, String categoryId, String section) {

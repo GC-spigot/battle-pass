@@ -7,9 +7,11 @@ import io.github.battlepass.objects.quests.Quest;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.text.Replace;
 import me.hyfe.simplespigot.text.Text;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 public class Lang {
     private final BattlePlugin plugin;
@@ -82,11 +84,11 @@ public class Lang {
     public LangSub external(String id, Replace replace) {
         Object requested = this.externalLang.get(id);
         if (requested == null) {
-            System.out.println("^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
-            System.out.println(" ");
-            System.out.println("Missing the configuration value '".concat(id).concat("', located in the file 'lang.yml'"));
-            System.out.println(" ");
-            System.out.println("^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
+            Bukkit.getLogger().log(Level.INFO, "^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
+            Bukkit.getLogger().log(Level.INFO, " ");
+            Bukkit.getLogger().log(Level.INFO, "Missing the configuration value '".concat(id).concat("', located in the file 'lang.yml'"));
+            Bukkit.getLogger().log(Level.INFO, " ");
+            Bukkit.getLogger().log(Level.INFO, "^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
             return null;
         }
         return new LangSub(Text.modify(String.valueOf(requested), replace));
