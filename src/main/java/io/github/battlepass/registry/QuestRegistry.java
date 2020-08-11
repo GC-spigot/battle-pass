@@ -11,7 +11,6 @@ import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecuto
 import io.github.battlepass.quests.quests.internal.*;
 import me.hyfe.simplespigot.registry.Registry;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
-import me.hyfe.simplespigot.version.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
@@ -57,9 +56,6 @@ public class QuestRegistry implements Registry {
                 SmeltQuest::new,
                 TameQuest::new
         );
-        if (ServerVersion.getVersion().getVersionId() >= 1161) {
-
-        }
         this.registerHook("AdvancedEnchantments", AdvancedEnchantmentsQuests::new);
         this.registerHook("ASkyblock", ASkyblockQuests::new);
         this.registerHook("AuctionHouse", AuctionHouseKludgeQuests::new, "klugemonkey");
@@ -84,7 +80,6 @@ public class QuestRegistry implements Registry {
         this.registerHook("KoTH", SubsideKothQuests::new, "SubSide");
         this.registerHook("MoneyHunters", MoneyHuntersQuests::new);
         this.registerHook("MythicMobs", MythicMobsQuests::new);
-        this.registerHook("PlaceholderApi", PlaceholderApiQuests::new);
         this.registerHook("PlotSquared", PlotSquaredQuests::new);
         this.registerHook("ProCosmetics", ProCosmeticsQuests::new);
         this.registerHook("CrazyEnvoy", CrazyEnvoyQuests::new);
@@ -178,6 +173,20 @@ public class QuestRegistry implements Registry {
         this.runRepeatingCheck(plugin, () -> {
             if (this.registerHook(plugin, function, author, versionCheck)) {
                 Bukkit.getScheduler().cancelTask(this.attempts.get(plugin).getValue());
+            }
+        });
+        return false;
+    }
+
+    public boolean registerPlaceholderApi(Set<String> placeholderTypes) {
+        if (Bukkit.getPluginManager().isPluginEnabled(this.plugin)) {
+            this.registeredHooks.add("PlaceholderAPI");
+            new PlaceholderApiQuests(this.plugin, placeholderTypes);
+            return true;
+        }
+        this.runRepeatingCheck("PlaceholderAPI", () -> {
+            if (this.registerPlaceholderApi(placeholderTypes)) {
+                Bukkit.getScheduler().cancelTask(this.attempts.get("PlaceholderAPI").getValue());
             }
         });
         return false;

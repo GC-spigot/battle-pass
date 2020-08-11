@@ -1,4 +1,4 @@
-package io.github.battlepass.menus.menus;
+package io.github.battlepass.menus.menus.rewards;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class RewardMenu extends ConfigMenu implements PageMethods, UserDependent {
+public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserDependent {
     private final BattlePassApi api;
     private final PassLoader passLoader;
     private final RewardCache rewardCache;
@@ -37,7 +37,7 @@ public class RewardMenu extends ConfigMenu implements PageMethods, UserDependent
 
     private int page = 1;
 
-    public RewardMenu(BattlePlugin plugin, Config config, Player player) {
+    public DefaultRewardsMenu(BattlePlugin plugin, Config config, Player player) {
         super(plugin, config, player);
         this.api = plugin.getLocalApi();
         this.passLoader = plugin.getPassLoader();

@@ -4,10 +4,9 @@ import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.logger.DebugLogger;
 import io.github.battlepass.logger.containers.LogContainer;
-import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
 import io.github.battlepass.objects.quests.variable.QuestResult;
+import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -20,11 +19,11 @@ public class PlaceholderApiQuests extends ExternalQuestExecutor {
     private final Set<String> integerPlaceholders = Sets.newHashSet();
     private final Set<String> matchPlaceholders = Sets.newHashSet();
 
-    public PlaceholderApiQuests(BattlePlugin plugin) {
+    public PlaceholderApiQuests(BattlePlugin plugin, Set<String> placeholderTypes) {
         super(plugin, "placeholderapi");
         this.plugin = plugin;
         DebugLogger logger = plugin.getDebugLogger();
-        for (String placeholder : plugin.getQuestCache().getPlaceholderTypes()) {
+        for (String placeholder : placeholderTypes) {
             String reducedPlaceholder = placeholder.substring(15);
             if (reducedPlaceholder.startsWith("integer_")) {
                 String toAdd = reducedPlaceholder.substring(8);
@@ -50,7 +49,8 @@ public class PlaceholderApiQuests extends ExternalQuestExecutor {
                 }
                 for (String placeholder : this.integerPlaceholders) {
                     String placeholderValue = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, "%".concat(placeholder).concat("%"));
-                    if (StringUtils.isNumeric(placeholderValue)) {
+                    String numberOnlyPlaceholder = placeholderValue.replaceAll("[^\\d.]", "");
+                    if (!numberOnlyPlaceholder.isEmpty()) {
                         this.execute("integer_".concat(placeholder), player, Integer.parseInt(placeholderValue), QuestResult::none,
                                 replace -> replace.set("placeholder_value", placeholderValue), true);
                     }

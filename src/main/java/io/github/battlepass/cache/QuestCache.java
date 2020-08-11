@@ -28,7 +28,6 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
     private final Set<Integer> notifyAt;
     private final Path dataFolder;
     private final Set<Quest> weeklyQuests = Sets.newHashSet();
-    private final Set<String> placeholderTypes = Sets.newHashSet();
     private boolean questsFinishedLoading = false;
     private int maxWeek = 0;
 
@@ -58,10 +57,6 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
         return this.get(categoryId).orElseGet(() -> this.set(categoryId, Maps.newLinkedHashMap()));
     }
 
-    public Set<String> getPlaceholderTypes() {
-        return this.placeholderTypes;
-    }
-
     public int getMaxWeek() {
         return this.maxWeek;
     }
@@ -69,6 +64,7 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
     @SneakyThrows
     public void cache() {
         this.createDefaultFiles();
+        Set<String> placeholderTypes = Sets.newHashSet();
         Set<File> questCollections = Files.walk(this.dataFolder.resolve("quests"))
                 .map(Path::toFile)
                 .filter(file -> file.getName().endsWith("-quests.yml"))
@@ -88,7 +84,7 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
                     continue;
                 }
                 if (quest.getType().startsWith("placeholderapi_")) { // PlaceholderAPI quest
-                    this.placeholderTypes.add(quest.getType());
+                    placeholderTypes.add(quest.getType());
                 }
                 this.getQuests(id).put(key, quest);
                 if (id.contains("week")) {
@@ -107,6 +103,7 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
             Bukkit.getLogger().info("Finished loading the " + " quests. ".concat(failureCounter.intValue() == 0 ? "All quests loaded successfully."
                     : failureCounter.toString() + " quests failed to load. See the console for more info."));
         }
+        this.plugin.getQuestRegistry().registerPlaceholderApi(placeholderTypes);
         this.questsFinishedLoading = true;
     }
 

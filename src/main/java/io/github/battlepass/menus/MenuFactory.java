@@ -5,7 +5,7 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.menus.menus.DailyQuestsMenu;
 import io.github.battlepass.menus.menus.PortalMenu;
 import io.github.battlepass.menus.menus.QuestOverviewMenu;
-import io.github.battlepass.menus.menus.RewardMenu;
+import io.github.battlepass.menus.menus.rewards.DefaultRewardsMenu;
 import me.hyfe.simplespigot.menu.Menu;
 import org.bukkit.entity.Player;
 
@@ -29,7 +29,7 @@ public class MenuFactory {
             case "daily-quests":
                 return this.initiateMenu(player, () -> new DailyQuestsMenu(this.plugin, this.plugin.getConfig("daily-quests-menu"), player));
             case "rewards":
-                return this.initiateMenu(player, () -> new RewardMenu(this.plugin, this.plugin.getConfig("rewards-menu"), player));
+                return this.initiateMenu(player, () -> new DefaultRewardsMenu(this.plugin, this.plugin.getConfig("rewards-menu"), player));
             case "missions":
             case "quests":
             case "quest-overview":
