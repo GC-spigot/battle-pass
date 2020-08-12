@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.function.IntUnaryOperator;
 import java.util.function.UnaryOperator;
 
 public class User {
@@ -64,8 +65,8 @@ public class User {
         return this.tier;
     }
 
-    public int updateTier(UnaryOperator<Integer> current) {
-        this.tier = current.apply(this.tier);
+    public int updateTier(IntUnaryOperator current) {
+        this.tier = current.applyAsInt(this.tier);
         return this.tier;
     }
 

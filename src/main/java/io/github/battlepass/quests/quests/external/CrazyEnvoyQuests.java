@@ -1,8 +1,8 @@
 package io.github.battlepass.quests.quests.external;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
 import io.github.battlepass.objects.quests.variable.QuestResult;
+import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
 import me.badbones69.crazyenvoy.api.events.OpenEnvoyEvent;
 import me.badbones69.crazyenvoy.api.events.UseFlareEvent;
 import org.bukkit.entity.Player;

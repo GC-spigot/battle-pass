@@ -39,7 +39,7 @@ public class SmeltQuest extends QuestExecutor {
                 return;
             }
             amount = result;
-        } else if (currentItem.getType().equals(currentItem.getType()) && cursorItem.getAmount() + currentItem.getAmount() > currentItem.getMaxStackSize()) {
+        } else if (cursorItem.getType().equals(currentItem.getType()) && cursorItem.getAmount() + currentItem.getAmount() > currentItem.getMaxStackSize()) {
             return;
         }
 

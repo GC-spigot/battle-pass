@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class DebugLogger {
@@ -63,7 +64,7 @@ public class DebugLogger {
     }
 
     @SneakyThrows
-    public String dump(Function<LogContainer, Boolean> filterFunction) {
+    public String dump(Predicate<LogContainer> filterFunction) {
         ImmutablePair<String, FileWriter> filePair = this.makeDebugFile();
         FileWriter writer = filePair.getValue();
         List<LogContainer> orderedBacklog = this.backlog.stream()
@@ -77,7 +78,7 @@ public class DebugLogger {
         writer.write(System.getProperty("line.separator"));
         if (filterFunction != null) {
             for (LogContainer logContainer : orderedBacklog) {
-                if (filterFunction.apply(logContainer)) {
+                if (filterFunction.test(logContainer)) {
                     this.writeLine(writer, this.lineTimeFormat.format(new Date(logContainer.getTime())).concat(" ").concat(logContainer.toString()));
                 }
             }
@@ -108,7 +109,7 @@ public class DebugLogger {
 
     @SneakyThrows
     private ImmutablePair<String, FileWriter> makeDebugFile() {
-        SimpleDateFormat fileNameFormat = new SimpleDateFormat("YYYY-MM-dd hh-mm-ss");
+        SimpleDateFormat fileNameFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
         String fileName = fileNameFormat.format(new Date(System.currentTimeMillis()));
         File file = this.debugFolder.resolve(fileName.concat(".txt")).toFile();
 

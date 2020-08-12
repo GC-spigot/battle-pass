@@ -1,6 +1,5 @@
 package io.github.battlepass.quests.workers.pipeline.steps;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.BattlePassApi;
@@ -17,7 +16,8 @@ import me.hyfe.simplespigot.service.Locks;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class QuestValidationStep {

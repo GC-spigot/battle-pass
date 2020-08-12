@@ -6,7 +6,6 @@ import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.objects.user.User;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.hyfe.simplespigot.uuid.FastUuid;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +29,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
             return "successful";
         }
         if (offlinePlayer == null) {
-            Bukkit.getLogger().log(Level.WARNING, "Could not get placeholder ".concat(placeholder).concat(" for user ").concat(FastUuid.toString(offlinePlayer.getUniqueId())).concat(" (player null)"));
+            Bukkit.getLogger().log(Level.WARNING, "Could not get placeholder ".concat(placeholder).concat(" (player null)"));
             return "???";
         }
         Optional<User> optionalUser = this.userCache.getSync(offlinePlayer.getUniqueId());

@@ -11,7 +11,7 @@ public abstract class LogContainer implements Comparable<LogContainer> {
 
     public static LogContainer of(String message, Player player) {
         return new BasicPlayerContainer(message, player);
-    };
+    }
 
     public LogContainer() {
         this.time = System.currentTimeMillis();

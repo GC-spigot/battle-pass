@@ -53,10 +53,11 @@ public class MenuAction extends Action {
     private void checkCondition(Menu menu, String splitter, BiPredicate<Integer, Integer> predicate, Runnable ifTrue) {
         if (this.condition.contains(splitter)) {
             String[] splitCondition = this.condition.replace(" ", "").split(splitter);
-            if (splitCondition[0].equalsIgnoreCase("page") && StringUtils.isNumeric(splitCondition[1]) && menu instanceof PageMethods) {
-                if (predicate.test(((PageMethods) menu).getPage(), Integer.parseInt(splitCondition[1]))) {
-                    ifTrue.run();
-                }
+            if (splitCondition[0].equalsIgnoreCase("page") &&
+                    StringUtils.isNumeric(splitCondition[1]) &&
+                    menu instanceof PageMethods &&
+                    predicate.test(((PageMethods) menu).getPage(), Integer.parseInt(splitCondition[1]))) {
+                ifTrue.run();
             }
         } else if (this.condition.isEmpty()) {
             ifTrue.run();
