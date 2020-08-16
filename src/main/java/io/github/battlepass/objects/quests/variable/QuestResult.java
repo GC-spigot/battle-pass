@@ -20,7 +20,7 @@ public interface QuestResult {
 
     boolean isEligible(Player player, Variable variable);
 
-    String getRoot();
+    String getEffectiveRoot();
 
     Map<String, String> getSubRoots();
 }
