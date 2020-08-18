@@ -34,3 +34,12 @@ quests:
   # These are here as examples, and you can make as many as necessary.
   askyblock_createisland-progressed: "&eQuests >> &7Custom ASkyblock progression message :D. &8(&e%progress%&7/&8%required_progress%&8)"
   askyblock_createisland-completed: "&eQuests >> &7You completed the ASkyblock island quest!"
+
+daily-quests:
+  # This section will only be used if the quest is daily. If messages aren't present here but are in the quest section, it will fall back onto that message.
+  # This section is coded so you can remove it entirely and only use the quests messages if you wish.
+  base-message-progressed: "&8[&eQuests&8] &7You progressed the daily quest &e%quest_name% &8(&e%progress%&7/&8&e%required_progress%&8)"
+  base-message-completed: "&8[&eQuests&8] &7You completed the daily quest &e%quest_name%"
+
+  askyblock_createisland-progressed: "&eQuests >> &7Custom ASkyblock daily progression message :D. &8(&e%progress%&7/&8%required_progress%&8)"
+  askyblock_createisland-completed: "&eQuests >> &7You completed the ASkyblock island daily quest!"

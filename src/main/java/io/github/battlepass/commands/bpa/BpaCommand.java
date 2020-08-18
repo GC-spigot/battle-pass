@@ -19,22 +19,23 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
         this.noPermissionLang(sender -> plugin.getLang().external("no-permission").asString());
         this.setSubCommands(
                 new DebugDumpSub(plugin),
+                new PlayerDebugDumpSub(plugin),
                 new MaterialBlockSub(plugin),
                 new MaterialItemSub(plugin),
                 new SetPassAllSub(plugin),
                 new SetPassOnlineSub(plugin),
                 new SetPassSub(plugin),
-                new PlayerDebugDumpSub(plugin),
                 new BypassLockedQuestsSub(plugin),
-                new ReloadSub(plugin),
-                new QuestIdsSub(plugin),
                 new DailyQuestIdsSub(plugin),
-                new ProgressQuestSub(plugin),
-                new ProgressDailyQuestSub(plugin),
                 new DeleteUserSub(plugin),
-                new RefreshDailyQuestsSub(plugin),
-                new ResetQuestSub(plugin),
                 new GivePointsSub(plugin),
+                new NewSeasonSub(plugin),
+                new ProgressDailyQuestSub(plugin),
+                new ProgressQuestSub(plugin),
+                new QuestIdsSub(plugin),
+                new RefreshDailyQuestsSub(plugin),
+                new ReloadSub(plugin),
+                new ResetQuestSub(plugin),
                 new SetPointsSub(plugin)
         );
     }
@@ -57,10 +58,11 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                 .concat("/bpa progress quest <player> <week> <quest id> <amount> - Progress a specific quest of a player.")
                 .concat("/bpa progress daily quest <player> <quest id> <amount> - Progress a specific quest of a player.")
                 .concat("/bpa refresh daily quests - Refresh daily quests.")
+                .concat("/bpa new season - Resets user tiers, pending rewards and points.")
                 .concat("/bpa material <block/item> - Get the config name of the item you're holding or block you're looking at.")
                 .concat("/bpa bypass locked quests <player> - Allows the player to bypass week locks and complete quests anyway.")
                 .replace("- ", "&8- &7")
-                .replace("/bp", "&e/bp")
+                .replace("/bpa", "&e/bpa")
                 .replace(".", ".\n"));
     }
 }

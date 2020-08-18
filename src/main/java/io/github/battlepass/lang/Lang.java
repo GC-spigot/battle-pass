@@ -44,6 +44,7 @@ public class Lang {
         this.localLang.put("target-user-data-deleted", "&cYour quest data has been wiped.");
         this.localLang.put("debug-dumped", "&cDumped the debug information to a file called %s");
         this.localLang.put("cooldown-has-seconds", "&cPlease wait %s seconds before using this again.");
+        this.localLang.put("confirm-new-season", "&cType the command again within 30 seconds to confirm this action. This command can be destructive, read the wiki first.");
         this.load();
     }
 
@@ -95,11 +96,11 @@ public class Lang {
     }
 
     public String questCompleteMessage(Quest quest) {
-        return Text.modify(this.external("quests.base-message-completed").asString(), replacer -> replacer.set("quest_name", quest.getName()));
+        return Text.modify(this.external(this.getCompletionPath(quest)).asString(), replacer -> replacer.set("quest_name", quest.getName()));
     }
 
     public String questProgressedMessage(Quest quest, int progress) {
-        return Text.modify(this.external("quests.base-message-progressed").asString(), replacer -> replacer
+        return Text.modify(this.external(this.getProgressionPath(quest)).asString(), replacer -> replacer
                 .set("quest_name", quest.getName())
                 .set("progress", progress)
                 .set("required_progress", quest.getRequiredProgress()));
@@ -116,6 +117,36 @@ public class Lang {
                     .append("\n");
         }
         return builder.toString();
+    }
+
+    private String getCompletionPath(Quest quest) {
+        if (quest.getCategoryId().contains("daily")) {
+            if (this.has("daily-quests.".concat(quest.getType()))) {
+                return "daily-quests".concat(quest.getType());
+            }
+            if (this.has("daily-quests.base-message-completed")) {
+                return "daily-quests.base-message-completed";
+            }
+        }
+        if (this.has("quests.".concat(quest.getType()))) {
+            return "quests.".concat(quest.getType());
+        }
+        return "quests.base-message-completed";
+    }
+
+    private String getProgressionPath(Quest quest) {
+        if (quest.getCategoryId().contains("daily")) {
+            if (this.has("daily-quests.".concat(quest.getType()))) {
+                return "daily-quests".concat(quest.getType());
+            }
+            if (this.has("daily-quests.base-message-progressed")) {
+                return "daily-quests.base-message-progressed";
+            }
+        }
+        if (this.has("quests.".concat(quest.getType()))) {
+            return "quests.".concat(quest.getType());
+        }
+        return "quests.base-message-progressed";
     }
 
     public static class LangSub {
