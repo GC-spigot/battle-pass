@@ -10,6 +10,7 @@ import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.quests.workers.reset.DailyQuestReset;
 import me.hyfe.simplespigot.config.Config;
+import me.hyfe.simplespigot.item.SpigotItem;
 import me.hyfe.simplespigot.menu.item.MenuItem;
 import me.hyfe.simplespigot.menu.service.MenuService;
 import me.hyfe.simplespigot.text.Text;
@@ -27,6 +28,7 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
     private final QuestCache questCache;
     private final QuestController questController;
     private final DailyQuestReset dailyQuestReset;
+    private final boolean glowOnCompletion;
     private final Lang lang;
     private final User user;
 
@@ -36,6 +38,7 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
         this.questCache = plugin.getQuestCache();
         this.questController = plugin.getQuestController();
         this.dailyQuestReset = plugin.getDailyQuestReset();
+        this.glowOnCompletion = plugin.getConfig("settings").bool("current-season.quest-glow-on-completion");
         this.lang = plugin.getLang();
         this.user = plugin.getUserCache().getOrThrow(player.getUniqueId());
     }
@@ -43,7 +46,11 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
     @Override
     public MenuItem pageableItem(Quest quest) {
         try {
-            return MenuItem.builderOf(Text.modify(quest.getItemStack(), replacer -> replacer
+            ItemStack itemStack = quest.getItemStack();
+            if (this.glowOnCompletion && this.questController.isQuestDone(this.user, quest)) {
+                itemStack = new SpigotItem.Builder().itemStack(itemStack).glow().build();
+            }
+            return MenuItem.builderOf(Text.modify(itemStack, replacer -> replacer
                     .set("daily_time_left", this.dailyQuestReset.asString())
                     .set("total_progress", this.questController.getQuestProgress(this.user, quest))
                     .set("required_progress", quest.getRequiredProgress())

@@ -70,6 +70,7 @@ current-season:
   daily-quest-reset-time: '12:00'
   daily-quest-amount: 9 # Amount of daily quests that will be available at one time
   daily-quests-enabled: true # If this value is set to false it will disable calculation of daily quests
+  quest-glow-on-completion: true # If quests will have an enchanted glow if they are completed.
   notify-at-percentages: [10, 25, 50, 75, 100]
   unlocks:
     require-previous-completion: false # Whether the user must complete all missions in the previous week to start the next week.
