@@ -10,6 +10,7 @@ import io.github.battlepass.menus.menus.rewards.DefaultRewardsMenu;
 import me.hyfe.simplespigot.menu.Menu;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -19,7 +20,7 @@ import java.util.function.Supplier;
 public class MenuFactory {
     private final BattlePlugin plugin;
     private final Set<UUID> insideMenu = Sets.newHashSet();
-    private final Map<Set<String>, Function<Player, Menu>> menus = Maps.newHashMap();
+    private final Map<Collection<String>, Function<Player, Menu>> menus = Maps.newHashMap();
 
     public MenuFactory(BattlePlugin plugin) {
         this.plugin = plugin;
@@ -27,7 +28,7 @@ public class MenuFactory {
     }
 
     public Menu createMenu(String menuName, Player player) {
-        for (Map.Entry<Set<String>, Function<Player, Menu>> entry : this.menus.entrySet()) {
+        for (Map.Entry<Collection<String>, Function<Player, Menu>> entry : this.menus.entrySet()) {
             if (entry.getKey().contains(menuName)) {
                 return this.initiateMenu(player, () -> entry.getValue().apply(player));
             }
@@ -44,7 +45,7 @@ public class MenuFactory {
      *
      * @return A map of the names of the menu to a function giving you the Player where you return your Menu.
      */
-    public Map<Set<String>, Function<Player, Menu>> getMenus() {
+    public Map<Collection<String>, Function<Player, Menu>> getMenus() {
         return this.menus;
     }
 
