@@ -84,7 +84,7 @@ public class ExecutableQuestResult implements QuestResult {
 
     @Override
     public String getEffectiveRoot() {
-        return this.material.isEmpty() ? this.root : this.material + ":" + this.data;
+        return this.material == null || this.material.isEmpty() ? this.root : this.material + ":" + this.data;
     }
 
     @Override
