@@ -58,8 +58,8 @@ public class MenuFactory {
 
     private void putDefaults() {
         this.menus.put(Sets.newHashSet("portal"), player -> new PortalMenu(this.plugin, this.plugin.getConfig("portal-menu"), player));
-        this.menus.put(Sets.newHashSet("daily", "daily-quests"), player -> new DailyQuestsMenu(this.plugin, this.plugin.getConfig("portal-menu"), player));
-        this.menus.put(Sets.newHashSet("rewards"), player -> new DefaultRewardsMenu(this.plugin, this.plugin.getConfig("portal-menu"), player));
-        this.menus.put(Sets.newHashSet("missions", "quests", "quest-overview"), player -> new QuestOverviewMenu(this.plugin, this.plugin.getConfig("portal-menu"), player));
+        this.menus.put(Sets.newHashSet("daily", "daily-quests"), player -> new DailyQuestsMenu(this.plugin, this.plugin.getConfig("daily-quests-menu"), player));
+        this.menus.put(Sets.newHashSet("rewards"), player -> new DefaultRewardsMenu(this.plugin, this.plugin.getConfig("rewards-menu"), player));
+        this.menus.put(Sets.newHashSet("missions", "quests", "quest-overview"), player -> new QuestOverviewMenu(this.plugin, this.plugin.getConfig("quest-overview-menu"), player));
     }
 }
