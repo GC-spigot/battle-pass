@@ -54,6 +54,9 @@ public class ConnectionListener implements Listener {
                     this.lang.external("collectable-rewards-notification", replacer -> replacer.set("player", player.getName())).to(player);
                 });
             }
+        }).exceptionally(ex -> {
+            ex.printStackTrace();
+            return null;
         });
     }
 
