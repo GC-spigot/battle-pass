@@ -22,11 +22,15 @@ import java.util.logging.Level;
 
 public class QuestRegistry implements Registry {
     private final BattlePlugin plugin;
+    private final Set<String> disabledPluginHooks = Sets.newHashSet();
     private final Set<String> registeredHooks = Sets.newHashSet();
     private final Map<String, ImmutablePair<AtomicInteger, Integer>> attempts = Maps.newHashMap();
 
     public QuestRegistry(BattlePlugin plugin) {
         this.plugin = plugin;
+        for (String disabledHook : plugin.getConfig("settings").stringList("disabled-plugin-hooks")) {
+            this.disabledPluginHooks.add(disabledHook.toLowerCase());
+        }
     }
 
     @Override
@@ -106,6 +110,9 @@ public class QuestRegistry implements Registry {
     }
 
     public boolean registerHook(String plugin, Function<BattlePlugin, ExternalQuestExecutor> function) {
+        if (this.disabledPluginHooks.contains(plugin.toLowerCase())) {
+            return false;
+        }
         if (Bukkit.getPluginManager().isPluginEnabled(plugin)) {
             Bukkit.getPluginManager().registerEvents(function.apply(this.plugin), this.plugin);
             Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(plugin));
@@ -121,6 +128,9 @@ public class QuestRegistry implements Registry {
     }
 
     public boolean registerHook(String plugin, Function<BattlePlugin, ExternalQuestExecutor> function, String author) {
+        if (this.disabledPluginHooks.contains(plugin.toLowerCase())) {
+            return false;
+        }
         if (Bukkit.getPluginManager().isPluginEnabled(plugin)) {
             if (Bukkit.getPluginManager().getPlugin(plugin).getDescription().getAuthors().contains(author)) {
                 Bukkit.getPluginManager().registerEvents(function.apply(this.plugin), this.plugin);
@@ -159,6 +169,9 @@ public class QuestRegistry implements Registry {
     }*/
 
     public boolean registerHook(String plugin, Function<BattlePlugin, ExternalQuestExecutor> function, String author, Function<Double, Boolean> versionCheck) {
+        if (this.disabledPluginHooks.contains(plugin.toLowerCase())) {
+            return false;
+        }
         PluginManager pluginManager = Bukkit.getPluginManager();
         if (pluginManager.isPluginEnabled(plugin)) {
             double version = this.getFormattedVersion(plugin);
@@ -183,6 +196,9 @@ public class QuestRegistry implements Registry {
     }
 
     private boolean registerPlaceholderApi(Set<String> placeholderTypes) {
+        if (this.disabledPluginHooks.contains("placeholderapi")) {
+            return false;
+        }
         if (Bukkit.getPluginManager().isPluginEnabled(this.plugin)) {
             this.registeredHooks.add("PlaceholderAPI");
             new PlaceholderApiQuests(this.plugin, placeholderTypes);

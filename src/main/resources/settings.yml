@@ -79,3 +79,7 @@ current-season:
 season-finished:
   stop-daily-quests: false # Whether once the season is finished, daily quests will stop being rolled / progress not counted.
   stop-other-quests: false # If set to true, anything other than daily quests will not be progressable. Combine with the option above to block all quests.
+
+#disabled-plugin-hooks: # This will disable the loading for any quests from the specified plugin. You can use this if you use an outdated version of them and it's causing errors to stop them.
+#  - 'AutoSell'
+#  - 'PlotSquared'
