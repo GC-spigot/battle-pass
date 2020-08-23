@@ -12,30 +12,35 @@ import io.github.battlepass.quests.quests.internal.*;
 import me.hyfe.simplespigot.registry.Registry;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 
 public class QuestRegistry implements Registry {
     private final BattlePlugin plugin;
-    private final Set<String> disabledPluginHooks = Sets.newHashSet();
+    private final PluginManager manager;
+    private final Set<String> disabledHooks = Sets.newHashSet();
     private final Set<String> registeredHooks = Sets.newHashSet();
-    private final Map<String, ImmutablePair<AtomicInteger, Integer>> attempts = Maps.newHashMap();
+    private final Map<String, ImmutablePair<AtomicInteger, BukkitTask>> attempts = Maps.newHashMap();
 
     public QuestRegistry(BattlePlugin plugin) {
         this.plugin = plugin;
+        this.manager = Bukkit.getPluginManager();
+
         for (String disabledHook : plugin.getConfig("settings").stringList("disabled-plugin-hooks")) {
-            this.disabledPluginHooks.add(disabledHook.toLowerCase());
+            this.disabledHooks.add(disabledHook.toLowerCase());
         }
     }
 
     @Override
     public void register() {
-        this.registerQuests(
+        this.quest(
                 BlockBreakQuest::new,
                 BlockPlaceQuest::new,
                 ChatQuest::new,
@@ -60,143 +65,120 @@ public class QuestRegistry implements Registry {
                 SmeltQuest::new,
                 TameQuest::new
         );
-        this.registerHook("AdvancedEnchantments", AdvancedEnchantmentsQuests::new);
-        this.registerHook("ASkyblock", ASkyblockQuests::new);
-        this.registerHook("AuctionHouse", AuctionHouseKludgeQuests::new, "klugemonkey");
-        this.registerHook("AutoSell", AutoSellQuests::new, "extended_clip");
-        this.registerHook("BedWars1058", BedWars1058Quests::new);
-        this.registerHook("KOTH", BenzimmerKothQuests::new, "benzimmer123");
-        this.registerHook("BuildBattle", BuildBattleTigerQuests::new, "Tigerpanzer");
-        this.registerHook("ChatReaction", ChatReactionQuests::new);
-        this.registerHook("ChestShop", ChestShopQuests::new, "https://github.com/ChestShop-authors/ChestShop-3/contributors", version -> version > 3.92);
-        this.registerHook("ChestShop", LegacyChestShopQuests::new, "https://github.com/ChestShop-authors/ChestShop-3/contributors", version -> version <= 3.92);
-        this.registerHook("Citizens", CitizensQuests::new);
-        this.registerHook("Clans", ClansQuests::new);
-        this.registerHook("ClueScrolls", ClueScrollsQuests::new);
-        this.registerHook("CrateReloaded", CrateReloadedQuests::new);
-        this.registerHook("CratesPlus", CratesPlusQuests::new);
-        this.registerHook("CrazyCrates", CrazyCratesQuests::new);
-        this.registerHook("DiscordMinecraft", DiscordMinecraftQuests::new);
-        this.registerHook("Jobs", JobsQuests::new);
-        this.registerHook("Lands", LandsQuests::new);
-        this.registerHook("LobbyPresents", LobbyPresentsPoompkQuests::new, "poompk");
-        this.registerHook("KoTH", SubsideKothQuests::new, "SubSide");
-        this.registerHook("MoneyHunters", MoneyHuntersQuests::new);
-        this.registerHook("MythicMobs", MythicMobsQuests::new);
-        this.registerHook("PlotSquared", PlotSquaredQuests::new);
-        this.registerHook("ProCosmetics", ProCosmeticsQuests::new);
-        this.registerHook("CrazyEnvoy", CrazyEnvoyQuests::new);
-        this.registerHook("Shopkeepers", ShopkeeperQuests::new, "nisovin");
-        this.registerHook("SkillAPI", SkillApiQuests::new);
-        this.registerHook("StrikePractice", StrikePracticeQuests::new);
-        this.registerHook("SuperiorSkyblock2", SuperiorSkyblockQuests::new);
-        this.registerHook("TheLab", TheLabQuests::new);
-        this.registerHook("TokenEnchant", TokenEnchantQuests::new);
-        this.registerHook("UltraSkyWars", UltraSkyWarsQuests::new, "Leonardo0013YT");
-        this.registerHook("uSkyBlock", USkyBlockQuests::new);
-        this.registerHook("Votifier", VotifierQuests::new);
-        this.registerPlaceholderApi(this.plugin.getQuestCache().getPlaceholderTypes());
+        this.hook("AdvancedEnchantments", AdvancedEnchantmentsQuests::new);
+        this.hook("ASkyblock", ASkyblockQuests::new);
+        this.hook("AuctionHouse", AuctionHouseKludgeQuests::new, "klugemonkey");
+        this.hook("AutoSell", AutoSellQuests::new, "extended_clip");
+        this.hook("BedWars1058", BedWars1058Quests::new);
+        this.hook("KOTH", BenzimmerKothQuests::new, "benzimmer123");
+        this.hook("BuildBattle", BuildBattleTigerQuests::new, "Tigerpanzer");
+        this.hook("ChatReaction", ChatReactionQuests::new);
+        this.hook("ChestShop", ChestShopQuests::new, version -> version > 3.92);
+        this.hook("ChestShop", ChestShopQuests::new, "https://github.com/ChestShop-authors/ChestShop-3/contributors", version -> version > 3.92);
+        this.hook("ChestShop", LegacyChestShopQuests::new, "https://github.com/ChestShop-authors/ChestShop-3/contributors", version -> version <= 3.92);
+        this.hook("Citizens", CitizensQuests::new);
+        this.hook("Clans", ClansQuests::new);
+        this.hook("ClueScrolls", ClueScrollsQuests::new);
+        this.hook("CrateReloaded", CrateReloadedQuests::new);
+        this.hook("CratesPlus", CratesPlusQuests::new);
+        this.hook("CrazyCrates", CrazyCratesQuests::new);
+        this.hook("DiscordMinecraft", DiscordMinecraftQuests::new);
+        this.hook("Jobs", JobsQuests::new);
+        this.hook("Lands", LandsQuests::new);
+        this.hook("LobbyPresents", LobbyPresentsPoompkQuests::new, "poompk");
+        this.hook("KoTH", SubsideKothQuests::new, "SubSide");
+        this.hook("MoneyHunters", MoneyHuntersQuests::new);
+        this.hook("MythicMobs", MythicMobsQuests::new);
+        this.hook("PlotSquared", PlotSquaredQuests::new);
+        this.hook("ProCosmetics", ProCosmeticsQuests::new);
+        this.hook("CrazyEnvoy", CrazyEnvoyQuests::new);
+        this.hook("Shopkeepers", ShopkeeperQuests::new, "nisovin");
+        this.hook("SkillAPI", SkillApiQuests::new);
+        this.hook("StrikePractice", StrikePracticeQuests::new);
+        this.hook("SuperiorSkyblock2", SuperiorSkyblockQuests::new);
+        this.hook("TheLab", TheLabQuests::new);
+        this.hook("TokenEnchant", TokenEnchantQuests::new);
+        this.hook("UltraSkyWars", UltraSkyWarsQuests::new, "Leonardo0013YT");
+        this.hook("uSkyBlock", USkyBlockQuests::new);
+        this.hook("Votifier", VotifierQuests::new);
+        this.placeholderAPI(this.plugin.getQuestCache().getPlaceholderTypes());
     }
 
     public Set<String> getRegisteredHooks() {
         return this.registeredHooks;
     }
 
+    public boolean isHookDisabled(String plugin) {
+        return this.disabledHooks.contains(plugin.toLowerCase());
+    }
+
+    @FunctionalInterface
+    private interface Instantiator<T extends QuestExecutor> {
+
+        T init(BattlePlugin plugin);
+    }
+
     @SafeVarargs
-    public final void registerQuests(Function<BattlePlugin, QuestExecutor>... functions) {
-        for (Function<BattlePlugin, QuestExecutor> function : functions) {
-            Bukkit.getPluginManager().registerEvents(function.apply(this.plugin), this.plugin);
+    private final void quest(Instantiator<QuestExecutor>... instantiators) {
+        for (Instantiator<?> instantiator : instantiators) {
+            Bukkit.getPluginManager().registerEvents(instantiator.init(this.plugin), this.plugin);
         }
     }
 
-    public boolean registerHook(String plugin, Function<BattlePlugin, ExternalQuestExecutor> function) {
-        if (this.disabledPluginHooks.contains(plugin.toLowerCase())) {
+    private void hook(String name, Instantiator<ExternalQuestExecutor> instantiator) {
+        this.hook(name, instantiator, "");
+    }
+
+    private boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author) {
+        if (this.isHookDisabled(name)) {
             return false;
         }
-        if (Bukkit.getPluginManager().isPluginEnabled(plugin)) {
-            Bukkit.getPluginManager().registerEvents(function.apply(this.plugin), this.plugin);
-            Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(plugin));
-            this.registeredHooks.add(plugin);
+        Plugin plugin = this.manager.getPlugin(name);
+        if (plugin != null && (author.equals("") || plugin.getDescription().getAuthors().contains(author))) {
+            this.manager.registerEvents(instantiator.init(this.plugin), this.plugin);
+            Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(name));
+            this.registeredHooks.add(name);
             return true;
         }
-        this.runRepeatingCheck(plugin, () -> {
-            if (this.registerHook(plugin, function)) {
-                Bukkit.getScheduler().cancelTask(this.attempts.get(plugin).getValue());
+        this.runRepeatingCheck(name , () -> {
+            if (this.hook(name, instantiator, author)) {
+                this.attempts.get(name).getValue().cancel();
             }
         });
         return false;
     }
 
-    public boolean registerHook(String plugin, Function<BattlePlugin, ExternalQuestExecutor> function, String author) {
-        if (this.disabledPluginHooks.contains(plugin.toLowerCase())) {
+    private void hook(String name, Instantiator<ExternalQuestExecutor> instantiator, Predicate<Double> versionPredicate) {
+        this.hook(name, instantiator, "", versionPredicate);
+    }
+
+    private boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author, Predicate<Double> versionPredicate) {
+        if (this.isHookDisabled(name)) {
             return false;
         }
-        if (Bukkit.getPluginManager().isPluginEnabled(plugin)) {
-            if (Bukkit.getPluginManager().getPlugin(plugin).getDescription().getAuthors().contains(author)) {
-                Bukkit.getPluginManager().registerEvents(function.apply(this.plugin), this.plugin);
-                Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(plugin));
-                this.registeredHooks.add(plugin);
-                return true;
-            }
-        }
-        this.runRepeatingCheck(plugin, () -> {
-            if (this.registerHook(plugin, function, author)) {
-                Bukkit.getScheduler().cancelTask(this.attempts.get(plugin).getValue());
-            }
-        });
-        return false;
-    }
-
-    /*public boolean registerHook(String plugin, Function<BattlePlugin, ExternalQuestExecutor> function, Function<Double, Boolean> versionCheck) {
-        PluginManager pluginManager = Bukkit.getPluginManager();
-        if (pluginManager.isPluginEnabled(plugin)) {
-            double version = this.getFormattedVersion(plugin);
-            if (versionCheck.apply(version)) {
-                pluginManager.registerEvents(function.apply(this.plugin), this.plugin);
-                Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(plugin));
-                this.registeredHooks.add(plugin);
+        Plugin plugin = this.manager.getPlugin(name);
+        if (plugin != null && (author.equals("") || plugin.getDescription().getAuthors().contains(author))) {
+            double version = this.extractVersion(plugin);
+            Bukkit.getLogger().log(Level.INFO, "Using internal version as " + version + " for loading " + name + ".");
+            if (versionPredicate.test(version)) {
+                this.manager.registerEvents(instantiator.init(this.plugin), this.plugin);
+                Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(name));
+                this.registeredHooks.add(name);
             } else {
-                Bukkit.getLogger().log(Level.INFO, plugin.concat(" was present but its version is not supported."));
+                Bukkit.getLogger().log(Level.INFO, name.concat(" was present but its version is not supported."));
             }
             return true;
         }
-        this.runRepeatingCheck(plugin, () -> {
-            if (this.registerHook(plugin, function, versionCheck)) {
-                Bukkit.getScheduler().cancelTask(this.attempts.get(plugin).getValue());
-            }
-        });
-        return false;
-    }*/
-
-    public boolean registerHook(String plugin, Function<BattlePlugin, ExternalQuestExecutor> function, String author, Function<Double, Boolean> versionCheck) {
-        if (this.disabledPluginHooks.contains(plugin.toLowerCase())) {
-            return false;
-        }
-        PluginManager pluginManager = Bukkit.getPluginManager();
-        if (pluginManager.isPluginEnabled(plugin)) {
-            double version = this.getFormattedVersion(plugin);
-            if (pluginManager.getPlugin(plugin).getDescription().getAuthors().contains(author)) {
-                Bukkit.getLogger().log(Level.INFO, "Using internal version as ".concat(String.valueOf(version)).concat(" for loading ").concat(plugin).concat("."));
-                if (versionCheck.apply(version)) {
-                    pluginManager.registerEvents(function.apply(this.plugin), this.plugin);
-                    Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(plugin));
-                    this.registeredHooks.add(plugin);
-                } else {
-                    Bukkit.getLogger().log(Level.INFO, plugin.concat(" was present but its version is not supported."));
-                }
-            }
-            return true;
-        }
-        this.runRepeatingCheck(plugin, () -> {
-            if (this.registerHook(plugin, function, author, versionCheck)) {
-                Bukkit.getScheduler().cancelTask(this.attempts.get(plugin).getValue());
+        this.runRepeatingCheck(name , () -> {
+            if (this.hook(name, instantiator, author, versionPredicate)) {
+                this.attempts.get(name).getValue().cancel();
             }
         });
         return false;
     }
 
-    private boolean registerPlaceholderApi(Set<String> placeholderTypes) {
-        if (this.disabledPluginHooks.contains("placeholderapi")) {
+    private boolean placeholderAPI(Set<String> placeholderTypes) {
+        if (this.isHookDisabled("placeholderapi")) {
             return false;
         }
         if (Bukkit.getPluginManager().isPluginEnabled(this.plugin)) {
@@ -205,43 +187,40 @@ public class QuestRegistry implements Registry {
             return true;
         }
         this.runRepeatingCheck("PlaceholderAPI", () -> {
-            if (this.registerPlaceholderApi(placeholderTypes)) {
-                Bukkit.getScheduler().cancelTask(this.attempts.get("PlaceholderAPI").getValue());
+            if (this.placeholderAPI(placeholderTypes)) {
+                this.attempts.get("PlaceholderAPI").getValue().cancel();
             }
         });
         return false;
     }
 
-    private void runRepeatingCheck(String plugin, Runnable runnable) {
-        if (this.attempts.containsKey(plugin)) {
+    private void runRepeatingCheck(String name, Runnable runnable) {
+        if (this.attempts.containsKey(name)) {
             return;
         }
-        int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
-            AtomicInteger value = this.attempts.get(plugin).getKey();
+        BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
+            AtomicInteger value = this.attempts.get(name).getKey();
             if (value.intValue() > 18) {
-                Bukkit.getScheduler().cancelTask(this.attempts.get(plugin).getValue());
+                this.attempts.get(name).getValue().cancel();
             }
             runnable.run();
         }, 200, 200);
-
-        this.attempts.put(plugin, ImmutablePair.of(new AtomicInteger(), taskId));
+        this.attempts.put(name, ImmutablePair.of(new AtomicInteger(), bukkitTask));
     }
 
-    private double getFormattedVersion(String plugin) {
-        String pluginVersion = Bukkit.getPluginManager().getPlugin(plugin).getDescription().getVersion().replace("-", ".");
-        if (pluginVersion.contains(".")) {
-            String[] split = pluginVersion.split("\\.");
-            StringBuilder builder = new StringBuilder();
-            boolean first = true;
-            for (String part : split) {
-                builder.append(part.replace("[^0-9]", ""));
-                if (first) {
-                    builder.append(".");
-                    first = false;
+    private double extractVersion(Plugin plugin) {
+        String version = plugin.getDescription().getVersion();
+        StringBuilder extractedVersion = new StringBuilder();
+        for (int i = 0; i < version.length(); i++) {
+            char character = version.charAt(i);
+            if (Character.isDigit(character)) {
+                if (extractedVersion.length() == 0) {
+                    extractedVersion.append(character).append(".");
+                } else {
+                    extractedVersion.append(character);
                 }
             }
-            return Double.parseDouble(builder.toString().split(" ")[0]);
         }
-        return Double.parseDouble(pluginVersion);
+        return extractedVersion.length() == 0 ? 0.0 : Double.parseDouble(extractedVersion.toString());
     }
 }
