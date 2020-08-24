@@ -45,6 +45,7 @@ public class Lang {
         this.localLang.put("debug-dumped", "&cDumped the debug information to a file called %s");
         this.localLang.put("cooldown-has-seconds", "&cPlease wait %s seconds before using this again.");
         this.localLang.put("confirm-new-season", "&cType the command again within 30 seconds to confirm this action. This command can be destructive, read the wiki first.");
+        this.localLang.put("new-season-reset", "&cReset user tiers, points, quest progress and pending rewards.");
         this.load();
     }
 

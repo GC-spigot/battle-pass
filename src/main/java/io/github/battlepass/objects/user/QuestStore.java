@@ -9,4 +9,8 @@ public class QuestStore {
     public Map<String, ConcurrentHashMap<String, Integer>> asMap() {
         return this.quests;
     }
+
+    public void clear() {
+        this.quests.clear();
+    }
 }

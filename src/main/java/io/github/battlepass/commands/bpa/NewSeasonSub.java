@@ -27,11 +27,14 @@ public class NewSeasonSub extends BpSubCommand<CommandSender> {
         if (this.confirmations.containsKey(name) && System.currentTimeMillis() - this.confirmations.get(name) < 30000) {
             this.userCache.asyncModifyAll(user -> {
                 user.getPendingTiers().clear();
+                user.getQuestStore().clear();
                 user.updatePoints(current -> new BigInteger("0"));
                 user.updateTier(current -> 0);
             });
+            this.lang.local("new-season-reset").to(sender);
             return;
         }
+        this.confirmations.put(name, System.currentTimeMillis());
         this.lang.local("confirm-new-season").to(sender);
     }
 }
