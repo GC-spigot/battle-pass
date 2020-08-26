@@ -66,6 +66,11 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
         return "1.1";
     }
 
+    @Override
+    public boolean persist() {
+        return true;
+    }
+
     public void reload(BattlePlugin plugin) {
         this.userCache = plugin.getUserCache();
         this.passLoader = plugin.getPassLoader();
