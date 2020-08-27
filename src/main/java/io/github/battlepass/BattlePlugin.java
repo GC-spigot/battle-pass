@@ -10,6 +10,7 @@ import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.RewardCache;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.cache.listener.ConnectionListener;
+import io.github.battlepass.cache.listener.UserLoadListener;
 import io.github.battlepass.commands.AliasesListener;
 import io.github.battlepass.commands.bp.BpCommand;
 import io.github.battlepass.commands.bpa.BpaCommand;
@@ -252,7 +253,8 @@ public final class BattlePlugin extends SpigotPlugin {
         this.registerListeners(
                 new AliasesListener(this),
                 new MenuListener(),
-                new ConnectionListener(this)
+                new ConnectionListener(this),
+                new UserLoadListener(this)
 
         );
         this.runSync(() -> {

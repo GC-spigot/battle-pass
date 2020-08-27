@@ -75,6 +75,9 @@ public class BattlePassApi {
             return;
         }
         user.setPassId(passId);
+        if (passId.equals("free")) {
+            user.getPendingTiers().remove("premium");
+        }
         if (passId.equals("premium")) {
             for (int tier = 1; tier <= user.getTier(); tier++) {
                 this.reward(user, "premium", tier, false);
