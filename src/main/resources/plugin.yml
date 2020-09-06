@@ -1,7 +1,7 @@
 name: BattlePass
 version: 3.6.0
 main: io.github.battlepass.BattlePlugin
-api-version: 1.16
+api-version: 1.13
 soft-depend:
   - AdvancedEnchantments
   - ASkyBlock
