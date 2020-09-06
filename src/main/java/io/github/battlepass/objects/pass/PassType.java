@@ -39,7 +39,7 @@ public class PassType {
             }
             int tier = Integer.parseInt(key);
             int requiredPoints = config.has("tiers.".concat(key).concat(".required-points")) ? config.integer("tiers.".concat(key).concat(".required-points")) : this.defaultPointsRequired;
-            Set<String> rewardIds = Sets.newHashSet(config.stringList("tiers.".concat(key).concat(".rewards")));
+            List<String> rewardIds = config.stringList("tiers.".concat(key).concat(".rewards"));
             this.tiers.put(tier, new Tier(tier, requiredPoints, rewardIds));
         }
         for (String action : config.stringList("tier-up-actions")) {
