@@ -256,7 +256,6 @@ public final class BattlePlugin extends SpigotPlugin {
                 new MenuListener(),
                 new ConnectionListener(this),
                 new UserLoadListener(this)
-
         );
         this.runSync(() -> {
             this.getCommandBase().getCommands().clear();

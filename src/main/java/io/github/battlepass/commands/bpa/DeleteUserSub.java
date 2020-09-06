@@ -1,6 +1,7 @@
 package io.github.battlepass.commands.bpa;
 
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.api.events.user.UserLoadEvent;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.objects.user.User;
@@ -36,7 +37,7 @@ public class DeleteUserSub extends BpSubCommand<CommandSender> {
         UUID uuid = maybeUser.get().getUuid();
         Player player = Bukkit.getPlayer(uuid);
         this.userCache.invalidate(uuid);
-        this.userCache.load(uuid);
+        Bukkit.getPluginManager().callEvent(new UserLoadEvent(this.userCache.set(uuid, new User(uuid)), true));
         this.lang.local("target-user-data-deleted").to(player);
         if (player != null && !sender.getName().equals(player.getName())) {
             this.lang.local("user-data-deleted", player.getName()).to(sender);
