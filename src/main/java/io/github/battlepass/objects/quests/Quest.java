@@ -19,6 +19,7 @@ public class Quest {
     private final Set<String> whitelistedWorlds;
     private final Set<String> blacklistedWorlds;
     private final String exclusiveTo;
+    private final boolean antiAbuse;
     private ItemStack itemStack;
 
     public Quest(String id,
@@ -32,7 +33,8 @@ public class Quest {
                  Set<Integer> notifyAt,
                  Set<String> whitelistedWorlds,
                  Set<String> blacklistedWorlds,
-                 @Nullable String exclusiveTo) {
+                 @Nullable String exclusiveTo,
+                 boolean antiAbuse) {
         this.id = id;
         this.categoryId = categoryId;
         this.name = name;
@@ -44,6 +46,7 @@ public class Quest {
         this.whitelistedWorlds = whitelistedWorlds;
         this.blacklistedWorlds = blacklistedWorlds;
         this.exclusiveTo = exclusiveTo;
+        this.antiAbuse = antiAbuse;
         for (int percentage : notifyAt) {
             this.notifyAt.add(this.requiredProgress * percentage / 100);
         }
@@ -91,6 +94,10 @@ public class Quest {
 
     public String getExclusiveTo() {
         return this.exclusiveTo;
+    }
+
+    public boolean isAntiAbuse() {
+        return this.antiAbuse;
     }
 
     public ItemStack getItemStack() {

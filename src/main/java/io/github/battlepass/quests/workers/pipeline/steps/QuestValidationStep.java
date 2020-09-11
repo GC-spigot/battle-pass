@@ -34,8 +34,6 @@ public class QuestValidationStep {
     private final boolean disableNormalsOnSeasonEnd;
     private final ReentrantLock questLock = Locks.newReentrantLock();
 
-    //private final Map<UUID, Map<String, Queue<Runnable>>> concurrentPipelineQueue = Maps.newConcurrentMap();
-
     public QuestValidationStep(BattlePlugin plugin) {
         Config settings = plugin.getConfig("settings");
         this.completionStep = new CompletionStep(plugin, this);
@@ -61,6 +59,7 @@ public class QuestValidationStep {
             return;
         }
         for (Quest quest : quests) {
+            this.applyAntiAbuseMeasures(player, user, quest, name, progress, questResult);
             if (!name.equalsIgnoreCase(quest.getType())) {
                 continue;
             }
@@ -177,27 +176,18 @@ public class QuestValidationStep {
         }
     }
 
-    /*public synchronized void notifyPipelineCompletion(UUID uuid, String questId) {
-        if (this.concurrentPipelineQueue.get(uuid).containsKey(questId)) {
-            Queue<Runnable> innerQueue = this.concurrentPipelineQueue.get(uuid).get(questId);
-            if (innerQueue == null || innerQueue.isEmpty()) {
-                this.concurrentPipelineQueue.get(uuid).remove(questId);
-            } else {
-                Runnable runnable = innerQueue.poll();
-                runnable.run();
+    private void applyAntiAbuseMeasures(Player player, User user, Quest quest, String currentType, int progress, QuestResult questResult) {
+        if (this.controller.isQuestDone(user, quest)
+                || (!currentType.equals("block-break") && !currentType.equals("block-place"))
+                || !quest.isAntiAbuse()
+                || questResult.isEligible(player, quest.getVariable())) {
+            return;
+        }
+        if ((quest.getType().equals("block-break") && currentType.equals("block-place")) || (quest.getType().equals("block-place") && currentType.equals("block-break"))) {
+            int currentProgress = this.controller.getQuestProgress(user, quest);
+            if (currentProgress > 0) {
+                this.controller.setQuestProgress(user, quest, Math.max(currentProgress - progress, 0));
             }
         }
     }
-
-    private synchronized void synchronizedQueueComputation(UUID uuid, Player player, User user, Quest quest, QuestResult questResult, int progress, boolean overrideUpdate) {
-        if (!this.concurrentPipelineQueue.containsKey(uuid)) {
-            this.concurrentPipelineQueue.put(uuid, Maps.newConcurrentMap());
-        }
-        if (this.concurrentPipelineQueue.get(uuid).containsKey(quest.getId())) {
-            this.concurrentPipelineQueue.get(uuid).get(quest.getId()).add(() -> this.exitQueueAndProceed(player, user, quest, progress, questResult, overrideUpdate));
-        } else {
-            this.concurrentPipelineQueue.get(uuid).put(quest.getId(), Lists.newLinkedList());
-            this.exitQueueAndProceed(player, user, quest, progress, questResult, overrideUpdate);
-        //}
-    }*/
 }

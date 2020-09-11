@@ -118,10 +118,11 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
         String variable = config.string(section.concat("variable"));
         int points = config.integer(section.concat("points"));
         String exclusiveTo = config.string(section.concat("exclusive"));
+        boolean antiAbuse = config.bool(section.concat("anti-abuse"));
         Set<String> whitelistedWorlds = Sets.newHashSet(config.stringList("whitelisted-worlds"));
         Set<String> blacklistedWorlds = Sets.newHashSet(config.stringList("blacklisted-worlds"));
         return new Quest(questId, categoryId, name, item, type, requiredProgress,
-                new Variable(variable == null ? "none" : variable), points, this.notifyAt, whitelistedWorlds, blacklistedWorlds, exclusiveTo);
+                new Variable(variable == null ? "none" : variable), points, this.notifyAt, whitelistedWorlds, blacklistedWorlds, exclusiveTo, antiAbuse);
     }
 
     private void createDefaultFiles() {

@@ -15,6 +15,7 @@ import io.github.battlepass.commands.AliasesListener;
 import io.github.battlepass.commands.bp.BpCommand;
 import io.github.battlepass.commands.bpa.BpaCommand;
 import io.github.battlepass.controller.QuestController;
+import io.github.battlepass.enums.Category;
 import io.github.battlepass.lang.Lang;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.logger.DebugLogger;

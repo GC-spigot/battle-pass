@@ -35,7 +35,7 @@ public class QuestController {
         }
         for (Map.Entry<String, Integer> entry : weekQuests.entrySet()) {
             Quest quest = this.questCache.getQuest(categoryId, entry.getKey());
-            if (entry.getValue() < quest.getRequiredProgress()) {
+            if (entry.getValue() != null && quest != null && entry.getValue() < quest.getRequiredProgress()) {
                 return false;
             }
         }
