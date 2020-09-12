@@ -37,7 +37,7 @@ dependencies {
     compileOnly 'com.andrei1058.bedwars:bedwars-api:19.10'
     compileOnly 'com.github.Angeschossen:LandsAPI:4.5.2.0'
     compileOnly 'com.github.electro2560:ClueScrollsAPI:-SNAPSHOT'
-    implementation 'com.github.hyfe-dev:simple-spigot:1.0.10.4'
+    implementation 'com.github.hyfe-dev:simple-spigot:1.0.10.5'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
 
