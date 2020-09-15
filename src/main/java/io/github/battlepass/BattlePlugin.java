@@ -15,7 +15,6 @@ import io.github.battlepass.commands.AliasesListener;
 import io.github.battlepass.commands.bp.BpCommand;
 import io.github.battlepass.commands.bpa.BpaCommand;
 import io.github.battlepass.controller.QuestController;
-import io.github.battlepass.enums.Category;
 import io.github.battlepass.lang.Lang;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.logger.DebugLogger;
@@ -39,7 +38,6 @@ import me.hyfe.simplespigot.menu.listener.MenuListener;
 import me.hyfe.simplespigot.plugin.SpigotPlugin;
 import me.hyfe.simplespigot.storage.StorageSettings;
 import me.hyfe.simplespigot.storage.storage.Storage;
-import me.hyfe.simplespigot.version.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -87,6 +85,7 @@ public final class BattlePlugin extends SpigotPlugin {
         this.configRelations();
         this.load();
         this.placeholders();
+        this.debugLogger.finishedStartup(true);
     }
 
     @Override
@@ -94,6 +93,9 @@ public final class BattlePlugin extends SpigotPlugin {
         V2Detector v2Detector = new V2Detector(this);
         if (!v2Detector.isV2()) {
             this.unload();
+        }
+        if (this.placeholderApiHook != null) {
+            this.placeholderApiHook.unregister();
         }
     }
 
@@ -275,9 +277,6 @@ public final class BattlePlugin extends SpigotPlugin {
         this.resetStorage.save("daily-data", this.dailyQuestReset);
         this.userStorage.closeBack();
         this.resetStorage.closeBack();
-        if (this.placeholderApiHook != null) {
-            this.placeholderApiHook.unregister();
-        }
         for (UUID uuid : this.menuFactory.getInsideMenu()) {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) {

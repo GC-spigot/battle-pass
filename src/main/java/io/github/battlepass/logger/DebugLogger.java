@@ -14,11 +14,7 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -42,9 +38,6 @@ public class DebugLogger {
 
     public void log(LogContainer logContainer) {
         this.backlog.add(logContainer);
-        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-            this.backlog.remove(logContainer);
-        }, 12000);
     }
 
     public void log(Zone zone, String message) {
@@ -67,7 +60,7 @@ public class DebugLogger {
     public String dump(Predicate<LogContainer> filterFunction) {
         ImmutablePair<String, FileWriter> filePair = this.makeDebugFile();
         FileWriter writer = filePair.getValue();
-        List<LogContainer> orderedBacklog = this.backlog.stream()
+        List<LogContainer> orderedBacklog = this.backlog.parallelStream()
                 .sorted(Collections.reverseOrder())
                 .collect(Collectors.toList());
 
@@ -122,5 +115,17 @@ public class DebugLogger {
         if (!pathFile.exists()) {
             pathFile.mkdirs();
         }
+    }
+
+    private void cleanup() {
+        long currentTime = System.currentTimeMillis();
+        this.plugin.runAsync(() -> {
+            this.backlog.removeIf(logContainer -> currentTime - logContainer.getTime() > 600000);
+        });
+    }
+
+    public void finishedStartup(boolean startupOccurred) {
+        this.startupOccurred = startupOccurred;
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, this::cleanup, 1200, 1200);
     }
 }
