@@ -71,6 +71,14 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
         return true;
     }
 
+    public void tryUnregister() {
+        try {
+            this.unregister();
+        } catch(Exception ex) {
+            Bukkit.getLogger().warning("Please update to the latest version of PlaceholderAPI. Currently there seems to be some issues.");
+        }
+    }
+
     public void reload(BattlePlugin plugin) {
         this.userCache = plugin.getUserCache();
         this.passLoader = plugin.getPassLoader();

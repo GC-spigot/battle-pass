@@ -95,7 +95,7 @@ public final class BattlePlugin extends SpigotPlugin {
             this.unload();
         }
         if (this.placeholderApiHook != null) {
-            this.placeholderApiHook.unregister();
+            this.placeholderApiHook.tryUnregister();
         }
     }
 
