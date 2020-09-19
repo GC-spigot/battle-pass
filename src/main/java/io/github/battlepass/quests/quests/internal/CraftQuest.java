@@ -57,7 +57,7 @@ public class CraftQuest extends QuestExecutor {
         }
         Multiset<Integer> amounts = HashMultiset.create();
         for (ItemStack itemStack : player.getInventory().getContents()) {
-            if (!itemStack.getType().equals(checkItem.getType()) || itemStack.getAmount() >= itemStack.getMaxStackSize()) {
+            if (itemStack == null || !itemStack.getType().equals(checkItem.getType()) || itemStack.getAmount() >= itemStack.getMaxStackSize()) {
                 continue;
             }
             amounts.add(itemStack.getAmount());
