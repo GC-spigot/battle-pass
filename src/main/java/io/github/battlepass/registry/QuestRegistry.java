@@ -113,22 +113,22 @@ public class QuestRegistry implements Registry {
     }
 
     @FunctionalInterface
-    private interface Instantiator<T extends QuestExecutor> {
+    public interface Instantiator<T extends QuestExecutor> {
         T init(BattlePlugin plugin);
     }
 
     @SafeVarargs
-    private final void quest(Instantiator<QuestExecutor>... instantiators) {
+    public final void quest(Instantiator<QuestExecutor>... instantiators) {
         for (Instantiator<?> instantiator : instantiators) {
             Bukkit.getPluginManager().registerEvents(instantiator.init(this.plugin), this.plugin);
         }
     }
 
-    private void hook(String name, Instantiator<ExternalQuestExecutor> instantiator) {
+    public void hook(String name, Instantiator<ExternalQuestExecutor> instantiator) {
         this.hook(name, instantiator, "");
     }
 
-    private boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author) {
+    public boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author) {
         if (this.isHookDisabled(name)) {
             return false;
         }
@@ -149,11 +149,11 @@ public class QuestRegistry implements Registry {
         return false;
     }
 
-    private void hook(String name, Instantiator<ExternalQuestExecutor> instantiator, Predicate<Double> versionPredicate) {
+    public void hook(String name, Instantiator<ExternalQuestExecutor> instantiator, Predicate<Double> versionPredicate) {
         this.hook(name, instantiator, "", versionPredicate);
     }
 
-    private boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author, Predicate<Double> versionPredicate) {
+    public boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author, Predicate<Double> versionPredicate) {
         if (this.isHookDisabled(name)) {
             return false;
         }
