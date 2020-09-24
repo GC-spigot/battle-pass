@@ -70,8 +70,10 @@ public class QuestValidationStep {
             }
             Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
             if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
+                System.out.println("Failed whitelisted or blacklisted worlds.");
                 continue;
             }
+            System.out.println("Passed whitelisted or blacklisted worlds.");
             this.questLock.lock();
             try {
                 this.proceed(player, user, quest, progress, questResult, overrideUpdate);

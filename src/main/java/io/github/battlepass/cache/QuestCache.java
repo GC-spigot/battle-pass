@@ -119,8 +119,10 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
         int points = config.integer(section.concat("points"));
         String exclusiveTo = config.string(section.concat("exclusive"));
         boolean antiAbuse = config.bool(section.concat("anti-abuse"));
-        Set<String> whitelistedWorlds = Sets.newHashSet(config.stringList("whitelisted-worlds"));
-        Set<String> blacklistedWorlds = Sets.newHashSet(config.stringList("blacklisted-worlds"));
+        Set<String> whitelistedWorlds = Sets.newHashSet(config.stringList(section.concat("whitelisted-worlds")));
+        Set<String> blacklistedWorlds = Sets.newHashSet(config.stringList(section.concat("blacklisted-worlds")));
+
+        Bukkit.dispatchCommand()
         return new Quest(questId, categoryId, name, item, type, requiredProgress,
                 new Variable(variable == null ? "none" : variable), points, this.notifyAt, whitelistedWorlds, blacklistedWorlds, exclusiveTo, antiAbuse);
     }
