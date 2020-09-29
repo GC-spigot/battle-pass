@@ -1,8 +1,8 @@
 package io.github.battlepass.menus.service;
 
 import com.google.common.cache.Cache;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import io.github.battlepass.actions.*;
 import io.github.battlepass.menus.MenuFactory;
 import me.hyfe.simplespigot.config.Config;
@@ -14,21 +14,21 @@ import me.hyfe.simplespigot.text.Replacer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 
 public class MenuIllustrator {
 
-    public void draw(Menu menu, Config config, MenuFactory menuFactory, Player player, Cache<String, Map<Integer, Set<Action>>> actionCache, Map<String, Runnable> customActions, Replace replace) {
-        Function<Integer, Set<Action>> actionSupplier = slot -> {
+    public void draw(Menu menu, Config config, MenuFactory menuFactory, Player player, Cache<String, Map<Integer, List<Action>>> actionCache, Map<String, Runnable> customActions, Replace replace) {
+        Function<Integer, List<Action>> actionSupplier = slot -> {
             String id = menu.getClass().getSimpleName();
-            Map<Integer, Set<Action>> actionsMap = actionCache.getIfPresent(id);
+            Map<Integer, List<Action>> actionsMap = actionCache.getIfPresent(id);
             if (actionsMap != null && actionsMap.containsKey(slot)) {
                 return actionsMap.get(slot);
             } else {
-                Set<Action> actions = Sets.newLinkedHashSet();
+                List<Action> actions = Lists.newArrayList();
                 for (String action : config.stringList(String.format("menu.%s.actions", slot))) {
                     actions.add(Action.parse(action));
                 }

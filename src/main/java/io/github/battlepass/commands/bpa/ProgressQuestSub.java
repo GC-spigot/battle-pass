@@ -27,7 +27,7 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
         this.questCache = plugin.getQuestCache();
         this.controller = plugin.getQuestController();
         this.questValidationStep = new QuestValidationStep(plugin);
-        this.completionStep = new CompletionStep(plugin, this.questValidationStep);
+        this.completionStep = new CompletionStep(plugin);
         this.inheritPermission();
         this.addFlats("progress", "quest");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()

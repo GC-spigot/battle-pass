@@ -45,8 +45,8 @@ import org.bukkit.event.HandlerList;
 import java.nio.file.Path;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -68,7 +68,7 @@ public final class BattlePlugin extends SpigotPlugin {
     private MenuIllustrator menuIllustrator;
     private Storage<User> userStorage;
     private Storage<DailyQuestReset> resetStorage;
-    private Cache<String, Map<Integer, Set<Action>>> actionCache;
+    private Cache<String, Map<Integer, List<Action>>> actionCache;
     private PlaceholderApiHook placeholderApiHook;
     private Lang lang;
     private ZonedDateTime seasonStartDate;
@@ -171,7 +171,7 @@ public final class BattlePlugin extends SpigotPlugin {
         return this.lang;
     }
 
-    public Cache<String, Map<Integer, Set<Action>>> getActionCache() {
+    public Cache<String, Map<Integer, List<Action>>> getActionCache() {
         return this.actionCache;
     }
 

@@ -2,7 +2,6 @@ package io.github.battlepass.objects.pass;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import io.github.battlepass.actions.Action;
 import io.github.battlepass.cache.RewardCache;
 import io.github.battlepass.objects.user.User;
@@ -15,7 +14,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 public class PassType {
@@ -25,7 +23,7 @@ public class PassType {
     private final String requiredPermission;
     private final int defaultPointsRequired;
     private final Map<Integer, Tier> tiers = Maps.newTreeMap();
-    private final Set<Action> tierUpActions = Sets.newHashSet();
+    private final List<Action> tierUpActions = Lists.newArrayList();
 
     public PassType(String id, Config config) {
         this.id = id;
@@ -67,7 +65,7 @@ public class PassType {
         return (TreeMap<Integer, Tier>) this.tiers;
     }
 
-    public Set<Action> getTierUpActions() {
+    public List<Action> getTierUpActions() {
         return this.tierUpActions;
     }
 

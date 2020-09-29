@@ -36,7 +36,7 @@ public class QuestValidationStep {
 
     public QuestValidationStep(BattlePlugin plugin) {
         Config settings = plugin.getConfig("settings");
-        this.completionStep = new CompletionStep(plugin, this);
+        this.completionStep = new CompletionStep(plugin);
         this.plugin = plugin;
         this.api = plugin.getLocalApi();
         this.controller = plugin.getQuestController();

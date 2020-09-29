@@ -61,6 +61,13 @@ blacklisted-worlds: # World names where quests cannot be progressed.
 
 daily-quests-enabled: true
 
+# Actions that are run whenever any player completes any quest, for that player.
+# This is empty by default, set it like this if you want actions:
+#
+# quest-completed-actions:
+#   - '[message]{Well you did something}'
+quest-completed-actions: []
+
 current-season:
   time-zone: 'Europe/Oslo' # The timezone for week releases to be based off.
   start-date: '06/06/2020' # This is what all of the week releases are based off. Format: dd/mm/yyyy
