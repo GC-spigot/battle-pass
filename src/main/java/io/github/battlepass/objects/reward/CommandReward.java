@@ -14,9 +14,9 @@ public class CommandReward extends Reward<String> {
     }
 
     @Override
-    public void reward(Player player) {
+    public void reward(Player player, int tier) {
         for (String command : this.set) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Replacer.to(command, replacer -> replacer.set("player", player.getName())));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Replacer.to(command, replacer -> replacer.set("player", player.getName()).set("tier", tier)));
         }
     }
 }

@@ -18,7 +18,7 @@ public abstract class Reward<T> {
         this.set = set;
     }
 
-    public abstract void reward(Player player);
+    public abstract void reward(Player player, int tier);
 
     public String getId() {
         return this.id;

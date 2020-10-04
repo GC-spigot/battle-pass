@@ -14,7 +14,7 @@ public class ItemReward extends Reward<ItemStack> {
     }
 
     @Override
-    public void reward(Player player) {
+    public void reward(Player player, int tier) {
         Simple.spigot().giveItem(player, this.set);
     }
 }

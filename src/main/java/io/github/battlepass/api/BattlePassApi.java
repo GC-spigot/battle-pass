@@ -152,7 +152,7 @@ public class BattlePassApi {
                     }
                     UserRewardReceiveEvent event = new UserRewardReceiveEvent(user, tierObject, maybeReward.get());
                     this.plugin.runSync(() -> Bukkit.getPluginManager().callEvent(event));
-                    event.ifNotCancelled(consumerEvent -> maybeReward.get().reward(player));
+                    event.ifNotCancelled(consumerEvent -> maybeReward.get().reward(player, tier));
                 }
             }
         }
