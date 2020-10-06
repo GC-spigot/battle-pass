@@ -86,15 +86,15 @@ public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserD
     }
 
     private void drawAndComputePageableItems(Runnable runBeforeSet) {
-        this.drawRewards("free", () -> {
-        }, this.freeTierSlots, this.freeCachedPageIndexes);
+        this.drawRewards("free", () -> {}, this.freeTierSlots, this.freeCachedPageIndexes);
         this.drawRewards("premium", runBeforeSet, this.premiumTierSlots, this.premiumCachedPageIndexes);
         boolean drawPastMaxTier = this.config.bool("draw-past-max-tier");
         int iterations = 0;
         for (int slot : this.progressTrackSlots) {
             int tier = (this.page - 1) * this.progressTrackSlots.size() + iterations + 1;
-            if (tier > this.passLoader.getMaxTier() && drawPastMaxTier) {
+            if (tier > this.passLoader.getMaxTier() && !drawPastMaxTier) {
                 this.flush(slot);
+                continue;
             }
             this.item(MenuItem
                     .builderOf(SpigotItem.toItem(

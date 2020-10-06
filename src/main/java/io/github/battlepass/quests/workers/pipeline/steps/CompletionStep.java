@@ -1,11 +1,14 @@
 package io.github.battlepass.quests.workers.pipeline.steps;
 
+import com.google.common.collect.Lists;
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.actions.Action;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.lang.Lang;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
 import me.hyfe.simplespigot.config.Config;
+import me.hyfe.simplespigot.text.Replacer;
 import me.hyfe.simplespigot.text.Text;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -14,17 +17,21 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CompletionStep {
-    private final QuestValidationStep questValidationStep;
+    private final List<Action> completionActions = Lists.newArrayList();
+    private final BattlePlugin plugin;
     private final Config settingsConfig;
     private final RewardStep rewardStep;
     private final QuestController controller;
     private final Lang lang;
 
-    public CompletionStep(BattlePlugin plugin, QuestValidationStep questValidationStep) {
-        this.questValidationStep = questValidationStep;
+    public CompletionStep(BattlePlugin plugin) {
+        this.completionActions.addAll(plugin.getConfig("settings").stringList("quest-completed-actions").stream().map(Action::parse).collect(Collectors.toList()));
+        this.plugin = plugin;
         this.settingsConfig = plugin.getConfig("settings");
         this.rewardStep = new RewardStep(plugin);
         this.controller = plugin.getQuestController();
@@ -36,20 +43,21 @@ public class CompletionStep {
         int newTotalProgress = Math.min(progressIncrement, quest.getRequiredProgress());
         int updatedProgress = overrideUpdate ? this.controller.setQuestProgress(user, quest, newTotalProgress) : this.controller.addQuestProgress(user, quest, newTotalProgress);
         String methodType = this.settingsConfig.string("current-season.notification-method");
-        for (int notifyAt : quest.getNotifyAt()) {
-            if (updatedProgress == notifyAt || (notifyAt > originalProgress && notifyAt < updatedProgress)) {
-                String message = this.lang.questProgressedMessage(quest, updatedProgress);
-                maybePlayer.ifPresent(player -> {
+        maybePlayer.ifPresent(player -> {
+            Action.executeSimple(player, this.completionActions, this.plugin, new Replacer().set("player", player.getName()).set("quest_name", quest.getName()).set("quest_category", quest.getCategoryId()));
+            for (int notifyAt : quest.getNotifyAt()) {
+                if (updatedProgress == notifyAt || (notifyAt > originalProgress && notifyAt < updatedProgress)) {
+                    String message = this.lang.questProgressedMessage(quest, updatedProgress);
                     if (methodType.contains("chat")) {
                         Text.sendMessage(player, message);
                     }
                     if (methodType.contains("action bar")) {
                         this.sendActionBar(player, message);
                     }
-                });
-                break;
+                    break;
+                }
             }
-        }
+        });
         //this.questValidationStep.notifyPipelineCompletion(user.getUuid(), quest.getId());
 
         if (this.controller.isQuestDone(user, quest)) {

@@ -57,6 +57,12 @@ public class ExecutableQuestResult implements QuestResult {
     }
 
     @Override
+    public QuestResult subRoot(ItemStack itemStack) {
+        this.subRoots.put("item", itemStack.getType().toString());
+        return this;
+    }
+
+    @Override
     public ExecutableQuestResult none() {
         this.root = "none";
         return this;

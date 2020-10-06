@@ -9,7 +9,11 @@ buildscript {
 }
 
 group 'io.github.battlepass'
+<<<<<<< HEAD
 version '3.8-volatile'
+=======
+version '3.8'
+>>>>>>> 5c3a6c37e1f4295e0df2342eb2b1f6f11448c134
 
 apply plugin: 'java'
 apply plugin: 'com.github.johnrengelman.shadow'

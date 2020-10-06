@@ -1,5 +1,9 @@
 name: BattlePass
+<<<<<<< HEAD
 version: 3.8-volatile
+=======
+version: 3.8
+>>>>>>> 5c3a6c37e1f4295e0df2342eb2b1f6f11448c134
 main: io.github.battlepass.BattlePlugin
 api-version: 1.13
 soft-depend:

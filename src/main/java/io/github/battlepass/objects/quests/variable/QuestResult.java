@@ -16,6 +16,8 @@ public interface QuestResult {
 
     QuestResult subRoot(String subRoot, String value);
 
+    QuestResult subRoot(ItemStack itemStack);
+
     QuestResult none();
 
     boolean isEligible(Player player, Variable variable);
