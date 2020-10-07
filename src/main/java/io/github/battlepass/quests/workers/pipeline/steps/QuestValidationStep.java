@@ -180,7 +180,6 @@ public class QuestValidationStep {
         if (this.controller.isQuestDone(user, quest)
                 || (!currentType.equals("block-break") && !currentType.equals("block-place"))
                 || !quest.isAntiAbuse()
-                || this.controller.isQuestDone(user, quest)
                 || questResult.isEligible(player, quest.getVariable())) {
             return;
         }
