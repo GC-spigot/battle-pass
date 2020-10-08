@@ -50,6 +50,7 @@ public class SetPassSub extends BpSubCommand<CommandSender> {
         if (passType.getRequiredPermission() != null) {
             if (this.passLoader.passTypeOfId(user.getPassId()) != null) {
                 this.lang.local("failed-set-pass-require-permission", user.getPassId(), passType.getRequiredPermission()).to(sender);
+                return;
             }
             this.lang.local("failed-set-pass-require-permission", passId, passType.getRequiredPermission()).to(sender);
             return;
