@@ -41,19 +41,23 @@ public class SetPassSub extends BpSubCommand<CommandSender> {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
             return;
         }
+        User user = maybeUser.get();;
         PassType passType = this.passLoader.passTypeOfId(passId);
         if (passType == null) {
             this.lang.local("invalid-pass-id", passId).to(sender);
             return;
         }
         if (passType.getRequiredPermission() != null) {
+            if (this.passLoader.passTypeOfId(user.getPassId()) != null) {
+                this.lang.local("failed-set-pass-require-permission", user.getPassId(), passType.getRequiredPermission()).to(sender);
+            }
             this.lang.local("failed-set-pass-require-permission", passId, passType.getRequiredPermission()).to(sender);
             return;
         }
-        UserPassChangeEvent event = new UserPassChangeEvent(maybeUser.get(), passId);
+        UserPassChangeEvent event = new UserPassChangeEvent(user, passId);
         Bukkit.getPluginManager().callEvent(event);
         event.ifNotCancelled(consumerEvent -> {
-            this.api.setPassId(maybeUser.get(), consumerEvent.getNewPassId());
+            this.api.setPassId(user, consumerEvent.getNewPassId());
             this.lang.local("successful-set-pass", args[2], passId).to(sender);
         });
     }

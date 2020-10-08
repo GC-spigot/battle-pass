@@ -59,7 +59,7 @@ blacklisted-worlds: # World names where quests cannot be progressed.
   - 'world_with_no_quests'
   - 'another_world'
 
-daily-quests-enabled: true
+daily-quests-enabled: true # If this value is set to false it will disable calculation of daily quests
 
 # Actions that are run whenever any player completes any quest, for that player.
 # This is empty by default, set it like this if you want actions:
@@ -76,7 +76,6 @@ current-season:
   auto-receive-rewards: false # If this value is set to false players will need to click a reward in the gui to claim it
   daily-quest-reset-time: '12:00'
   daily-quest-amount: 9 # Amount of daily quests that will be available at one time
-  daily-quests-enabled: true # If this value is set to false it will disable calculation of daily quests
   quest-glow-on-completion: true # If quests will have an enchanted glow if they are completed.
   notify-at-percentages: [10, 25, 50, 75, 100]
   unlocks:
