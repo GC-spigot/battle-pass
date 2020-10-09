@@ -4,7 +4,7 @@ import com.andrei1058.bedwars.api.events.player.PlayerBedBreakEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerFirstSpawnEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.shop.ShopBuyEvent;
-import com.andrei1058.bedwars.api.events.shop.UpgradeBuyEvent;
+import com.andrei1058.bedwars.api.events.upgrades.UpgradeBuyEvent;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
