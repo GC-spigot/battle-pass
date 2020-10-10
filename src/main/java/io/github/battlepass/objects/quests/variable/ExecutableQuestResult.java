@@ -3,6 +3,7 @@ package io.github.battlepass.objects.quests.variable;
 import com.google.common.collect.Maps;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
 import me.hyfe.simplespigot.version.ServerVersion;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -73,16 +74,14 @@ public class ExecutableQuestResult implements QuestResult {
         for (String root : variable.getRoots()) {
             boolean noVariableRoot = root.equalsIgnoreCase("none");
             if (this.areSubRootsValid(player, variable)) {
-                if (this.material == null || (noVariableRoot || this.root.equalsIgnoreCase(root))) {
+                if (this.material == null || (noVariableRoot || (this.root != null && this.root.equalsIgnoreCase(root)))) {
                     return true;
                 }
-                //if (this.material != null) {
                     for (ImmutablePair<String, Byte> pair : variable.getMaterialRoots()) {
-                        if ((noVariableRoot || this.material.equalsIgnoreCase(pair.getKey())) && (pair.getValue() < 0 || this.data == pair.getValue())) {
+                        if (this.material.equalsIgnoreCase(pair.getKey()) && (pair.getValue() < 0 || this.data == pair.getValue())) {
                             return true;
                         }
                     }
-                //}
             }
         }
         return false;

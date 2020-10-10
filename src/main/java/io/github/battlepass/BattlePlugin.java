@@ -24,6 +24,7 @@ import io.github.battlepass.menus.MenuFactory;
 import io.github.battlepass.menus.service.MenuIllustrator;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.placeholders.PlaceholderApiHook;
+import io.github.battlepass.quests.QuestExecutor;
 import io.github.battlepass.quests.workers.pipeline.QuestPipeline;
 import io.github.battlepass.quests.workers.reset.DailyQuestReset;
 import io.github.battlepass.registry.ArgumentRegistry;
@@ -39,8 +40,10 @@ import me.hyfe.simplespigot.plugin.SpigotPlugin;
 import me.hyfe.simplespigot.storage.StorageSettings;
 import me.hyfe.simplespigot.storage.storage.Storage;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.ItemStack;
 
 import java.nio.file.Path;
 import java.time.ZoneId;

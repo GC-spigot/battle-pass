@@ -74,7 +74,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
     public void tryUnregister() {
         try {
             this.unregister();
-        } catch(Exception ex) {
+        } catch(NoSuchMethodError ex) {
             Bukkit.getLogger().warning("Please update to the latest version of PlaceholderAPI. Currently there seems to be some issues.");
         }
     }
