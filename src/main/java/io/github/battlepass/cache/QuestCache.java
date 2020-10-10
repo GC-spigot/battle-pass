@@ -115,14 +115,13 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
         ItemStack item = SpigotItem.toItem(config, section.concat("item"));
         String type = config.string(section.concat("type"));
         int requiredProgress = config.integer(section.concat("required-progress"));
-        String variable = config.string(section.concat("variable"));
         int points = config.integer(section.concat("points"));
         String exclusiveTo = config.string(section.concat("exclusive"));
         boolean antiAbuse = config.bool(section.concat("anti-abuse"));
         Set<String> whitelistedWorlds = Sets.newHashSet(config.stringList(section.concat("whitelisted-worlds")));
         Set<String> blacklistedWorlds = Sets.newHashSet(config.stringList(section.concat("blacklisted-worlds")));
         return new Quest(questId, categoryId, name, item, type, requiredProgress,
-                new Variable(variable == null ? "none" : variable), points, this.notifyAt, whitelistedWorlds, blacklistedWorlds, exclusiveTo, antiAbuse);
+                Variable.of(config, section), points, this.notifyAt, whitelistedWorlds, blacklistedWorlds, exclusiveTo, antiAbuse);
     }
 
     private void createDefaultFiles() {

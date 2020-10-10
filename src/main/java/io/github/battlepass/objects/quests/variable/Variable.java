@@ -2,7 +2,7 @@ package io.github.battlepass.objects.quests.variable;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import me.hyfe.simplespigot.config.ConfigLoader;
+import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
 import me.hyfe.simplespigot.version.MultiMaterial;
 import org.bukkit.inventory.ItemStack;
@@ -52,26 +52,33 @@ public class Variable {
         }
     }
 
-    public static Variable of(ConfigLoader.Reader reader) {
+    public static Variable of(Config config, String section) {
         Map<String, List<String>> subRoots = Maps.newHashMap();
         BiConsumer<String, Supplier<String>> consumer = (path, supplier) -> subRoots.put(path, Arrays.asList(supplier.get().split(" OR ")));
-        if (reader.has("variable.root")) {
-            String root = reader.string("variable.root");
-            if (reader.has("variable.holding")) {
-                consumer.accept("holding.item", () -> reader.string("variable.holding.item"));
-                consumer.accept("holding.name", () -> reader.string("variable.holding.name"));
-                consumer.accept("holding.amount", () -> Integer.toString(reader.integer("variable.holding.amount")));
+        if (config.has(section.concat("variable.root"))) {
+            String root = config.string(section.concat("variable.root"));
+            String variableSection = section.concat("variable.");
+            if (config.has(variableSection.concat("holding"))) {
+                apply(consumer, config, variableSection, "holding.item");
+                apply(consumer, config, variableSection, "holding.name");
+                apply(consumer, config, variableSection, "holding.amount");
             }
-            reader.keyLoop(reader.getCurrentPath().concat(".variable"), subRoot -> {
+            for (String subRoot : config.stringList(section.concat("variable"))) {
                 if (!subRoot.equalsIgnoreCase("root") && !subRoot.equalsIgnoreCase("holding")) {
-                    consumer.accept(subRoot, reader::string);
+                    consumer.accept(subRoot, () -> config.string(section + "." + subRoot));
                 }
-            });
+            }
             return new Variable(root, subRoots);
-        } else if (reader.has("variable")) {
-            return new Variable(reader.string("variable"));
+        } else if (config.has(section.concat("variable"))) {
+            return new Variable(config.string(section.concat("variable")));
         } else {
             return new Variable("none");
+        }
+    }
+
+    private static void apply(BiConsumer<String, Supplier<String>> consumer, Config config, String section, String addon) {
+        if (config.has(section.concat(addon))) {
+            consumer.accept(addon, () -> config.string(section.concat(addon)));
         }
     }
 }
