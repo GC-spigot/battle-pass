@@ -23,7 +23,7 @@ public class DailyQuestResetRecode {
         System.out.println(this.now() + ":" + (this.now().until(this.whenReset.plusDays(this.now().until(this.whenReset, ChronoUnit.SECONDS) < 0 ? 1 : 0), ChronoUnit.SECONDS)));
         this.executorService.scheduleAtFixedRate(() -> {
             System.out.println("Time reached");
-        }, this.now().until(this.whenReset.plusDays(this.now().until(this.whenReset, ChronoUnit.SECONDS) < 0 ? 1 : 0), ChronoUnit.SECONDS), TimeUnit.DAYS.toMinutes(1), TimeUnit.SECONDS);
+        }, this.now().until(this.whenReset.plusDays(this.now().until(this.whenReset, ChronoUnit.SECONDS) <= 0 ? 1 : 0), ChronoUnit.SECONDS), TimeUnit.DAYS.toMinutes(1), TimeUnit.SECONDS);
     }
 
     private ZonedDateTime now() {
