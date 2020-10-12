@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 public class PassType {
@@ -22,7 +21,7 @@ public class PassType {
     private final String name;
     private final String requiredPermission;
     private final int defaultPointsRequired;
-    private final Map<Integer, Tier> tiers = Maps.newTreeMap();
+    private final TreeMap<Integer, Tier> tiers = Maps.newTreeMap();
     private final List<Action> tierUpActions = Lists.newArrayList();
 
     public PassType(String id, Config config) {
@@ -62,7 +61,7 @@ public class PassType {
     }
 
     public TreeMap<Integer, Tier> getTiers() {
-        return (TreeMap<Integer, Tier>) this.tiers;
+        return this.tiers;
     }
 
     public List<Action> getTierUpActions() {

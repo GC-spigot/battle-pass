@@ -1,6 +1,7 @@
 menu-title: 'Rewards'
 menu-rows: 5
 draw-past-max-tier: true # Whether the stained glass in the middle of the page will go past the max tier in the menu.
+hide-tiers-without-rewards: false # If set to true, tiers that are defined but have no associated rewards will be hidden.
 
 free-reward-slots:
   slots: '0...8' # Feel free to just use slot, slot, slot such as 0, 1, 2 instead if it's easier.

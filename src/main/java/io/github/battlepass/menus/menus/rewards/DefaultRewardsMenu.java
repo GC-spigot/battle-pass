@@ -33,6 +33,7 @@ public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserD
     private final Map<Integer, Set<Integer>> freeCachedPageIndexes = Maps.newHashMap();
     private final Map<Integer, Set<Integer>> premiumCachedPageIndexes = Maps.newHashMap();
     private final boolean autoReceiveRewards;
+    private final boolean hideTiersWithoutRewards;
     private final User user;
 
     private int page = 1;
@@ -47,6 +48,7 @@ public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserD
         this.premiumTierSlots = Lists.newArrayList(MenuService.parseSlots(this, this.config, "premium-reward-slots"));
         this.progressTrackSlots = MenuService.parseSlots(this, this.config, "progress-track-slots");
         this.autoReceiveRewards = this.plugin.getConfig("settings").bool("current-season.auto-receive-rewards");
+        this.hideTiersWithoutRewards = config.bool("hide-tiers-without-rewards");
         this.user = plugin.getUserCache().getOrThrow(player.getUniqueId());
     }
 
@@ -114,7 +116,7 @@ public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserD
             Set<Integer> indexes = Sets.newLinkedHashSetWithExpectedSize(slots.size());
             for (int slot = 0; slot < slots.size(); slot++) {
                 int index = (this.page - 1) * slots.size() + slot + 1;
-                if (tiers.containsKey(index)) {
+                if (tiers.containsKey(index) && !(this.hideTiersWithoutRewards && tiers.get(index).getRewardIds().isEmpty())) {
                     indexes.add(index);
                 }
             }
