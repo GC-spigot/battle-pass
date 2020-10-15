@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.battlepass.actions.Action;
 import io.github.battlepass.api.BattlePassApi;
+import io.github.battlepass.api.events.server.PluginReloadEvent;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.RewardCache;
 import io.github.battlepass.cache.UserCache;
@@ -211,7 +212,7 @@ public final class BattlePlugin extends SpigotPlugin {
         } else {
             this.placeholderApiHook.reload(this);
         }
-        System.gc();
+        this.runSync(() -> Bukkit.getPluginManager().callEvent(new PluginReloadEvent()));
     }
 
     private void load() {
