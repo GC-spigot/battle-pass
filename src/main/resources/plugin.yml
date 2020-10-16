@@ -21,6 +21,7 @@ soft-depend:
   - Factions
   - Jobs
   - SkillAPI
+  - Vault
   - KoTH
   - Lands
   - PlaceholderAPI

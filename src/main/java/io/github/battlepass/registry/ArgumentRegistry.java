@@ -8,6 +8,7 @@ import me.hyfe.simplespigot.registry.Registry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 public class ArgumentRegistry implements Registry {
@@ -25,6 +26,13 @@ public class ArgumentRegistry implements Registry {
                 .registerArgumentType(User.class, string -> {
                     Player player = Bukkit.getPlayerExact(string);
                     return player == null ? Optional.empty() : this.userCache.getSync(player.getUniqueId());
+                })
+                .registerArgumentType(BigInteger.class, string -> {
+                    try {
+                        return new BigInteger(string);
+                    } catch (NumberFormatException ex) {
+                        return null;
+                    }
                 });
     }
 }

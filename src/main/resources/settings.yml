@@ -89,3 +89,9 @@ season-finished:
 #disabled-plugin-hooks: # This will disable the loading for any quests from the specified plugin. You can use this if you use an outdated version of them and it's causing errors to stop them.
 #  - 'AutoSell'
 #  - 'PlotSquared'
+
+reward-excess-points: # If set to vault, Vault & an economy plugin is required. If set to internal, no other plugins are required.
+  method: none # Set this to none, vault or internal. If it's internal, the value will be stored within BattlePass and you must use commands to add/remove and placeholders to get.
+  currency-per-point: # The amount of currency given per every excess point.
+    free: 50
+    premium: 100

@@ -22,6 +22,7 @@ stats-command:
   - '  &8- &ePass Type: &f%pass_type%'
   - '  &8- &eTier: &f%tier%'
   - '  &8- &eTotal Points: &f%total_points%'
+  #- '  &8- &eBalance: &f%balance%' # Only used if you use internal for excess points in the settings.yml
 
 quests:
   # The base message will be used for all quests unless another message is set.

@@ -13,6 +13,7 @@ import io.github.battlepass.objects.pass.Tier;
 import io.github.battlepass.objects.reward.Reward;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.registry.QuestRegistry;
+import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.text.Replacer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -32,6 +33,7 @@ public class BattlePassApi {
     private final RewardCache rewardCache;
     private final QuestCache questCache;
     private final QuestRegistry questRegistry;
+    private final Config settingsConfig;
 
     public BattlePassApi(BattlePlugin plugin) {
         this.plugin = plugin;
@@ -40,6 +42,7 @@ public class BattlePassApi {
         this.rewardCache = plugin.getRewardCache();
         this.questCache = plugin.getQuestCache();
         this.questRegistry = plugin.getQuestRegistry();
+        this.settingsConfig = plugin.getConfig("settings");
     }
 
     public QuestRegistry getQuestRegistry() {
@@ -60,7 +63,7 @@ public class BattlePassApi {
     }
 
     public long currentWeek() {
-        ZoneId zoneId = ZoneId.of(this.plugin.getConfig("settings").string("current-season.time-zone"));
+        ZoneId zoneId = ZoneId.of(this.settingsConfig.string("current-season.time-zone"));
         long daysBetween = ChronoUnit.DAYS.between(this.plugin.getSeasonStartDate(), ZonedDateTime.now().withZoneSameInstant(zoneId));
         return daysBetween < 0 ? 0 : (daysBetween / 7) + 1;
     }
@@ -98,6 +101,7 @@ public class BattlePassApi {
     public void givePoints(User user, int points) {
         int maxTier = this.passLoader.getMaxTier();
         if (user.getTier() >= maxTier) {
+            this.rewardCurrency(user, points);
             return;
         }
         user.updatePoints(current -> current.add(BigInteger.valueOf(points)));
@@ -106,6 +110,7 @@ public class BattlePassApi {
 
     /**
      * Updates the tier of a user / fixes it if they're over the points of that tier. Say they have 100/50 points, it will tier them up and they will have 50 points
+     *
      * @param user The user to update their tier for.
      */
     public void updateUserTier(User user) {
@@ -126,7 +131,10 @@ public class BattlePassApi {
             }
         }
         if (user.getTier() >= maxTier) {
-            user.updatePoints(current -> BigInteger.ZERO);
+            user.updatePoints(current -> {
+                this.rewardCurrency(user, current.intValue());
+                return BigInteger.ZERO;
+            });
         }
     }
 
@@ -135,7 +143,7 @@ public class BattlePassApi {
     }
 
     public void reward(User user, String passId, int tier, boolean ignoreRestrictions) {
-        boolean autoReceiveRewards = this.plugin.getConfig("settings").bool("current-season.auto-receive-rewards");
+        boolean autoReceiveRewards = this.settingsConfig.bool("current-season.auto-receive-rewards");
         Tier tierObject = this.getTier(tier, passId);
         if (tierObject == null) {
             return;
@@ -155,6 +163,23 @@ public class BattlePassApi {
                     event.ifNotCancelled(consumerEvent -> maybeReward.get().reward(player, tier));
                 }
             }
+        }
+    }
+
+    public void rewardCurrency(User user, int points) {
+        String method = this.settingsConfig.string("reward-excess-points.method");
+        if (method == null || method.equalsIgnoreCase("none")) {
+            return;
+        }
+        int rewardAmount = points * this.settingsConfig.integer("reward-excess-points.currency-per-point.".concat(user.getPassId()));
+        switch (method.toLowerCase()) {
+            case "vault":
+                if (this.plugin.getEconomy() != null) {
+                    this.plugin.getEconomy().depositPlayer(user.getPlayer(), rewardAmount);
+                }
+                break;
+            case "internal":
+                this.plugin.runSync(() -> user.updateCurrency(current -> current.add(BigInteger.valueOf(rewardAmount))));
         }
     }
 }

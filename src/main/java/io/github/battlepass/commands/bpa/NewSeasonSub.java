@@ -16,8 +16,8 @@ public class NewSeasonSub extends BpSubCommand<CommandSender> {
     public NewSeasonSub(BattlePlugin plugin) {
         super(plugin, true);
         this.userCache = plugin.getUserCache();
-
         this.inheritPermission();
+
         this.addFlats("new", "season");
     }
 

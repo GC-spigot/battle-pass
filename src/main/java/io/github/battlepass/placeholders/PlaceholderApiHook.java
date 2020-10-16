@@ -47,6 +47,9 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
                 return this.passLoader.passTypeOfId(user.getPassId()).getName();
             case "pass_id":
                 return user.getPassId();
+            case "balance":
+            case "currency":
+                return user.getCurrency().toString();
         }
         return "Invalid Placeholder";
     }

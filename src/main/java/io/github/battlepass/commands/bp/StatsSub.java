@@ -45,7 +45,8 @@ public class StatsSub extends BpSubCommand<Player> {
                         .set("tier", tier)
                         .set("points", user.getPoints())
                         .set("required_points", this.api.getRequiredPoints(tier, userPassId))
-                        .set("total_points", finalTotalPoints.toString()))
+                        .set("total_points", finalTotalPoints.toString())
+                        .set("balance", user.getCurrency().toString()))
                         .to(sender);
             });
         });

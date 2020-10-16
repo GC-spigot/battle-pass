@@ -39,9 +39,11 @@ import me.hyfe.simplespigot.menu.listener.MenuListener;
 import me.hyfe.simplespigot.plugin.SpigotPlugin;
 import me.hyfe.simplespigot.storage.StorageSettings;
 import me.hyfe.simplespigot.storage.storage.Storage;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.nio.file.Path;
 import java.time.ZoneId;
@@ -50,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public final class BattlePlugin extends SpigotPlugin {
     private static BattlePassApi api;
@@ -71,9 +74,11 @@ public final class BattlePlugin extends SpigotPlugin {
     private Storage<DailyQuestReset> resetStorage;
     private Cache<String, Map<Integer, List<Action>>> actionCache;
     private PlaceholderApiHook placeholderApiHook;
+    private Economy economy;
     private Lang lang;
     private ZonedDateTime seasonStartDate;
     private int placeholderRuns = 0;
+    private int economyRuns = 0;
 
     @Override
     public void onEnable() {
@@ -85,7 +90,8 @@ public final class BattlePlugin extends SpigotPlugin {
         }
         this.configRelations();
         this.load();
-        this.placeholders();
+        this.placeholderHook();
+        this.vaultHook();
         this.debugLogger.finishedStartup(true);
     }
 
@@ -176,6 +182,10 @@ public final class BattlePlugin extends SpigotPlugin {
         return this.actionCache;
     }
 
+    public Economy getEconomy() {
+        return this.economy;
+    }
+
     public ZonedDateTime getSeasonStartDate() {
         return this.seasonStartDate;
     }
@@ -208,7 +218,7 @@ public final class BattlePlugin extends SpigotPlugin {
         this.load();
         if (this.placeholderApiHook == null) {
             this.placeholderRuns = 0;
-            this.placeholders();
+            this.placeholderHook();
         } else {
             this.placeholderApiHook.reload(this);
         }
@@ -287,7 +297,7 @@ public final class BattlePlugin extends SpigotPlugin {
         }
     }
 
-    private void placeholders() {
+    private void placeholderHook() {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             this.placeholderApiHook = new PlaceholderApiHook(this);
             this.placeholderApiHook.register();
@@ -295,7 +305,34 @@ public final class BattlePlugin extends SpigotPlugin {
         }
         if (this.placeholderApiHook == null && this.placeholderRuns < 10) {
             this.placeholderRuns++;
-            Bukkit.getScheduler().runTaskLater(this, this::placeholders, 100);
+            Bukkit.getScheduler().runTaskLater(this, this::placeholderHook, 100);
+        }
+    }
+
+    private void vaultHook() {
+        if (!this.getConfig("settings").has("reward-excess-points.method") || this.getConfig("settings").string("reward-excess-points.method").equalsIgnoreCase("none")) {
+            System.out.println("1");
+            return;
+        }
+        if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+            System.out.println("2");
+            RegisteredServiceProvider<Economy> ecoProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
+            System.out.println("3 " + ecoProvider);
+            if (ecoProvider != null) {
+                System.out.println("4");
+                System.out.println("AAAAA");
+                this.economy = ecoProvider.getProvider();
+                System.out.println("BBBB");
+                Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into vault");
+                return;
+            }
+            return;
+        }
+        System.out.println("5");
+        if (this.economy == null && this.economyRuns < 10) {
+            System.out.println("6");
+            this.economyRuns++;
+            Bukkit.getScheduler().runTaskLater(this, this::vaultHook, 100);
         }
     }
 
