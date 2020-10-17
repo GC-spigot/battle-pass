@@ -58,9 +58,9 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
                     .set("progress_bar", this.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()))))
                     .build();
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.WARNING, "Quest: ".concat(String.valueOf(quest)));
-            Bukkit.getLogger().log(Level.WARNING, "Error whilst building menu item for quest: " + quest.getId() + " category " + quest.getCategoryId() + " name " + quest.getName());
-            Bukkit.getLogger().log(Level.WARNING, "Quest Item: ".concat(String.valueOf(quest.getItemStack())));
+            BattlePlugin.logger().log(Level.WARNING, "Quest: ".concat(String.valueOf(quest)));
+            BattlePlugin.logger().log(Level.WARNING, "Error whilst building menu item for quest: " + quest.getId() + " category " + quest.getCategoryId() + " name " + quest.getName());
+            BattlePlugin.logger().log(Level.WARNING, "Quest Item: ".concat(String.valueOf(quest.getItemStack())));
             e.printStackTrace();
             return MenuItem.builderOf(new ItemStack(Material.BARRIER)).build();
         }

@@ -45,7 +45,7 @@ public class MenuIllustrator {
                 for (int slot : MenuService.parseSlots(menu, config, "menu.", key)) {
                     if (slot > menu.getRows() * 9 - 1) {
                         if (menu.getMenuState().isRaw()) {
-                            Bukkit.getLogger().log(Level.SEVERE, String.format("The specified slot %d in the menu %s is greater\n then the amount of slots in the menu (%d). Skipping the slot...", slot, menu.getTitle(), menu.getRows() * 9 - 1));
+                            BattlePlugin.logger().log(Level.SEVERE, String.format("The specified slot %d in the menu %s is greater\n then the amount of slots in the menu (%d). Skipping the slot...", slot, menu.getTitle(), menu.getRows() * 9 - 1));
                         }
                         continue;
                     }

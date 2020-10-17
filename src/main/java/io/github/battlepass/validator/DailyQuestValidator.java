@@ -16,7 +16,7 @@ public class DailyQuestValidator {
 
     public boolean checkQuest(Quest quest) {
         if (quest == null) {
-            Bukkit.getLogger().log(Level.SEVERE, "Failed to load a daily quest. Make sure you haven't deleted any (if so /bpa refresh daily quests will fix this)" +
+            BattlePlugin.logger().log(Level.SEVERE, "Failed to load a daily quest. Make sure you haven't deleted any (if so /bpa refresh daily quests will fix this)" +
                     " and that there aren't any broken daily quests.");
             this.logger.log("Failed to load a daily quest - quest was null.");
             return false;

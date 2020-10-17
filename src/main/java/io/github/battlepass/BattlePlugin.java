@@ -49,8 +49,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public final class BattlePlugin extends SpigotPlugin {
+    private static Logger logger;
     private static BattlePassApi api;
     private DebugLogger debugLogger;
     private DailyQuestValidator dailyQuestValidator;
@@ -76,6 +78,7 @@ public final class BattlePlugin extends SpigotPlugin {
 
     @Override
     public void onEnable() {
+        logger = logger();
         this.debugLogger = new DebugLogger(this);
         V2Detector v2Detector = new V2Detector(this);
         if (v2Detector.runV2Operations()) {
@@ -97,6 +100,10 @@ public final class BattlePlugin extends SpigotPlugin {
         if (this.placeholderApiHook != null) {
             this.placeholderApiHook.tryUnregister();
         }
+    }
+
+    public static Logger logger() {
+        return logger;
     }
 
     public static BattlePassApi getApi() {

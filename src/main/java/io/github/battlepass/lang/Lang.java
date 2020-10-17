@@ -86,11 +86,11 @@ public class Lang {
     public LangSub external(String id, Replace replace) {
         Object requested = this.externalLang.get(id);
         if (requested == null) {
-            Bukkit.getLogger().log(Level.INFO, "^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
-            Bukkit.getLogger().log(Level.INFO, " ");
-            Bukkit.getLogger().log(Level.INFO, "Missing the configuration value '".concat(id).concat("', located in the file 'lang.yml'"));
-            Bukkit.getLogger().log(Level.INFO, " ");
-            Bukkit.getLogger().log(Level.INFO, "^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
+            BattlePlugin.logger().log(Level.INFO, "^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
+            BattlePlugin.logger().log(Level.INFO, " ");
+            BattlePlugin.logger().log(Level.INFO, "Missing the configuration value '".concat(id).concat("', located in the file 'lang.yml'"));
+            BattlePlugin.logger().log(Level.INFO, " ");
+            BattlePlugin.logger().log(Level.INFO, "^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
             return null;
         }
         return new LangSub(Text.modify(String.valueOf(requested), replace));

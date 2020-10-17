@@ -50,7 +50,7 @@ public class UserStorage extends Storage<User> {
                 Map<String, TreeSet<Integer>> pendingTiers = gson.fromJson(json.get("pending-rewards").getAsString(), new TypeToken<HashMap<String, TreeSet<Integer>>>(){}.getType());
                 return new User(uuid, questStore, tier, points, passId, bypassLockedWeeks, pendingTiers);
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "Error whilst loading player data file: ".concat(uuid.toString()).concat(".json"));
+                BattlePlugin.logger().log(Level.SEVERE, "Error whilst loading player data file: ".concat(uuid.toString()).concat(".json"));
                 e.printStackTrace();
                 return null;
             }
