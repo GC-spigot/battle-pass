@@ -183,9 +183,9 @@ public class QuestValidationStep {
     private void applyAntiAbuseMeasures(Player player, User user, Quest quest, String currentType, int progress, QuestResult questResult) {
         if (this.controller.isQuestDone(user, quest)
                 || (!currentType.equals("block-break") && !currentType.equals("block-place"))
-                || !currentType.equalsIgnoreCase(quest.getType())
+                || currentType.equalsIgnoreCase(quest.getType())
                 || !quest.isAntiAbuse()
-                || questResult.isEligible(player, quest.getVariable())) {
+                || !questResult.isEligible(player, quest.getVariable())) {
             return;
         }
         this.debugLogger.log(LogContainer.of("Anti abuse measures applied for player %s on quest " + quest.getCategoryId() + ":" + quest.getId(), player));
