@@ -2,7 +2,7 @@ package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.QuestExecutor;
-import org.bukkit.Bukkit;
+import me.hyfe.simplespigot.version.ServerVersion;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -25,7 +25,7 @@ public class FishingQuest extends QuestExecutor {
 
         if (state.equals(PlayerFishEvent.State.CAUGHT_FISH) && entity instanceof Item) {
             ItemStack itemStack = ((Item) entity).getItemStack();
-            this.execute("fish", player, result -> result.root(itemStack), replacer -> replacer.set("caught", itemStack.getType()));
+            this.execute("fish", player, result -> ServerVersion.isOver_V1_12() ? result.root(itemStack.getType().toString()) : result.root(itemStack), replacer -> replacer.set("caught", itemStack.getType()));
         }
     }
 }
