@@ -3,6 +3,7 @@ package io.github.battlepass.menus.service;
 import com.google.common.cache.Cache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.actions.*;
 import io.github.battlepass.menus.MenuFactory;
 import me.hyfe.simplespigot.config.Config;
@@ -11,7 +12,6 @@ import me.hyfe.simplespigot.menu.item.MenuItem;
 import me.hyfe.simplespigot.menu.service.MenuService;
 import me.hyfe.simplespigot.text.Replace;
 import me.hyfe.simplespigot.text.Replacer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;

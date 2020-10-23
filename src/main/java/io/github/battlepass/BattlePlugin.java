@@ -78,7 +78,7 @@ public final class BattlePlugin extends SpigotPlugin {
 
     @Override
     public void onEnable() {
-        logger = logger();
+        logger = this.getLogger();
         this.debugLogger = new DebugLogger(this);
         V2Detector v2Detector = new V2Detector(this);
         if (v2Detector.runV2Operations()) {

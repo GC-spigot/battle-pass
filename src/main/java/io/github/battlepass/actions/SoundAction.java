@@ -1,6 +1,6 @@
 package io.github.battlepass.actions;
 
-import org.bukkit.Bukkit;
+import io.github.battlepass.BattlePlugin;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 

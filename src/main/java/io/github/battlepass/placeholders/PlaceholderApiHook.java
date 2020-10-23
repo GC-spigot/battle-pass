@@ -73,7 +73,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
     public void tryUnregister() {
         try {
             this.unregister();
-        } catch(NoSuchMethodError ex) {
+        } catch(Throwable ex) {
             BattlePlugin.logger().warning("Please update to the latest version of PlaceholderAPI. Currently there seems to be some issues.");
         }
     }
