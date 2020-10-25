@@ -2,6 +2,7 @@ package io.github.battlepass.commands.bp;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.commands.BpSubCommand;
+import me.hyfe.simplespigot.menu.Menu;
 import org.bukkit.entity.Player;
 
 public class MenuSub extends BpSubCommand<Player> {
@@ -16,6 +17,10 @@ public class MenuSub extends BpSubCommand<Player> {
 
     @Override
     public void onExecute(Player player, String[] strings) {
-        this.plugin.getMenuFactory().createMenu(this.menuName, player).show();
+        Menu menu = this.plugin.getMenuFactory().createMenu(this.menuName, player);
+        if (menu == null) {
+            return;
+        }
+        menu.show();
     }
 }

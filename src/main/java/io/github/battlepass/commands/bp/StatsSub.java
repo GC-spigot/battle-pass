@@ -24,6 +24,10 @@ public class StatsSub extends BpSubCommand<Player> {
 
     @Override
     public void onExecute(Player sender, String[] args) {
+        if (sender.hasPermission("battlepass.block")) {
+            this.lang.external("disallowed-permission").to(sender);
+            return;
+        }
         if (!this.lang.has("stats-command")) {
             sender.sendMessage("&cThe stats command is not configured.");
             return;

@@ -51,6 +51,10 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
             return;
         }
+        if (player.hasPermission("battlepass.block")) {
+            this.lang.local("blocked-from-pass", sender.getName()).to(sender);
+            return;
+        }
         User user = maybeUser.get();
         Quest quest = this.questCache.getQuest(Category.WEEKLY.id(week), id);
         if (quest == null) {

@@ -3,6 +3,7 @@ package io.github.battlepass.menus;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.lang.Lang;
 import io.github.battlepass.menus.menus.DailyQuestsMenu;
 import io.github.battlepass.menus.menus.PortalMenu;
 import io.github.battlepass.menus.menus.QuestOverviewMenu;
@@ -19,15 +20,21 @@ import java.util.function.Supplier;
 
 public class MenuFactory {
     private final BattlePlugin plugin;
+    private final Lang lang;
     private final Set<UUID> insideMenu = Sets.newHashSet();
     private final Map<Collection<String>, Function<Player, Menu>> menus = Maps.newHashMap();
 
     public MenuFactory(BattlePlugin plugin) {
         this.plugin = plugin;
+        this.lang = plugin.getLang();
         this.putDefaults();
     }
 
     public Menu createMenu(String menuName, Player player) {
+        if (player.hasPermission("battlepass.block")) {
+            this.lang.external("disallowed-permission").to(player);
+            return null;
+        }
         for (Map.Entry<Collection<String>, Function<Player, Menu>> entry : this.menus.entrySet()) {
             if (entry.getKey().contains(menuName)) {
                 return this.initiateMenu(player, () -> entry.getValue().apply(player));

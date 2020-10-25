@@ -28,6 +28,10 @@ public class QuestPipeline {
             this.logger.log("(PIPELINE) Player null issue for quest type ".concat(name));
             return;
         }
+        if (player.hasPermission("battlepass.block")) {
+            this.logger.log(LogContainer.of("(PIPELINE) Player %s is blocked from the battlepass so dropping them.", player));
+            return;
+        }
         this.logger.log(LogContainer.of("(PIPELINE) Quest type " + name + " for player %s has entered the pipeline. Root: " + questResult.getEffectiveRoot(), player));
         this.userCache.get(player.getUniqueId()).thenAccept(maybeUser -> maybeUser.ifPresent(user -> {
             this.questValidationStep.process(player, user, name, progress, questResult, this.questCache.getAllQuests(), overrideUpdate);
