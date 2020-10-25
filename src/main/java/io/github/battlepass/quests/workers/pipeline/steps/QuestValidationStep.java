@@ -7,6 +7,8 @@ import io.github.battlepass.api.events.user.UserQuestProgressionEvent;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.enums.Category;
+import io.github.battlepass.logger.DebugLogger;
+import io.github.battlepass.logger.containers.LogContainer;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.objects.quests.variable.Variable;
@@ -26,6 +28,7 @@ public class QuestValidationStep {
     private final BattlePassApi api;
     private final QuestController controller;
     private final QuestCache questCache;
+    private final DebugLogger debugLogger;
     private final Set<String> whitelistedWorlds;
     private final Set<String> blacklistedWorlds;
     private final boolean lockPreviousWeeks;
@@ -41,6 +44,7 @@ public class QuestValidationStep {
         this.api = plugin.getLocalApi();
         this.controller = plugin.getQuestController();
         this.questCache = plugin.getQuestCache();
+        this.debugLogger = plugin.getDebugLogger();
         this.whitelistedWorlds = Sets.newHashSet(settings.stringList("whitelisted-worlds"));
         this.blacklistedWorlds = Sets.newHashSet(settings.stringList("blacklisted-worlds"));
         this.lockPreviousWeeks = settings.bool("current-season.unlocks.lock-previous-weeks");
@@ -179,15 +183,15 @@ public class QuestValidationStep {
     private void applyAntiAbuseMeasures(Player player, User user, Quest quest, String currentType, int progress, QuestResult questResult) {
         if (this.controller.isQuestDone(user, quest)
                 || (!currentType.equals("block-break") && !currentType.equals("block-place"))
+                || currentType.equalsIgnoreCase(quest.getType())
                 || !quest.isAntiAbuse()
-                || questResult.isEligible(player, quest.getVariable())) {
+                || !questResult.isEligible(player, quest.getVariable())) {
             return;
         }
-        if ((quest.getType().equals("block-break") && currentType.equals("block-place")) || (quest.getType().equals("block-place") && currentType.equals("block-break"))) {
-            int currentProgress = this.controller.getQuestProgress(user, quest);
-            if (currentProgress > 0) {
-                this.controller.setQuestProgress(user, quest, Math.max(currentProgress - progress, 0));
-            }
+        this.debugLogger.log(LogContainer.of("Anti abuse measures applied for player %s on quest " + quest.getCategoryId() + ":" + quest.getId(), player));
+        int currentProgress = this.controller.getQuestProgress(user, quest);
+        if (currentProgress > 0) {
+            this.controller.setQuestProgress(user, quest, Math.max(currentProgress - progress, 0));
         }
     }
 }

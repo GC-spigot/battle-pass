@@ -6,7 +6,6 @@ import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.objects.user.User;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +19,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
     public PlaceholderApiHook(BattlePlugin plugin) {
         this.userCache = plugin.getUserCache();
         this.passLoader = plugin.getPassLoader();
-        Bukkit.getLogger().log(Level.FINE, "[BattlePass] Register PlaceholderAPI placeholders");
+        BattlePlugin.logger().log(Level.FINE, "Register PlaceholderAPI placeholders");
     }
 
     @Override
@@ -29,7 +28,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
             return "successful";
         }
         if (offlinePlayer == null) {
-            Bukkit.getLogger().log(Level.WARNING, "Could not get placeholder ".concat(placeholder).concat(" (player null)"));
+            BattlePlugin.logger().log(Level.WARNING, "Could not get placeholder ".concat(placeholder).concat(" (player null)"));
             return "???";
         }
         Optional<User> optionalUser = this.userCache.getSync(offlinePlayer.getUniqueId());
@@ -77,8 +76,8 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
     public void tryUnregister() {
         try {
             this.unregister();
-        } catch(NoSuchMethodError ex) {
-            Bukkit.getLogger().warning("Please update to the latest version of PlaceholderAPI. Currently there seems to be some issues.");
+        } catch(Throwable ex) {
+            BattlePlugin.logger().warning("Please update to the latest version of PlaceholderAPI. Currently there seems to be some issues.");
         }
     }
 

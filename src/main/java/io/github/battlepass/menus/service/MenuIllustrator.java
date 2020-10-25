@@ -3,6 +3,7 @@ package io.github.battlepass.menus.service;
 import com.google.common.cache.Cache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.actions.*;
 import io.github.battlepass.menus.MenuFactory;
 import me.hyfe.simplespigot.config.Config;
@@ -11,7 +12,6 @@ import me.hyfe.simplespigot.menu.item.MenuItem;
 import me.hyfe.simplespigot.menu.service.MenuService;
 import me.hyfe.simplespigot.text.Replace;
 import me.hyfe.simplespigot.text.Replacer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class MenuIllustrator {
                 for (int slot : MenuService.parseSlots(menu, config, "menu.", key)) {
                     if (slot > menu.getRows() * 9 - 1) {
                         if (menu.getMenuState().isRaw()) {
-                            Bukkit.getLogger().log(Level.SEVERE, String.format("The specified slot %d in the menu %s is greater\n then the amount of slots in the menu (%d). Skipping the slot...", slot, menu.getTitle(), menu.getRows() * 9 - 1));
+                            BattlePlugin.logger().log(Level.SEVERE, String.format("The specified slot %d in the menu %s is greater\n then the amount of slots in the menu (%d). Skipping the slot...", slot, menu.getTitle(), menu.getRows() * 9 - 1));
                         }
                         continue;
                     }

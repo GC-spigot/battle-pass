@@ -72,7 +72,7 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
         for (File questsFile : questCollections) {
             String id = questsFile.getName().replace("-quests.yml", "");
             if (!id.contains("daily") && !id.contains("week")) {
-                Bukkit.getLogger().warning("Failed to load the ".concat(id).concat(" quests"));
+                BattlePlugin.logger().warning("Failed to load the ".concat(id).concat(" quests"));
                 continue;
             }
             Config questsConfig = new Config(this.plugin, questsFile, true);
@@ -100,7 +100,7 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
                     }
                 }
             }
-            Bukkit.getLogger().info("Finished loading the " + " quests. ".concat(failureCounter.intValue() == 0 ? "All quests loaded successfully."
+            BattlePlugin.logger().info("Finished loading the " + " quests. ".concat(failureCounter.intValue() == 0 ? "All quests loaded successfully."
                     : failureCounter.toString() + " quests failed to load. See the console for more info."));
         }
         this.questsFinishedLoading = true;

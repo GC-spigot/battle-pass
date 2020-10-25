@@ -53,7 +53,7 @@ public class PassLoader {
             }
             Config passTypeConfig = new Config(this.plugin, passTypeFile, true);
             if (!passTypeConfig.has("name")) {
-                Bukkit.getLogger().warning("Failed to load the pass type with the id: ".concat(id));
+                BattlePlugin.logger().warning("Failed to load the pass type with the id: ".concat(id));
                 continue;
             }
             PassType passType = new PassType(id, passTypeConfig);
@@ -61,7 +61,7 @@ public class PassLoader {
             if (passType.getTiers().lastKey() > this.maxTier) {
                 this.maxTier = passType.getTiers().lastKey();
             }
-            Bukkit.getLogger().info("Successfully loaded the pass type with the id: ".concat(id));
+            BattlePlugin.logger().info("Successfully loaded the pass type with the id: ".concat(id));
         }
     }
 

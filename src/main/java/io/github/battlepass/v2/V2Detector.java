@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.logger.Zone;
 import me.hyfe.simplespigot.text.Text;
-import org.bukkit.Bukkit;
 
 import java.nio.file.Path;
 import java.util.Set;
@@ -20,23 +19,23 @@ public class V2Detector {
     public boolean runV2Operations() {
         this.plugin.log(Zone.START, "Starting v2 operations.");
         if (this.isV2()) {
-            Bukkit.getLogger().log(Level.SEVERE, " ");
-            Bukkit.getLogger().log(Level.SEVERE, " ");
-            Bukkit.getLogger().log(Level.SEVERE, " ");
-            Bukkit.getLogger().log(Level.SEVERE, " ");
-            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4----- [BattlePass v3] -----"));
-            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4 "));
-            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4BattlePass v3 could not load. You have v2 configurations present."));
-            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4 "));
-            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4Please read https://github.com/Hyfe-JavaDebug/battlepass-wiki-v3/wiki/Moving-from-v2--to--v3 for information."));
-            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4As BattlePass v3 is not a drop-in replacement for v2. Join our Discord https://discord.gg/hsedh6n for more help."));
-            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4You can still download v2 from the Version History on Spigot if you're not ready to update yet."));
-            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4 "));
-            Bukkit.getLogger().log(Level.SEVERE, Text.modify("&4----- [BattlePass v3] -----"));
-            Bukkit.getLogger().log(Level.SEVERE, " ");
-            Bukkit.getLogger().log(Level.SEVERE, " ");
-            Bukkit.getLogger().log(Level.SEVERE, " ");
-            Bukkit.getLogger().log(Level.SEVERE, " ");
+            BattlePlugin.logger().log(Level.SEVERE, " ");
+            BattlePlugin.logger().log(Level.SEVERE, " ");
+            BattlePlugin.logger().log(Level.SEVERE, " ");
+            BattlePlugin.logger().log(Level.SEVERE, " ");
+            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4----- [BattlePass v3] -----"));
+            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4 "));
+            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4BattlePass v3 could not load. You have v2 configurations present."));
+            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4 "));
+            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4Please read https://github.com/Hyfe-JavaDebug/battlepass-wiki-v3/wiki/Moving-from-v2--to--v3 for information."));
+            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4As BattlePass v3 is not a drop-in replacement for v2. Join our Discord https://discord.gg/hsedh6n for more help."));
+            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4You can still download v2 from the Version History on Spigot if you're not ready to update yet."));
+            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4 "));
+            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4----- [BattlePass v3] -----"));
+            BattlePlugin.logger().log(Level.SEVERE, " ");
+            BattlePlugin.logger().log(Level.SEVERE, " ");
+            BattlePlugin.logger().log(Level.SEVERE, " ");
+            BattlePlugin.logger().log(Level.SEVERE, " ");
             return true;
         }
         return false;

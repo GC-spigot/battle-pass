@@ -136,7 +136,7 @@ public class QuestRegistry implements Registry {
         if (plugin != null) {
             if (!this.isHookDisabled(name) && (author.isEmpty() || plugin.getDescription().getAuthors().contains(author))) {
                 this.manager.registerEvents(instantiator.init(this.plugin), this.plugin);
-                Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(name));
+                BattlePlugin.logger().log(Level.INFO, "Hooked into ".concat(name));
                 this.registeredHooks.add(name);
             }
             return true;
@@ -161,13 +161,13 @@ public class QuestRegistry implements Registry {
         if (plugin != null) {
             if (!this.isHookDisabled(name) && (author.isEmpty() || plugin.getDescription().getAuthors().contains(author))) {
                 double version = this.extractVersion(plugin);
-                Bukkit.getLogger().log(Level.INFO, "Using internal version as " + version + " for loading " + name + ".");
+                BattlePlugin.logger().log(Level.INFO, "Using internal version as " + version + " for loading " + name + ".");
                 if (versionPredicate.test(version)) {
                     this.manager.registerEvents(instantiator.init(this.plugin), this.plugin);
-                    Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into ".concat(name));
+                    BattlePlugin.logger().log(Level.INFO, "Hooked into ".concat(name));
                     this.registeredHooks.add(name);
                 } else {
-                    Bukkit.getLogger().log(Level.INFO, name.concat(" was present but its version is not supported."));
+                    BattlePlugin.logger().log(Level.INFO, name.concat(" was present but its version is not supported."));
                 }
             }
             return true;

@@ -1,7 +1,7 @@
 package io.github.battlepass.validator;
 
+import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.objects.quests.Quest;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,18 +10,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class QuestValidator {
+    private final Logger logger = BattlePlugin.logger();
 
     public boolean checkQuest(Quest quest, AtomicInteger failCounter) {
-        Logger logger = Bukkit.getLogger();
         String prefix = "[Quest Validator] You have a broken quest. ";
         if (quest == null) {
-            logger.log(Level.SEVERE, prefix.concat("Quest itself is null."));
+            this.logger.log(Level.SEVERE, prefix.concat("Quest itself is null."));
             return false;
         }
         String categoryId = quest.getCategoryId();
         String id = quest.getId();
         if (categoryId == null || id == null || categoryId.isEmpty() || id.isEmpty()) {
-            logger.log(Level.SEVERE, prefix.concat("(issue with category or quest ID.)"));
+            this.logger.log(Level.SEVERE, prefix.concat("(issue with category or quest ID.)"));
             return false;
         }
         prefix = prefix.concat(" Category: ").concat(categoryId).concat(" | ID: ").concat(id).concat(" | ");
@@ -50,7 +50,6 @@ public class QuestValidator {
     }
 
     private void log(String message) {
-        Logger logger = Bukkit.getLogger();
-        logger.log(Level.WARNING, message);
+        this.logger.log(Level.WARNING, message);
     }
 }

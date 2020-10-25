@@ -50,9 +50,8 @@ public class UserStorage extends Storage<User> {
                 boolean bypassLockedWeeks = json.has("bypass-locked-weeks") && json.get("bypass-locked-weeks").getAsBoolean();
                 Map<String, TreeSet<Integer>> pendingTiers = gson.fromJson(json.get("pending-rewards").getAsString(), new TypeToken<HashMap<String, TreeSet<Integer>>>(){}.getType());
                 return new User(uuid, questStore, tier, points, currency, passId, bypassLockedWeeks, pendingTiers);
-            } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "Error whilst loading player data file: " + uuid + ".json");
-                e.printStackTrace();
+            } catch (Exception ex) {
+                Bukkit.getLogger().log(Level.SEVERE, "Error whilst loading player data file: " + uuid + ".json", ex);
                 return null;
             }
         };
