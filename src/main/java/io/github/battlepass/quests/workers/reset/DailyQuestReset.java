@@ -62,9 +62,8 @@ public class DailyQuestReset {
     }
 
     public void start() {
-        Config settings = this.plugin.getConfig("settings");
-        String configKey = "season-finished.stop-daily-quests";
         if (!this.shouldDoDailyQuests()) {
+            this.currentQuests.clear();
             return;
         }
         if (this.between() <= 0) {
@@ -84,6 +83,7 @@ public class DailyQuestReset {
 
     public void reset() {
         if (!this.shouldDoDailyQuests()) {
+            this.currentQuests.clear();
             return;
         }
         this.userCache.asyncModifyAll(user -> user.getQuestStore().asMap().put(Category.DAILY.id(), new ConcurrentHashMap<>()));
