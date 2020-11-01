@@ -133,7 +133,7 @@ public class QuestRegistry implements Registry {
             return false;
         }
         Plugin plugin = this.manager.getPlugin(name);
-        if (plugin != null) {
+        if (plugin != null && plugin.isEnabled()) {
             if (!this.isHookDisabled(name) && (author.isEmpty() || plugin.getDescription().getAuthors().contains(author))) {
                 this.manager.registerEvents(instantiator.init(this.plugin), this.plugin);
                 BattlePlugin.logger().log(Level.INFO, "Hooked into ".concat(name));
@@ -158,7 +158,7 @@ public class QuestRegistry implements Registry {
             return false;
         }
         Plugin plugin = this.manager.getPlugin(name);
-        if (plugin != null) {
+        if (plugin != null && plugin.isEnabled()) {
             if (!this.isHookDisabled(name) && (author.isEmpty() || plugin.getDescription().getAuthors().contains(author))) {
                 double version = this.extractVersion(plugin);
                 BattlePlugin.logger().log(Level.INFO, "Using internal version as " + version + " for loading " + name + ".");
