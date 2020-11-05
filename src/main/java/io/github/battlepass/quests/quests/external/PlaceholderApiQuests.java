@@ -44,11 +44,11 @@ public class PlaceholderApiQuests extends ExternalQuestExecutor {
         Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 for (String placeholder : this.matchPlaceholders) {
-                    String placeholderValue = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, "%".concat(placeholder).concat("%"));
+                    String placeholderValue = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, "%" + placeholder + "%");
                     this.execute("match_".concat(placeholder), player, result -> result.root(placeholderValue));
                 }
                 for (String placeholder : this.integerPlaceholders) {
-                    String placeholderValue = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, "%".concat(placeholder).concat("%"));
+                    String placeholderValue = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, "%" + placeholder + "%");
                     String numberOnlyPlaceholder = placeholderValue.replaceAll("[^\\d.]", "");
                     if (!numberOnlyPlaceholder.isEmpty()) {
                         this.execute("integer_".concat(placeholder), player, Integer.parseInt(placeholderValue), QuestResult::none,

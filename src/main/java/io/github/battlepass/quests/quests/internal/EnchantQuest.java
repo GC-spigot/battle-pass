@@ -24,17 +24,24 @@ public class EnchantQuest extends QuestExecutor {
         int levelCost = event.getExpLevelCost();
         Iterator<Enchantment> iterator = event.getEnchantsToAdd().keySet().iterator();
         String enchantment;
+        int enchantLevel;
         if (!iterator.hasNext()) {
             enchantment = "none";
+            enchantLevel = 0;
         } else if (ServerVersion.isOver_V1_12()) {
-            String possible = iterator.next().getKey().toString();
-            enchantment = possible.startsWith("minecraft:") ? possible.split("minecraft:")[1] : possible;
+            Enchantment enchant = iterator.next();
+            String possibleName = enchant.getKey().getNamespace();
+            enchantment = possibleName.startsWith("minecraft:") ? possibleName.split("minecraft:")[1] : possibleName;
+            enchantLevel = event.getEnchantsToAdd().get(enchant);
         } else {
-            enchantment = iterator.next().getName();
+            Enchantment enchant = iterator.next();
+            enchantLevel = event.getEnchantsToAdd().get(enchant);
+            enchantment = enchant.getName();
         }
 
         this.execute("enchant", player, result -> {
             result.subRoot("cost", String.valueOf(levelCost));
+            result.subRoot("level", String.valueOf(enchantLevel));
             result.subRoot(item);
             return result.root(enchantment);
         });

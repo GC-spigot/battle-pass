@@ -1,5 +1,5 @@
 name: BattlePass
-version: 3.9
+version: 3.9-dev
 main: io.github.battlepass.BattlePlugin
 api-version: 1.13
 soft-depend:
@@ -21,7 +21,6 @@ soft-depend:
   - Factions
   - Jobs
   - SkillAPI
-  - Vault
   - KoTH
   - Lands
   - PlaceholderAPI

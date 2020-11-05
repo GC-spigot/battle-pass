@@ -63,6 +63,7 @@ public class DailyQuestReset {
 
     public void start() {
         if (!this.shouldDoDailyQuests()) {
+            this.currentQuests.clear();
             return;
         }
         if (this.between() <= 0) {
@@ -82,6 +83,7 @@ public class DailyQuestReset {
 
     public void reset() {
         if (!this.shouldDoDailyQuests()) {
+            this.currentQuests.clear();
             return;
         }
         this.userCache.asyncModifyAll(user -> user.getQuestStore().asMap().put(Category.DAILY.id(), new ConcurrentHashMap<>()));

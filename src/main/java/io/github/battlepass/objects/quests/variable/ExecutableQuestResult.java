@@ -103,7 +103,7 @@ public class ExecutableQuestResult implements QuestResult {
         }
         if (subRoots.containsKey("holding.item")) {
             ItemStack holding = ServerVersion.getVersion().getVersionId() > 183 ? player.getInventory().getItemInMainHand() : player.getItemInHand();
-            if (holding.getType().equals(Material.AIR) || !holding.getType().toString().toLowerCase().concat(":").concat(Byte.toString(holding.getData().getData()))
+            if (!(holding.getType().equals(Material.AIR) ? "none" : holding.getType().toString().toLowerCase().concat(":").concat(Byte.toString(holding.getData().getData())))
                     .equalsIgnoreCase(subRoots.get("holding.item").get(0))) {
                 return false;
             }
