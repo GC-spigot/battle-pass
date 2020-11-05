@@ -16,6 +16,7 @@ import io.github.battlepass.commands.AliasesListener;
 import io.github.battlepass.commands.bp.BpCommand;
 import io.github.battlepass.commands.bpa.BpaCommand;
 import io.github.battlepass.controller.QuestController;
+import io.github.battlepass.controller.UserController;
 import io.github.battlepass.lang.Lang;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.logger.DebugLogger;
@@ -69,6 +70,7 @@ public final class BattlePlugin extends SpigotPlugin {
     private QuestPipeline questPipeline;
     private QuestRegistry questRegistry;
     private QuestController questController;
+    private UserController userController;
     private DailyQuestReset dailyQuestReset;
     private MenuFactory menuFactory;
     private MenuIllustrator menuIllustrator;
@@ -79,6 +81,7 @@ public final class BattlePlugin extends SpigotPlugin {
     private Economy economy;
     private Lang lang;
     private ZonedDateTime seasonStartDate;
+    private ZonedDateTime seasonEndDate;
     private int placeholderRuns = 0;
     private int economyRuns = 0;
 
@@ -161,6 +164,10 @@ public final class BattlePlugin extends SpigotPlugin {
         return this.questController;
     }
 
+    public UserController getUserController() {
+        return this.userController;
+    }
+
     public DailyQuestReset getDailyQuestReset() {
         return this.dailyQuestReset;
     }
@@ -197,6 +204,10 @@ public final class BattlePlugin extends SpigotPlugin {
         return this.seasonStartDate;
     }
 
+    public ZonedDateTime getSeasonEndDate() {
+        return this.seasonEndDate;
+    }
+
     public Config getConfig(String name) {
         return this.getConfigStore().getConfig(name);
     }
@@ -227,14 +238,14 @@ public final class BattlePlugin extends SpigotPlugin {
             this.placeholderRuns = 0;
             this.placeholderHook();
         } else {
-            this.placeholderApiHook.reload(this);
+            this.placeholderApiHook.setClassValues(this);
         }
         this.runSync(() -> Bukkit.getPluginManager().callEvent(new PluginReloadEvent()));
     }
 
     private void load() {
         this.setStorageSettings();
-        this.setSeasonStartDate();
+        this.setSeasonDate();
 
         this.questValidator = new QuestValidator();
         this.dailyQuestValidator = new DailyQuestValidator(this);
@@ -245,6 +256,7 @@ public final class BattlePlugin extends SpigotPlugin {
         this.passLoader = new PassLoader(this);
         this.questCache = new QuestCache(this);
         this.questController = new QuestController(this);
+        this.userController = new UserController(this);
         this.userCache = new UserCache(this);
         this.menuFactory = new MenuFactory(this);
         this.questRegistry = new QuestRegistry(this);
@@ -374,7 +386,7 @@ public final class BattlePlugin extends SpigotPlugin {
         storageSettings.setProperties(Maps.newHashMap());
     }
 
-    private void setSeasonStartDate() {
+    private void setSeasonDate() {
         Config config = this.getConfig("settings");
         String[] date = config.string("current-season.start-date").split("/");
         String[] time = config.string("current-season.start-time").split(":");
@@ -385,5 +397,6 @@ public final class BattlePlugin extends SpigotPlugin {
         int minute = Integer.parseInt(time[1]);
         String zoneId = config.string("current-season.time-zone");
         this.seasonStartDate = ZonedDateTime.of(year, month, day, hour, minute, 0, 0, ZoneId.of(zoneId));
+        this.seasonEndDate = this.seasonStartDate.plusWeeks(this.questCache.getMaxWeek());
     }
 }

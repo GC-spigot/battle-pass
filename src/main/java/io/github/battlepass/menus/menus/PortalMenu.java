@@ -32,12 +32,10 @@ public class PortalMenu extends ConfigMenu implements UserDependent {
 
     @Override
     public void redraw() {
-        String finishedSection = "season-finished-message";
         this.drawConfigItems(replacer -> replacer
                 .set("daily_time_left", this.dailyQuestReset.asString())
                 .set("pass_type", this.passLoader.passTypeOfId(this.user.getPassId()).getName())
-                .set("week", this.api.currentWeek() > this.questCache.getMaxWeek() ? this.lang.has(finishedSection) ? this.lang.external(finishedSection).asString()
-                        : this.api.currentDisplayWeek() : this.api.currentDisplayWeek())
+                .set("week", this.api.getWeekFormatted())
                 .set("tier", this.user.getTier())
                 .set("points", this.user.getPoints().toString())
                 .set("required_points", this.api.getRequiredPoints(this.user.getTier(), this.user.getPassId()))

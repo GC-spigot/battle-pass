@@ -11,9 +11,10 @@ import me.hyfe.simplespigot.cache.SimpleCache;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.item.SpigotItem;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -54,8 +55,14 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
         return output;
     }
 
+    @NotNull
     public Map<String, Quest> getQuests(String categoryId) {
         return this.get(categoryId).orElseGet(() -> this.set(categoryId, Maps.newLinkedHashMap()));
+    }
+
+    @Nullable
+    public Map<String, Quest> getQuestsVerbatim(String categoryId) {
+        return this.get(categoryId).orElse(null);
     }
 
     public int getMaxWeek() {
