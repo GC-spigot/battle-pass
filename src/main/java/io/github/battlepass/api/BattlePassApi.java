@@ -7,6 +7,7 @@ import io.github.battlepass.api.events.user.UserTierUpEvent;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.RewardCache;
 import io.github.battlepass.cache.UserCache;
+import io.github.battlepass.lang.Lang;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.objects.pass.PassType;
 import io.github.battlepass.objects.pass.Tier;
@@ -28,6 +29,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class BattlePassApi {
     private final BattlePlugin plugin;
+    private final Lang lang;
     private final PassLoader passLoader;
     private final UserCache userCache;
     private final RewardCache rewardCache;
@@ -37,6 +39,7 @@ public class BattlePassApi {
 
     public BattlePassApi(BattlePlugin plugin) {
         this.plugin = plugin;
+        this.lang = plugin.getLang();
         this.passLoader = plugin.getPassLoader();
         this.userCache = plugin.getUserCache();
         this.rewardCache = plugin.getRewardCache();
@@ -59,11 +62,21 @@ public class BattlePassApi {
 
     public boolean hasSeasonEnded() {
         ZonedDateTime startTime = this.plugin.getSeasonStartDate();
-        return ZonedDateTime.now().isAfter(startTime.plusWeeks(this.questCache.getMaxWeek()));
+        return ZonedDateTime.now().isAfter(this.plugin.getSeasonEndDate());
+    }
+
+    public String getWeekFormatted() {
+        String finishedSection = "season-finished-message";
+        return this.hasSeasonEnded() ? this.lang.has(finishedSection) ? this.lang.external(finishedSection).asString()
+                : String.valueOf(this.currentDisplayWeek()) : String.valueOf(this.currentDisplayWeek());
+    }
+
+    public ZoneId getZone() {
+        return ZoneId.of(this.plugin.getConfig("settings").string("current-season.time-zone"));
     }
 
     public long currentWeek() {
-        ZoneId zoneId = ZoneId.of(this.settingsConfig.string("current-season.time-zone"));
+        ZoneId zoneId = this.getZone();
         long daysBetween = ChronoUnit.DAYS.between(this.plugin.getSeasonStartDate(), ZonedDateTime.now().withZoneSameInstant(zoneId));
         return daysBetween < 0 ? 0 : (daysBetween / 7) + 1;
     }

@@ -62,8 +62,6 @@ public class DailyQuestReset {
     }
 
     public void start() {
-        Config settings = this.plugin.getConfig("settings");
-        String configKey = "season-finished.stop-daily-quests";
         if (!this.shouldDoDailyQuests()) {
             return;
         }
