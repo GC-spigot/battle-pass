@@ -245,7 +245,6 @@ public final class BattlePlugin extends SpigotPlugin {
 
     private void load() {
         this.setStorageSettings();
-        this.setSeasonDate();
 
         this.questValidator = new QuestValidator();
         this.dailyQuestValidator = new DailyQuestValidator(this);
@@ -261,9 +260,11 @@ public final class BattlePlugin extends SpigotPlugin {
         this.menuFactory = new MenuFactory(this);
         this.questRegistry = new QuestRegistry(this);
 
+        this.questCache.cache();
+        this.setSeasonDate();
+
         this.rewardCache.cache();
         this.passLoader.load();
-        this.questCache.cache();
         this.userCache.loadOnline();
 
         this.localApi = new BattlePassApi(this);
@@ -330,26 +331,18 @@ public final class BattlePlugin extends SpigotPlugin {
 
     private void vaultHook() {
         if (!this.getConfig("settings").has("reward-excess-points.method") || this.getConfig("settings").string("reward-excess-points.method").equalsIgnoreCase("none")) {
-            System.out.println("1");
             return;
         }
         if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-            System.out.println("2");
             RegisteredServiceProvider<Economy> ecoProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
-            System.out.println("3 " + ecoProvider);
             if (ecoProvider != null) {
-                System.out.println("4");
-                System.out.println("AAAAA");
                 this.economy = ecoProvider.getProvider();
-                System.out.println("BBBB");
                 Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into vault");
                 return;
             }
             return;
         }
-        System.out.println("5");
         if (this.economy == null && this.economyRuns < 10) {
-            System.out.println("6");
             this.economyRuns++;
             Bukkit.getScheduler().runTaskLater(this, this::vaultHook, 100);
         }

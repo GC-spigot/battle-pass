@@ -31,7 +31,7 @@ public class MenuFactory {
     }
 
     public Menu createMenu(String menuName, Player player) {
-        if (player.hasPermission("battlepass.block")) {
+        if (player.hasPermission("battlepass.block") && this.plugin.getConfig("settings").bool("enable-ban-permission") && !player.isOp()) {
             this.lang.external("disallowed-permission").to(player);
             return null;
         }

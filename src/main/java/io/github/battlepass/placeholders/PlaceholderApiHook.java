@@ -51,7 +51,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
             case "time_to_next_week":
                 return this.api.hasSeasonEnded() ?
                         "00:00" :
-                        Simple.time().format(TimeUnit.SECONDS, ChronoUnit.SECONDS.between(ZonedDateTime.now().withZoneSameInstant(this.api.getZone()), this.seasonStartDate.plusWeeks(this.api.currentWeek() + 1)));
+                        Simple.time().format(TimeUnit.SECONDS, ChronoUnit.SECONDS.between(ZonedDateTime.now().withZoneSameInstant(this.api.getZone()), this.seasonStartDate.plusWeeks(this.api.currentWeek())));
             case "time_to_season_end":
                 String finishedSection = "season-finished-message";
                 return this.api.hasSeasonEnded() ?

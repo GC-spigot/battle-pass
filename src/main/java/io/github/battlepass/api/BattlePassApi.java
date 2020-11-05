@@ -61,7 +61,6 @@ public class BattlePassApi {
     }
 
     public boolean hasSeasonEnded() {
-        ZonedDateTime startTime = this.plugin.getSeasonStartDate();
         return ZonedDateTime.now().isAfter(this.plugin.getSeasonEndDate());
     }
 

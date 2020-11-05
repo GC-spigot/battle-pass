@@ -53,6 +53,8 @@ battle-pass-aliases:
 # This is provided in seconds, you can not use decimals
 join-message-delay: 5
 
+enable-ban-permission: false # Enables the battlepass.block permission which blocks users from using the battlepass.
+
 # Set as [] at the end to disable either.
 whitelisted-worlds: [] # Use the same format as blacklisted worlds if you wish to use whitelisted worlds. You can use both at the same time.
 blacklisted-worlds: # World names where quests cannot be progressed.

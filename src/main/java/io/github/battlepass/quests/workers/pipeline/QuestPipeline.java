@@ -15,12 +15,14 @@ public class QuestPipeline {
     private final DebugLogger logger;
     private final UserCache userCache;
     private final QuestCache questCache;
+    private final BattlePlugin plugin;
 
     public QuestPipeline(BattlePlugin plugin) {
         this.questValidationStep = new QuestValidationStep(plugin);
         this.logger = plugin.getDebugLogger();
         this.userCache = plugin.getUserCache();
         this.questCache = plugin.getQuestCache();
+        this.plugin = plugin;
     }
 
     public void handle(String name, Player player, int progress, QuestResult questResult, Replacer replacer, boolean overrideUpdate) {
@@ -28,7 +30,7 @@ public class QuestPipeline {
             this.logger.log("(PIPELINE) Player null issue for quest type ".concat(name));
             return;
         }
-        if (player.hasPermission("battlepass.block")) {
+        if (player.hasPermission("battlepass.block") && this.plugin.getConfig("settings").bool("enable-ban-permission") && !player.isOp()) {
             this.logger.log(LogContainer.of("(PIPELINE) Player %s is blocked from the battlepass so dropping them.", player));
             return;
         }
