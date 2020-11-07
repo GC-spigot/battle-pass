@@ -182,7 +182,7 @@ public class BattlePassApi {
 
     public void rewardCurrency(User user, int points) {
         String method = this.settingsConfig.string("reward-excess-points.method");
-        if (method == null || method.equalsIgnoreCase("none")) {
+        if (method == null || method.isEmpty() || method.equalsIgnoreCase("none")) {
             return;
         }
         int rewardAmount = points * this.settingsConfig.integer("reward-excess-points.currency-per-point.".concat(user.getPassId()));
@@ -194,6 +194,8 @@ public class BattlePassApi {
                 break;
             case "internal":
                 this.plugin.runSync(() -> user.updateCurrency(current -> current.add(BigInteger.valueOf(rewardAmount))));
+            default:
+                this.plugin.getLogger().severe("Unknown reward method 'reward-excess-points.method'.");
         }
     }
 }

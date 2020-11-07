@@ -40,6 +40,7 @@ public class ClickQuest extends QuestExecutor {
                 }
                 this.execute("left-click-block", player, result -> result.root(clickedBlock), replacer -> replacer.set("block", clickedBlock.getType()));
                 break;
+            default:
         }
     }
 }

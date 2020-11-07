@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 public class DailyQuestReset {
     private final BattlePlugin plugin;
     private final BattlePassApi api;
-    private final DailyQuestValidator validator;
     private final int amount;
     private final ZoneId timeZone;
     private ZonedDateTime whenReset;
@@ -41,17 +40,17 @@ public class DailyQuestReset {
     protected Set<Quest> permanentQuests;
 
     public DailyQuestReset(BattlePlugin plugin, Set<Quest> currentQuests, Function<DailyQuestReset, ZonedDateTime> whenReset) {
+        DailyQuestValidator validator = plugin.getDailyQuestValidator();
         Config settings = plugin.getConfig("settings");
         this.plugin = plugin;
         this.api = plugin.getLocalApi();
-        this.validator = plugin.getDailyQuestValidator();
         this.questCache = plugin.getQuestCache();
         this.userCache = plugin.getUserCache();
         this.currentQuests = currentQuests;
         this.permanentQuests = settings.stringList("permanent-daily-quest-ids")
                 .stream()
                 .map(id -> this.questCache.getQuest(Category.DAILY.id(), id))
-                .filter(this.validator::checkQuest)
+                .filter(validator::checkQuest)
                 .collect(Collectors.toSet());
         this.amount = settings.integer("current-season.daily-quest-amount");
         this.timeZone = ZoneId.of(settings.string("current-season.time-zone"));

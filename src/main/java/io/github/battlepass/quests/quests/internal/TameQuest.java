@@ -23,6 +23,7 @@ public class TameQuest extends QuestExecutor {
         String entityName = event.getEntity().getCustomName();
 
         this.execute("tame", player, result -> {
+            result.subRoot("name", entityName);
             return result.root(entity.getType().toString());
         });
     }

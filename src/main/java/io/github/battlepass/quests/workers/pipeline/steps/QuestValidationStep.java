@@ -67,10 +67,8 @@ public class QuestValidationStep {
             if (!name.equalsIgnoreCase(quest.getType())) {
                 continue;
             }
-            if (seasonEnded) {
-                if ((quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd)) {
-                    continue;
-                }
+            if (seasonEnded && (quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd)) {
+                continue;
             }
             Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
             if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
