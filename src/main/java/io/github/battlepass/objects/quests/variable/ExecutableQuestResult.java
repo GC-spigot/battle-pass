@@ -73,8 +73,11 @@ public class ExecutableQuestResult implements QuestResult {
         for (String root : variable.getRoots()) {
             boolean noVariableRoot = root.equalsIgnoreCase("none");
             if (this.areSubRootsValid(player, variable)) {
+                if (noVariableRoot) {
+                    return true;
+                }
                 if (this.material == null) {
-                    return noVariableRoot || (this.root != null && this.root.equalsIgnoreCase(root));
+                    return (this.root != null && this.root.equalsIgnoreCase(root));
                 }
                 for (ImmutablePair<String, Byte> pair : variable.getMaterialRoots()) {
                     if (this.material.equalsIgnoreCase(pair.getKey()) && (pair.getValue() < 0 || this.data == pair.getValue())) {

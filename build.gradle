@@ -9,7 +9,7 @@ buildscript {
 }
 
 group 'io.github.battlepass'
-version '3.9-dev'
+version '3.9'
 
 apply plugin: 'java'
 apply plugin: 'com.github.johnrengelman.shadow'
