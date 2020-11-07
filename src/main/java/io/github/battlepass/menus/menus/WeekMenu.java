@@ -9,7 +9,7 @@ import io.github.battlepass.menus.service.extensions.PageableConfigMenu;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.quests.workers.reset.DailyQuestReset;
-import io.github.battlepass.service.Percentage;
+import io.github.battlepass.service.PercentageUtils;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.item.SpigotItem;
 import me.hyfe.simplespigot.menu.item.MenuItem;
@@ -54,8 +54,8 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
                     .set("daily_time_left", this.dailyQuestReset.asString())
                     .set("total_progress", this.questController.getQuestProgress(this.user, quest))
                     .set("required_progress", quest.getRequiredProgress())
-                    .set("percentage_progress", Percentage.getPercentage(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
-                    .set("progress_bar", Percentage.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress(), this.lang))))
+                    .set("percentage_progress", PercentageUtils.getPercentage(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
+                    .set("progress_bar", PercentageUtils.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress(), this.lang))))
                     .build();
         } catch (Exception e) {
             BattlePlugin.logger().log(Level.WARNING, "Quest: ".concat(String.valueOf(quest)));

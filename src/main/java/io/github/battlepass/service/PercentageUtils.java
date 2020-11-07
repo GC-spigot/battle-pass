@@ -10,7 +10,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 @UtilityClass
-public class Percentage {
+public class PercentageUtils {
 
     public static String getPercentage(BigInteger progress, BigInteger requiredProgress) {
         return new BigDecimal(progress).divide(new BigDecimal(requiredProgress), MathContext.DECIMAL32).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_EVEN).toString(); // TODO probs broken
