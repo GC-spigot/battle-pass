@@ -54,7 +54,7 @@ public class QuestValidationStep {
         this.disableNormalsOnSeasonEnd = settings.bool("season-finished.stop-other-quests");
     }
 
-    public void process(Player player, User user, String name, int progress, QuestResult questResult, Collection<Quest> quests, boolean overrideUpdate) {
+    public void process(Player player, User user, String name, BigInteger progress, QuestResult questResult, Collection<Quest> quests, boolean overrideUpdate) {
         String playerWorld = player.getWorld().getName();
         boolean seasonEnded = this.api.hasSeasonEnded();
         if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {

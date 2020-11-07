@@ -55,7 +55,7 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
                     .set("total_progress", this.questController.getQuestProgress(this.user, quest))
                     .set("required_progress", quest.getRequiredProgress())
                     .set("percentage_progress", Percentage.getPercentage(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
-                    .set("progress_bar", Percentage.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()))))
+                    .set("progress_bar", Percentage.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress(), this.lang))))
                     .build();
         } catch (Exception e) {
             BattlePlugin.logger().log(Level.WARNING, "Quest: ".concat(String.valueOf(quest)));
@@ -69,24 +69,5 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
     @Override
     public ImmutablePair<Collection<Quest>, Collection<Integer>> elementalValues() {
         return ImmutablePair.of(this.questCache.getQuests(Category.WEEKLY.id(this.week)).values(), MenuService.parseSlots(this, this.config, "quest-slots"));
-    }
-
-    private String getPercentage(double progress, double requiredProgress) {
-        return String.valueOf((int) ((progress / requiredProgress) * 100));
-    }
-
-    private String getProgressBar(int progress, int requiredProgress) {
-        float progressFloat = (float) progress / requiredProgress;
-        float complete = 30 * progressFloat;
-        float incomplete = 30 - complete;
-        String progressBar = Text.modify(this.lang.external("progress-bar.complete-color").asString());
-        for (int i = 0; i < complete; i++) {
-            progressBar = progressBar.concat(this.lang.external("progress-bar.symbol").asString());
-        }
-        progressBar = progressBar.concat(this.lang.external("progress-bar.incomplete-color").asString());
-        for (int i = 0; i < incomplete; i++) {
-            progressBar = progressBar.concat(this.lang.external("progress-bar.symbol").asString());
-        }
-        return progressBar;
     }
 }

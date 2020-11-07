@@ -1,6 +1,8 @@
 package io.github.battlepass.service;
 
+import io.github.battlepass.lang.Lang;
 import lombok.experimental.UtilityClass;
+import me.hyfe.simplespigot.text.Text;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -14,17 +16,17 @@ public class Percentage {
         return new BigDecimal(progress).divide(new BigDecimal(requiredProgress), MathContext.DECIMAL32).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_EVEN).toString(); // TODO probs broken
     }
 
-    public static String getProgressBar(BigInteger progress, BigInteger requiredProgress) {
+    public static String getProgressBar(BigInteger progress, BigInteger requiredProgress, Lang lang) {
         float progressFloat = new BigDecimal(progress).divide(new BigDecimal(requiredProgress), MathContext.DECIMAL32).setScale(2, RoundingMode.HALF_EVEN).floatValue();
         float complete = 30 * progressFloat;
         float incomplete = 30 - complete;
-        String progressBar = "A";
+        String progressBar = Text.modify(lang.external("progress-bar.complete-color").asString());
         for (int i = 0; i < complete; i++) {
-            progressBar = progressBar.concat("|");
+            progressBar = progressBar.concat(lang.external("progress-bar.symbol").asString());
         }
-        progressBar = progressBar.concat("B");
+        progressBar = progressBar.concat(lang.external("progress-bar.incomplete-color").asString());
         for (int i = 0; i < incomplete; i++) {
-            progressBar = progressBar.concat("|");
+            progressBar = progressBar.concat(lang.external("progress-bar.symbol").asString());
         }
         return progressBar;
     }

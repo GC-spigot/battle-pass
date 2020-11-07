@@ -122,7 +122,7 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
         String name = config.string(section.concat("name"));
         ItemStack item = SpigotItem.toItem(config, section.concat("item"));
         String type = config.string(section.concat("type"));
-        BigInteger requiredProgress = new BigInteger(config.string(section.concat("required-progress")));
+        BigInteger requiredProgress = new BigInteger(config.forcedString(section.concat("required-progress")));
         int points = config.integer(section.concat("points"));
         String exclusiveTo = config.string(section.concat("exclusive"));
         boolean antiAbuse = config.bool(section.concat("anti-abuse"));

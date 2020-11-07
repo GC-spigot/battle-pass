@@ -18,9 +18,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.logging.Level;
 
@@ -56,7 +53,7 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
                     .set("total_progress", this.questController.getQuestProgress(this.user, quest))
                     .set("required_progress", quest.getRequiredProgress())
                     .set("percentage_progress", Percentage.getPercentage(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
-                    .set("progress_bar", Percentage.getPercentage(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()))))
+                    .set("progress_bar", Percentage.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress(), this.lang))))
                     .build();
         } catch (Exception e) {
             BattlePlugin.logger().log(Level.INFO, "Quest: " + quest);
@@ -75,24 +72,5 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
     @Override
     public boolean isUserViable() {
         return this.user != null;
-    }
-
-    private String getPercentage(BigInteger progress, BigInteger requiredProgress) {
-        return new BigDecimal(progress).divide(new BigDecimal(requiredProgress), RoundingMode.CEILING).multiply(BigDecimal.valueOf(100)).toString(); // TODO probs broken
-    }
-
-    private String getProgressBar(int progress, int requiredProgress) {
-        float progressFloat = (float) progress / requiredProgress;
-        float complete = 30 * progressFloat;
-        float incomplete = 30 - complete;
-        String progressBar = Text.modify(this.lang.external("progress-bar.complete-color").asString());
-        for (int i = 0; i < complete; i++) {
-            progressBar = progressBar.concat(this.lang.external("progress-bar.symbol").asString());
-        }
-        progressBar = progressBar.concat(this.lang.external("progress-bar.incomplete-color").asString());
-        for (int i = 0; i < incomplete; i++) {
-            progressBar = progressBar.concat(this.lang.external("progress-bar.symbol").asString());
-        }
-        return progressBar;
     }
 }

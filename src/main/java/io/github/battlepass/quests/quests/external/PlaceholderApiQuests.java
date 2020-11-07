@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.math.BigInteger;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -51,7 +52,7 @@ public class PlaceholderApiQuests extends ExternalQuestExecutor {
                     String placeholderValue = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, "%" + placeholder + "%");
                     String numberOnlyPlaceholder = placeholderValue.replaceAll("[^\\d.]", "");
                     if (!numberOnlyPlaceholder.isEmpty()) {
-                        this.execute("integer_".concat(placeholder), player, Integer.parseInt(placeholderValue), QuestResult::none,
+                        this.execute("integer_".concat(placeholder), player, new BigInteger(placeholderValue), QuestResult::none,
                                 replace -> replace.set("placeholder_value", placeholderValue), true);
                     }
                 }
