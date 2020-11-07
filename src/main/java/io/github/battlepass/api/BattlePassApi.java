@@ -36,6 +36,7 @@ public class BattlePassApi {
     private final QuestCache questCache;
     private final QuestRegistry questRegistry;
     private final Config settingsConfig;
+    private final boolean useImprovedTierPoints;
 
     public BattlePassApi(BattlePlugin plugin) {
         this.plugin = plugin;
@@ -46,6 +47,7 @@ public class BattlePassApi {
         this.questCache = plugin.getQuestCache();
         this.questRegistry = plugin.getQuestRegistry();
         this.settingsConfig = plugin.getConfig("settings");
+        this.useImprovedTierPoints = this.settingsConfig.bool("fixes.use-improved-tier-points");
     }
 
     public QuestRegistry getQuestRegistry() {
@@ -128,7 +130,7 @@ public class BattlePassApi {
     public void updateUserTier(User user) {
         int maxTier = this.passLoader.getMaxTier();
         for (int tier = user.getTier() + 1; tier <= maxTier; tier++) {
-            int required = this.getRequiredPoints(user.getTier(), user.getPassId());
+            int required = this.getRequiredPoints(this.useImprovedTierPoints ? user.getTier() + 1 : user.getTier(), user.getPassId());
             if (user.getPoints().compareTo(BigInteger.valueOf(required)) >= 0) {
                 user.updatePoints(current -> current.subtract(BigInteger.valueOf(required)));
                 Bukkit.getPluginManager().callEvent(new UserTierUpEvent(user, tier));

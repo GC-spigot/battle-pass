@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -58,6 +59,14 @@ public class PassType {
 
     public int getDefaultPointsRequired() {
         return this.defaultPointsRequired;
+    }
+
+    public BigInteger getTotalPoints(int maxTier) {
+        BigInteger totalPoints = BigInteger.ZERO;
+        for (int i = 2; i <= maxTier; i++) {
+            totalPoints = totalPoints.add(BigInteger.valueOf(this.tiers.containsKey(i) ? this.tiers.get(i).getRequiredPoints() : this.defaultPointsRequired));
+        }
+        return totalPoints;
     }
 
     public TreeMap<Integer, Tier> getTiers() {

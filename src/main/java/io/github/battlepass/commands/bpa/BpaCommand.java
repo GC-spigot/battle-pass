@@ -13,7 +13,6 @@ import me.hyfe.simplespigot.text.Text;
 import org.bukkit.command.CommandSender;
 
 public class BpaCommand extends SimpleCommand<CommandSender> {
-    private String message;
 
     public BpaCommand(BattlePlugin plugin) {
         super(plugin, "battlepassadmin", "battlepass.admin", true);
@@ -39,16 +38,11 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                 new ResetQuestSub(plugin),
                 new SetPointsSub(plugin)
         );
-        this.setupMessage();
     }
 
     @Override
     public void onExecute(CommandSender sender, String[] args) {
-        Text.sendMessage(sender, this.message);
-    }
-
-    private void setupMessage() {
-        this.message = "\n"
+        Text.sendMessage(sender, ("\n"
                 + "\n&bBattlePass Admin Help:\n"
                 + "/bpa - This page."
                 + "/bpa reload - Reloads all the reloadable files."
@@ -67,11 +61,11 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                 + "/bpa new season - Resets user tiers, pending rewards and points."
                 + "/bpa material <block/item> - Get the config name of the item you're holding or block you're looking at."
                 + "/bpa bypass locked quests <player> - Allows the player to bypass week locks and complete quests anyway."
-                + "/bpa give balance <player> <amount> - Give a certain amount of internal balance to a player"
-                + "/bpa set balance <player> <amount> - Set the internal balance of a player"
-                + "/bpa remove balance <player> <amount> - Remove a certain amount of internal balance from a player"
+                + "/bpa give balance <player> <amount> - Give a certain amount of internal balance to a player."
+                + "/bpa set balance <player> <amount> - Set the internal balance of a player."
+                + "/bpa remove balance <player> <amount> - Remove a certain amount of internal balance from a player.")
                 .replace("- ", "&8- &7")
                 .replace("/bpa", "&e/bpa")
-                .replace(".", ".\n");
+                .replace(".", ".\n"));
     }
 }

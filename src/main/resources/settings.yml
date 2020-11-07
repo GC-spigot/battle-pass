@@ -63,6 +63,8 @@ blacklisted-worlds: # World names where quests cannot be progressed.
 
 daily-quests-enabled: true # If this value is set to false it will disable calculation of daily quests
 
+permanent-quest-ids: [] # ['1', '3', '5']
+
 # Actions that are run whenever any player completes any quest, for that player.
 # This is empty by default, set it like this if you want actions:
 #
@@ -92,8 +94,13 @@ season-finished:
 #  - 'AutoSell'
 #  - 'PlotSquared'
 
+enable-play-time: false # Switch this to true if you're going to use a playtime quest.
+
 reward-excess-points: # If set to vault, Vault & an economy plugin is required. If set to internal, no other plugins are required.
   method: none # Set this to none, vault or internal. If it's internal, the value will be stored within BattlePass and you must use commands to add/remove and placeholders to get.
   currency-per-point: # The amount of currency given per every excess point.
     free: 50
     premium: 100
+
+fixes:
+  use-improved-tier-points: true # Previously if you set 300 points for tier 10, that would mean 300 points to tier 11. This makes it so it's logical and it's 300 points to reach tier 10.

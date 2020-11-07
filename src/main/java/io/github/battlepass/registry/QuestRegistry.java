@@ -58,13 +58,15 @@ public class QuestRegistry implements Registry {
                 KillPlayerQuest::new,
                 LoginQuest::new,
                 MilkQuest::new,
-                PlayTimeQuest::new,
                 RegenerateQuest::new,
                 RideMobQuest::new,
                 ShearSheepQuest::new,
                 SmeltQuest::new,
                 TameQuest::new
         );
+        if (!plugin.getConfig("settings").bool("enable-play-time")) {
+            new PlayTimeQuest(this.plugin);
+        }
         this.hook("AdvancedEnchantments", AdvancedEnchantmentsQuests::new);
         this.hook("ASkyblock", ASkyblockQuests::new);
         this.hook("AuctionHouse", AuctionHouseKludgeQuests::new, "klugemonkey");

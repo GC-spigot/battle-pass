@@ -15,9 +15,9 @@ public class HelpSub extends BpSubCommand<CommandSender> {
     @Override
     public void onExecute(CommandSender sender, String[] strings) {
         Text.sendMessage(sender, "\n&eBattlePass &7by Hyfe and Zak Shearman\n"
-                .concat("/bp - Opens the portal menu.")
+                .concat("/battlepass - Opens the portal menu.")
                 .replace("- ", "&8- &7")
-                .replace("/bp", "&e/bp")
+                .replace("/battlepass", "&e/battlepass")
                 .replace(".", ".\n"));
     }
 }

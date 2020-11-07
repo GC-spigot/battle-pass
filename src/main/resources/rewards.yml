@@ -1,4 +1,4 @@
-'1': # The tier of the reward
+'1': # The id of the reward
   type: command
   name: 'First Reward'
   lore-addon:
