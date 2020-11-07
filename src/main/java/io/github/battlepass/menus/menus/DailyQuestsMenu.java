@@ -8,6 +8,7 @@ import io.github.battlepass.menus.service.extensions.PageableConfigMenu;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.quests.workers.reset.DailyQuestReset;
+import io.github.battlepass.service.Percentage;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.menu.item.MenuItem;
 import me.hyfe.simplespigot.menu.service.MenuService;
@@ -17,6 +18,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.logging.Level;
 
@@ -51,8 +55,8 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
             return MenuItem.builderOf(Text.modify(quest.getItemStack(), replacer -> replacer
                     .set("total_progress", this.questController.getQuestProgress(this.user, quest))
                     .set("required_progress", quest.getRequiredProgress())
-                    .set("percentage_progress", this.getPercentage(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
-                    .set("progress_bar", this.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()))))
+                    .set("percentage_progress", Percentage.getPercentage(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
+                    .set("progress_bar", Percentage.getPercentage(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()))))
                     .build();
         } catch (Exception e) {
             BattlePlugin.logger().log(Level.INFO, "Quest: " + quest);
@@ -73,8 +77,8 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
         return this.user != null;
     }
 
-    private String getPercentage(double progress, double requiredProgress) {
-        return String.valueOf((progress / requiredProgress) * 100);
+    private String getPercentage(BigInteger progress, BigInteger requiredProgress) {
+        return new BigDecimal(progress).divide(new BigDecimal(requiredProgress), RoundingMode.CEILING).multiply(BigDecimal.valueOf(100)).toString(); // TODO probs broken
     }
 
     private String getProgressBar(int progress, int requiredProgress) {

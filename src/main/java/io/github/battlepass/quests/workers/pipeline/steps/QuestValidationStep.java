@@ -18,6 +18,7 @@ import me.hyfe.simplespigot.service.Locks;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
@@ -84,8 +85,12 @@ public class QuestValidationStep {
     }
 
     private void proceed(Player player, User user, Quest quest, int progress, QuestResult questResult, boolean overrideUpdate) {
-        int originalProgress = this.controller.getQuestProgress(user, quest);
-        if (overrideUpdate && originalProgress == progress) {
+        this.proceed(player, user, quest, BigInteger.valueOf(progress), questResult, overrideUpdate);
+    }
+
+    private void proceed(Player player, User user, Quest quest, BigInteger progress, QuestResult questResult, boolean overrideUpdate) {
+        BigInteger originalProgress = this.controller.getQuestProgress(user, quest);
+        if (overrideUpdate && originalProgress.compareTo(progress) == 0) {
             return;
         }
         Variable subVariable = quest.getVariable();
@@ -119,11 +124,11 @@ public class QuestValidationStep {
             this.plugin.runSync(() -> {
                 Bukkit.getPluginManager().callEvent(event);
             });
-            event.ifNotCancelled(eventConsumer -> this.completionStep.process(user, quest, originalProgress, eventConsumer.getProgression(), overrideUpdate));
+            event.ifNotCancelled(eventConsumer -> this.completionStep.process(user, quest, originalProgress, eventConsumer.getAddedProgress(), overrideUpdate));
         }
     }
 
-    public void isQuestValid(Player player, User user, Quest quest, int progress, boolean overrideUpdate) {
+    public void isQuestValid(Player player, User user, Quest quest, BigInteger progress, boolean overrideUpdate) {
         String playerWorld = player.getWorld().getName();
         boolean seasonEnded = this.api.hasSeasonEnded();
         if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {
@@ -141,8 +146,8 @@ public class QuestValidationStep {
         if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
             return;
         }
-        int originalProgress = this.controller.getQuestProgress(user, quest);
-        if (overrideUpdate && originalProgress == progress) {
+        BigInteger originalProgress = this.controller.getQuestProgress(user, quest);
+        if (overrideUpdate && originalProgress.compareTo(progress) == 0) {
             return;
         }
         if (!this.controller.isQuestDone(user, quest)) {
@@ -179,6 +184,10 @@ public class QuestValidationStep {
     }
 
     private void applyAntiAbuseMeasures(Player player, User user, Quest quest, String currentType, int progress, QuestResult questResult) {
+        this.applyAntiAbuseMeasures(player, user, quest, currentType, BigInteger.valueOf(progress), questResult);
+    }
+
+    private void applyAntiAbuseMeasures(Player player, User user, Quest quest, String currentType, BigInteger progress, QuestResult questResult) {
         if (this.controller.isQuestDone(user, quest)
                 || (!currentType.equals("block-break") && !currentType.equals("block-place"))
                 || currentType.equalsIgnoreCase(quest.getType())
@@ -187,9 +196,9 @@ public class QuestValidationStep {
             return;
         }
         this.debugLogger.log(LogContainer.of("Anti abuse measures applied for player %s on quest " + quest.getCategoryId() + ":" + quest.getId(), player));
-        int currentProgress = this.controller.getQuestProgress(user, quest);
-        if (currentProgress > 0) {
-            this.controller.setQuestProgress(user, quest, Math.max(currentProgress - progress, 0));
+        BigInteger currentProgress = this.controller.getQuestProgress(user, quest);
+        if (currentProgress.compareTo(BigInteger.ZERO) > 0) {
+            this.controller.setQuestProgress(user, quest, currentProgress.subtract(progress).max(BigInteger.ZERO));
         }
     }
 }

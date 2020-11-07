@@ -13,29 +13,29 @@ import java.util.function.Predicate;
 
 public class QuestController {
     private final QuestCache questCache;
-    private final Function<User, Map<String, ConcurrentHashMap<String, Integer>>> questMap = user -> user.getQuestStore().asMap();
+    private final Function<User, Map<String, ConcurrentHashMap<String, BigInteger>>> questMap = user -> user.getQuestStore().asMap();
 
     public QuestController(BattlePlugin plugin) {
         this.questCache = plugin.getQuestCache();
     }
 
-    public Map<String, Integer> getQuests(User user, String categoryId) {
+    public Map<String, BigInteger> getQuests(User user, String categoryId) {
         return this.questMap.apply(user).get(categoryId);
     }
 
     public boolean isQuestDone(User user, Quest quest) {
-        return this.getQuestProgress(user, quest) >= quest.getRequiredProgress();
+        return this.getQuestProgress(user, quest).compareTo(quest.getRequiredProgress()) > -1;
     }
 
     public boolean isWeekDone(User user, int week) {
         String categoryId = "week-".concat(String.valueOf(week));
-        Map<String, Integer> weekQuests = this.getQuests(user, categoryId);
+        Map<String, BigInteger> weekQuests = this.getQuests(user, categoryId);
         if (weekQuests == null) {
             return week == 0;
         }
-        for (Map.Entry<String, Integer> entry : weekQuests.entrySet()) {
+        for (Map.Entry<String, BigInteger> entry : weekQuests.entrySet()) {
             Quest quest = this.questCache.getQuest(categoryId, entry.getKey());
-            if (entry.getValue() != null && quest != null && entry.getValue() < quest.getRequiredProgress()) {
+            if (entry.getValue() != null && quest != null && entry.getValue().compareTo(quest.getRequiredProgress()) < 0) {
                 return false;
             }
         }
@@ -43,7 +43,7 @@ public class QuestController {
     }
 
     public boolean resetQuest(User user, Quest quest) {
-        Map<String, Integer> quests = this.getQuests(user, quest.getCategoryId());
+        Map<String, BigInteger> quests = this.getQuests(user, quest.getCategoryId());
         if (quests == null) {
             return false;
         }
@@ -51,29 +51,30 @@ public class QuestController {
         return true;
     }
 
-    public int getQuestProgress(User user, Quest quest) {
-        return this.failedIndex(user, quest).equals(FailedIndex.NONE) ? this.getQuests(user, quest.getCategoryId()).get(quest.getId()) : 0;
+    public BigInteger getQuestProgress(User user, Quest quest) {
+        return this.failedIndex(user, quest).equals(FailedIndex.NONE) ? this.getQuests(user, quest.getCategoryId()).get(quest.getId()) : BigInteger.ZERO;
     }
 
-    public int setQuestProgress(User user, Quest quest, int progress) {
+    public BigInteger setQuestProgress(User user, Quest quest, BigInteger progress) {
         this.fillFailedIndexes(user, quest);
-        this.getQuests(user, quest.getCategoryId()).put(quest.getId(), Math.min(quest.getRequiredProgress(), progress));
+        this.getQuests(user, quest.getCategoryId()).put(quest.getId(), quest.getRequiredProgress().min(progress));
         return this.getQuestProgress(user, quest);
     }
 
     /**
      * Adds progress to a quest and
-     * @param user The user to apply to
-     * @param quest The quest to add progress for
+     *
+     * @param user     The user to apply to
+     * @param quest    The quest to add progress for
      * @param progress The amount of progress to add
-     * @param reward Whether to give the player points from this or not (default is no).
+     * @param reward   Whether to give the player points from this or not (default is no).
      * @return The new progress of the quest.
      */
-    public int addQuestProgress(User user, Quest quest, int progress, boolean reward) {
-        int initialProgress = this.getQuestProgress(user, quest);
-        if (initialProgress < quest.getRequiredProgress()) {
-            int modifiedProgress = this.setQuestProgress(user, quest, Math.min(initialProgress + progress, quest.getRequiredProgress()));
-            if (modifiedProgress >= quest.getRequiredProgress() && reward) {
+    public BigInteger addQuestProgress(User user, Quest quest, BigInteger progress, boolean reward) {
+        BigInteger initialProgress = this.getQuestProgress(user, quest);
+        if (initialProgress.compareTo(quest.getRequiredProgress()) < 0) {
+            BigInteger modifiedProgress = this.setQuestProgress(user, quest, initialProgress.add(progress).min(quest.getRequiredProgress()));
+            if (modifiedProgress.compareTo(quest.getRequiredProgress()) > -1 && reward) {
                 user.updatePoints(current -> current.add(BigInteger.valueOf(quest.getPoints())));
             }
             return modifiedProgress;
@@ -81,7 +82,7 @@ public class QuestController {
         return initialProgress;
     }
 
-    public int addQuestProgress(User user, Quest quest, int progress) {
+    public BigInteger addQuestProgress(User user, Quest quest, BigInteger progress) {
         return this.addQuestProgress(user, quest, progress, false);
     }
 
@@ -91,7 +92,7 @@ public class QuestController {
             this.questMap.apply(user).put(quest.getCategoryId(), new ConcurrentHashMap<>());
         }
         if (failedIndex.test(FailedIndex.QUEST_LAYER)) {
-            this.getQuests(user, quest.getCategoryId()).put(quest.getId(), 0);
+            this.getQuests(user, quest.getCategoryId()).put(quest.getId(), BigInteger.ZERO);
         }
     }
 
