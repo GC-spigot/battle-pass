@@ -41,7 +41,7 @@ public class SetPassSub extends BpSubCommand<CommandSender> {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
             return;
         }
-        User user = maybeUser.get();;
+        User user = maybeUser.get();
         PassType passType = this.passLoader.passTypeOfId(passId);
         if (passType == null) {
             this.lang.local("invalid-pass-id", passId).to(sender);

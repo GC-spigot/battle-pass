@@ -59,6 +59,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
                                 this.lang.external(finishedSection).asString() :
                                 "Finished" :
                         Simple.time().format(TimeUnit.SECONDS, ChronoUnit.SECONDS.between(ZonedDateTime.now().withZoneSameInstant(this.api.getZone()), this.seasonEndDate));
+            default:
         }
         if (offlinePlayer == null) {
             BattlePlugin.logger().log(Level.WARNING, "Could not get placeholder ".concat(placeholder).concat(" (player null)"));
@@ -84,8 +85,9 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
                 return user.getCurrency().toString();
             case "completed_quests":
                 return String.valueOf(this.userController.getQuestsDone(user, true));
+            default:
+                return "Invalid Placeholder";
         }
-        return "Invalid Placeholder";
     }
 
     @Override
