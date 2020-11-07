@@ -37,6 +37,7 @@ tiers:
   '2': # The tier number
     rewards: ['1'] # The reward numbers to give to the player (see rewards.yml).
     required-points: 120 # The amount of points the player must get to advance to the tier.
+    icon: 'diamond_sword:0'
   '4':
     rewards: ['4', '2']
   '10':
