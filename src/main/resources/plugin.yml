@@ -1,5 +1,5 @@
 name: BattlePass
-version: 3.9
+version: 3.10
 main: io.github.battlepass.BattlePlugin
 api-version: 1.13
 soft-depend:

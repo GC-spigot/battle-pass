@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * are recreated when the plugin is reloaded. If you have them referenced
  * as values they will no longer work.
  *
- * @since 3.9
+ * @since 3.10
  */
 public class PluginReloadEvent extends Event {
     private static final HandlerList HANDLER_LIST = new HandlerList();

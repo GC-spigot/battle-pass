@@ -15,7 +15,7 @@ public class LicenseSub extends BpSubCommand<CommandSender> {
     @Override
     public void onExecute(CommandSender sender, String[] args) {
         Text.sendMessage(sender, "&7This server is running &eBattlePass v" + this.plugin.getDescription().getVersion() +  " &7by Hyfe and Zak Shearman"
-        + "\n\n&eUser ID:&f 248452042236887042"
+        + "\n\n&eUser ID:&f %%__USER__%%"
         + "\n&eDownload ID:&f %%__NONCE__%%");
     }
 }
