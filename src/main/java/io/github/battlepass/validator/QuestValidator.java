@@ -5,6 +5,7 @@ import io.github.battlepass.objects.quests.Quest;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +34,7 @@ public class QuestValidator {
             this.log(prefix.concat("This quest has no type (e.g block-break or block-place)."));
             return false;
         }
-        if (quest.getRequiredProgress() < 1) {
+        if (quest.getRequiredProgress().compareTo(BigInteger.ONE) < 0) {
             this.log(prefix.concat("This quest's progress is not set or is lower than 1."));
             return false;
         }

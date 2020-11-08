@@ -5,6 +5,7 @@ import io.github.battlepass.objects.quests.variable.Variable;
 import me.hyfe.simplespigot.annotations.Nullable;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigInteger;
 import java.util.Set;
 
 public class Quest {
@@ -12,10 +13,10 @@ public class Quest {
     private final String categoryId;
     private final String name;
     private final String type;
-    private final int requiredProgress;
+    private final BigInteger requiredProgress;
     private final Variable variable;
     private final int points;
-    private final Set<Integer> notifyAt = Sets.newHashSet();
+    private final Set<BigInteger> notifyAt = Sets.newHashSet();
     private final Set<String> whitelistedWorlds;
     private final Set<String> blacklistedWorlds;
     private final String exclusiveTo;
@@ -27,10 +28,10 @@ public class Quest {
                  String name,
                  ItemStack itemStack,
                  String type,
-                 int requiredProgress,
+                 BigInteger requiredProgress,
                  Variable variable,
                  int points,
-                 Set<Integer> notifyAt,
+                 Set<Integer> notifyPercentages,
                  Set<String> whitelistedWorlds,
                  Set<String> blacklistedWorlds,
                  @Nullable String exclusiveTo,
@@ -47,8 +48,8 @@ public class Quest {
         this.blacklistedWorlds = blacklistedWorlds;
         this.exclusiveTo = exclusiveTo;
         this.antiAbuse = antiAbuse;
-        for (int percentage : notifyAt) {
-            this.notifyAt.add(this.requiredProgress * percentage / 100);
+        for (int percentage : notifyPercentages) {
+            this.notifyAt.add(this.requiredProgress.multiply(BigInteger.valueOf(percentage)).divide(BigInteger.valueOf(100)));
         }
     }
 
@@ -68,7 +69,7 @@ public class Quest {
         return this.type;
     }
 
-    public int getRequiredProgress() {
+    public BigInteger getRequiredProgress() {
         return this.requiredProgress;
     }
 
@@ -80,7 +81,7 @@ public class Quest {
         return this.points;
     }
 
-    public Set<Integer> getNotifyAt() {
+    public Set<BigInteger> getNotifyAt() {
         return this.notifyAt;
     }
 

@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.math.BigInteger;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
                 .collect(Collectors.toList()));
         this.addArgument(Integer.class, "week");
         this.addArgument(String.class, "quest id");
-        this.addArgument(Integer.class, "amount");
+        this.addArgument(BigInteger.class, "amount");
     }
 
     @Override
@@ -45,7 +46,7 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
         Player player = maybeUser.map(value -> Bukkit.getPlayer(value.getUuid())).orElse(null);
         int week = this.parseArgument(args, 3);
         String id = this.parseArgument(args, 4);
-        int amount = this.parseArgument(args, 5);
+        BigInteger amount = this.parseArgument(args, 5);
 
         if (!maybeUser.isPresent() || player == null) {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);

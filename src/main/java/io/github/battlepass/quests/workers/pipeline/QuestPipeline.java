@@ -10,6 +10,8 @@ import io.github.battlepass.quests.workers.pipeline.steps.QuestValidationStep;
 import me.hyfe.simplespigot.text.Replacer;
 import org.bukkit.entity.Player;
 
+import java.math.BigInteger;
+
 public class QuestPipeline {
     private final QuestValidationStep questValidationStep;
     private final DebugLogger logger;
@@ -26,6 +28,10 @@ public class QuestPipeline {
     }
 
     public void handle(String name, Player player, int progress, QuestResult questResult, Replacer replacer, boolean overrideUpdate) {
+        this.handle(name, player, BigInteger.valueOf(progress), questResult, replacer, overrideUpdate);
+    }
+
+    public void handle(String name, Player player, BigInteger progress, QuestResult questResult, Replacer replacer, boolean overrideUpdate) {
         if (player == null) {
             this.logger.log("(PIPELINE) Player null issue for quest type ".concat(name));
             return;

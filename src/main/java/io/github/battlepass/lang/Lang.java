@@ -9,6 +9,7 @@ import me.hyfe.simplespigot.text.Replace;
 import me.hyfe.simplespigot.text.Text;
 import org.bukkit.command.CommandSender;
 
+import java.math.BigInteger;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -100,7 +101,7 @@ public class Lang {
         return Text.modify(this.external(this.getCompletionPath(quest)).asString(), replacer -> replacer.set("quest_name", quest.getName()));
     }
 
-    public String questProgressedMessage(Quest quest, int progress) {
+    public String questProgressedMessage(Quest quest, BigInteger progress) {
         return Text.modify(this.external(this.getProgressionPath(quest)).asString(), replacer -> replacer
                 .set("quest_name", quest.getName())
                 .set("progress", progress)

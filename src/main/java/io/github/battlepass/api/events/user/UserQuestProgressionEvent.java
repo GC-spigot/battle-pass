@@ -7,19 +7,20 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.math.BigInteger;
 import java.util.function.Consumer;
 
 public class UserQuestProgressionEvent extends Event implements Cancellable {
     private static final HandlerList HANDLER_LIST = new HandlerList();
     private final User user;
     private final Quest quest;
-    private int progression;
+    private BigInteger addedProgress;
     private boolean isCancelled;
 
-    public UserQuestProgressionEvent(User user, Quest quest, int progression) {
+    public UserQuestProgressionEvent(User user, Quest quest, BigInteger progression) {
         this.user = user;
         this.quest = quest;
-        this.progression = progression;
+        this.addedProgress = progression;
     }
 
     public User getUser() {
@@ -30,12 +31,22 @@ public class UserQuestProgressionEvent extends Event implements Cancellable {
         return this.quest;
     }
 
+    @Deprecated
     public int getProgression() {
-        return this.progression;
+        return this.addedProgress.intValue();
     }
 
-    public void setProgression(int progression) {
-        this.progression = progression;
+    public BigInteger getAddedProgress() {
+        return this.addedProgress;
+    }
+
+    @Deprecated
+    public void setProgression(int progress) {
+        this.addedProgress = BigInteger.valueOf(progress);
+    }
+
+    public void setAddedProgress(BigInteger addedProgress) {
+        this.addedProgress = addedProgress;
     }
 
     public void ifNotCancelled(Consumer<UserQuestProgressionEvent> event) {
