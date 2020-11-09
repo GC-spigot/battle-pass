@@ -39,9 +39,9 @@ public class PassType {
             int tier = Integer.parseInt(key);
             int requiredPoints = config.has("tiers." + key + ".required-points") ? config.integer("tiers." + key + ".required-points") : this.defaultPointsRequired;
             List<String> rewardIds = config.stringList("tiers." + key + ".rewards");
-            ItemStack lockedTierItem = SpigotItem.toItem(this.config, "tiers." + key + ".locked-tier-item");
-            ItemStack unlockedTierItem = SpigotItem.toItem(this.config, "tiers." + key + ".unlocked-tier-item");;
-            ItemStack claimedTierItem = SpigotItem.toItem(this.config, "tiers." + key + ".claimed-tier-item");;
+            ItemStack lockedTierItem = this.config.has("tiers." + key + ".locked-tier-item") ? SpigotItem.toItem(this.config, "tiers." + key + ".locked-tier-item") : null;
+            ItemStack unlockedTierItem = this.config.has("tiers." + key + ".unlocked-tier-item") ? SpigotItem.toItem(this.config, "tiers." + key + ".unlocked-tier-item") : null;
+            ItemStack claimedTierItem = this.config.has("tiers." + key + ".claimed-tier-item") ? SpigotItem.toItem(this.config, "tiers." + key + ".claimed-tier-item") : null;
             this.tiers.put(tier, new Tier(tier, requiredPoints, rewardIds, lockedTierItem, unlockedTierItem, claimedTierItem));
         }
         for (String action : config.stringList("tier-up-actions")) {
