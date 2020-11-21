@@ -333,7 +333,12 @@ public final class BattlePlugin extends SpigotPlugin {
         storageSettings.setMaximumLifetime(config.integer("storage-options.pool-settings.maximum-lifetime"));
         storageSettings.setMaximumPoolSize(config.integer("storage-options.pool-settings.maximum-pool-size"));
         storageSettings.setMinimumIdle(config.integer("storage-options.pool-settings.minimum-idle"));
-        storageSettings.setProperties(Maps.newHashMap());
+
+        Map<String, String> additionalProperties = Maps.newHashMap();
+        for (String key : config.stringList("storage-options.connection-properties")) {
+            additionalProperties.put(key, config.forcedString("storage-options.connection-properties.".concat(key)));
+        }
+        storageSettings.setProperties(additionalProperties);
     }
 
     private void setSeasonStartDate() {
