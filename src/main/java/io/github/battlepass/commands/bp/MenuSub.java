@@ -10,9 +10,10 @@ public class MenuSub extends BpSubCommand<Player> {
 
     public MenuSub(BattlePlugin plugin, String menuName, String... aliases) {
         super(plugin, false);
+        this.menuName = menuName;
+
         this.addFlatWithAliases("open", "menu");
         this.addFlatWithAliases(menuName, aliases);
-        this.menuName = menuName;
     }
 
     @Override

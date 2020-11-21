@@ -14,6 +14,7 @@ public class BypassLockedQuestsSub extends BpSubCommand<CommandSender> {
 
     public BypassLockedQuestsSub(BattlePlugin plugin) {
         super(plugin);
+
         this.inheritPermission();
         this.addFlats("bypass", "locked", "quests");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()

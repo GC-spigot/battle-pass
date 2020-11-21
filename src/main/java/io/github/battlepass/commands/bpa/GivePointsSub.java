@@ -17,6 +17,7 @@ public class GivePointsSub extends BpSubCommand<CommandSender> {
     public GivePointsSub(BattlePlugin plugin) {
         super(plugin, true);
         this.api = plugin.getLocalApi();
+
         this.inheritPermission();
         this.addFlats("give", "points");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()

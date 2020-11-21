@@ -8,6 +8,7 @@ public class ReloadSub extends BpSubCommand<CommandSender> {
 
     public ReloadSub(BattlePlugin plugin) {
         super(plugin);
+
         this.inheritPermission();
         this.addFlat("reload");
     }

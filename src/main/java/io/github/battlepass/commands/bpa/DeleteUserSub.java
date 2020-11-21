@@ -19,6 +19,7 @@ public class DeleteUserSub extends BpSubCommand<CommandSender> {
     public DeleteUserSub(BattlePlugin plugin) {
         super(plugin);
         this.userCache = plugin.getUserCache();
+
         this.inheritPermission();
         this.addFlats("delete", "user");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()

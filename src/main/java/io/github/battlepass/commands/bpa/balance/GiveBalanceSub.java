@@ -17,7 +17,7 @@ public class GiveBalanceSub extends BpSubCommand<CommandSender> {
         super(plugin);
         this.inheritPermission();
 
-        this.addFlats("give");
+        this.addFlat("give");
         this.addFlatWithAliases("balance", "bal", "currency");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()
                 .stream()

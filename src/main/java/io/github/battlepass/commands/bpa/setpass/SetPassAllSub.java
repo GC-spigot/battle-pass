@@ -22,6 +22,7 @@ public class SetPassAllSub extends BpSubCommand<CommandSender> {
         this.passLoader = plugin.getPassLoader();
         this.api = plugin.getLocalApi();
 
+        this.inheritPermission();
         this.addFlats("set", "pass", "all");
         this.addArgument(String.class, "passId", sender -> Lists.newArrayList("free", "premium"));
     }

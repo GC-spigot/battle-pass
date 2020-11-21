@@ -11,9 +11,9 @@ public class MaterialItemSub extends SubCommand<Player> {
 
     public MaterialItemSub(SimplePlugin plugin) {
         super(plugin);
+
         this.inheritPermission();
-        this.addFlat("material");
-        this.addFlat("item");
+        this.addFlats("material", "item");
     }
 
     @Override

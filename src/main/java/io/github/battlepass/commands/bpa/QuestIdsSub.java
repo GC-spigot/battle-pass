@@ -14,6 +14,7 @@ public class QuestIdsSub extends BpSubCommand<CommandSender> {
 
     public QuestIdsSub(BattlePlugin plugin) {
         super(plugin);
+
         this.inheritPermission();
         this.addFlats("quest", "ids");
         this.addArgument(Integer.class, "week");

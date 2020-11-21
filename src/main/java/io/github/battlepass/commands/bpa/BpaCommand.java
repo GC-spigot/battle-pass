@@ -1,6 +1,9 @@
 package io.github.battlepass.commands.bpa;
 
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.commands.bpa.balance.GiveBalanceSub;
+import io.github.battlepass.commands.bpa.balance.RemoveBalanceSub;
+import io.github.battlepass.commands.bpa.balance.SetBalanceSub;
 import io.github.battlepass.commands.bpa.debugger.DebugDumpSub;
 import io.github.battlepass.commands.bpa.debugger.PlayerDebugDumpSub;
 import io.github.battlepass.commands.bpa.materialsub.MaterialBlockSub;
@@ -9,15 +12,23 @@ import io.github.battlepass.commands.bpa.setpass.SetPassAllSub;
 import io.github.battlepass.commands.bpa.setpass.SetPassOnlineSub;
 import io.github.battlepass.commands.bpa.setpass.SetPassSub;
 import me.hyfe.simplespigot.command.command.SimpleCommand;
+import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.text.Text;
 import org.bukkit.command.CommandSender;
 
 public class BpaCommand extends SimpleCommand<CommandSender> {
+    private final boolean useInternalBalance;
 
     public BpaCommand(BattlePlugin plugin) {
         super(plugin, "battlepassadmin", "battlepass.admin", true);
+        Config settings = plugin.getConfig("settings");
+        this.useInternalBalance = settings.has("reward-excess-points.method") && settings.string("reward-excess-points.method").equalsIgnoreCase("internal");
+
         this.noPermissionLang(sender -> plugin.getLang().external("no-permission").asString());
         this.setSubCommands(
+                new GiveBalanceSub(plugin),
+                new RemoveBalanceSub(plugin),
+                new SetBalanceSub(plugin),
                 new DebugDumpSub(plugin),
                 new PlayerDebugDumpSub(plugin),
                 new MaterialBlockSub(plugin),
@@ -46,6 +57,11 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                 + "\n&bBattlePass Admin Help:\n"
                 + "/bpa - This page."
                 + "/bpa reload - Reloads all the reloadable files."
+                + (this.useInternalBalance ? (
+                "/bpa give balance <player> <amount> - Gives internal balance"
+                        + "/bpa remove balance <player> <amount> - Takes away internal balance"
+                        + "/bpa set balance <player> <amount> - Sets a player's internal balance")
+                : "")
                 + "/bpa debug dump - Dumps a debug log with lots of information."
                 + "/bpa debug dump <player> - Dumps a debug log with player pertinent information."
                 + "/bpa set pass <player/online/all> <pass type> - Sets a player/group of players' pass type."
@@ -60,10 +76,7 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                 + "/bpa refresh daily quests - Refresh daily quests."
                 + "/bpa new season - Resets user tiers, pending rewards and points."
                 + "/bpa material <block/item> - Get the config name of the item you're holding or block you're looking at."
-                + "/bpa bypass locked quests <player> - Allows the player to bypass week locks and complete quests anyway."
-                + "/bpa give balance <player> <amount> - Give a certain amount of internal balance to a player."
-                + "/bpa set balance <player> <amount> - Set the internal balance of a player."
-                + "/bpa remove balance <player> <amount> - Remove a certain amount of internal balance from a player.")
+                + "/bpa bypass locked quests <player> - Allows the player to bypass week locks and complete quests anyway.")
                 .replace("- ", "&8- &7")
                 .replace("/bpa", "&e/bpa")
                 .replace(".", ".\n"));

@@ -5,6 +5,7 @@ import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.loader.PassLoader;
+import me.hyfe.simplespigot.text.Text;
 import org.bukkit.entity.Player;
 
 import java.math.BigInteger;
@@ -19,6 +20,7 @@ public class StatsSub extends BpSubCommand<Player> {
         this.userCache = plugin.getUserCache();
         this.passLoader = plugin.getPassLoader();
         this.api = plugin.getLocalApi();
+
         this.addFlat("stats");
     }
 
@@ -29,7 +31,7 @@ public class StatsSub extends BpSubCommand<Player> {
             return;
         }
         if (!this.lang.has("stats-command")) {
-            sender.sendMessage("&cThe stats command is not configured.");
+            sender.sendMessage(Text.modify("&cThe stats command is not configured."));
             return;
         }
         this.userCache.get(sender.getUniqueId()).thenAccept(optionalUser -> {

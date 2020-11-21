@@ -12,6 +12,7 @@ public class MaterialBlockSub extends SubCommand<Player> {
 
     public MaterialBlockSub(SimplePlugin plugin) {
         super(plugin);
+
         this.inheritPermission();
         this.addFlats("material", "block");
     }

@@ -9,6 +9,7 @@ public class RefreshDailyQuestsSub extends BpSubCommand<CommandSender> {
 
     public RefreshDailyQuestsSub(BattlePlugin plugin) {
         super(plugin);
+
         this.inheritPermission();
         this.addFlats("refresh", "daily", "quests");
     }

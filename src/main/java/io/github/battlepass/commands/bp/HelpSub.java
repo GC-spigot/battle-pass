@@ -9,6 +9,7 @@ public class HelpSub extends BpSubCommand<CommandSender> {
 
     public HelpSub(BattlePlugin plugin) {
         super(plugin, true);
+
         this.addFlatWithAliases("help", "?");
     }
 

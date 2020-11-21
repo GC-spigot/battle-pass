@@ -18,6 +18,7 @@ public class SetPointsSub extends BpSubCommand<CommandSender> {
     public SetPointsSub(BattlePlugin plugin) {
         super(plugin, true);
         this.api = plugin.getLocalApi();
+
         this.inheritPermission();
         this.addFlats("set", "points");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()

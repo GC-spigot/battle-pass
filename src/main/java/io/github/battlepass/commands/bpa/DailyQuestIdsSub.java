@@ -14,6 +14,7 @@ public class DailyQuestIdsSub extends BpSubCommand<CommandSender> {
 
     public DailyQuestIdsSub(BattlePlugin plugin) {
         super(plugin);
+
         this.inheritPermission();
         this.addFlats("daily", "quest", "ids");
         this.questCache = plugin.getQuestCache();

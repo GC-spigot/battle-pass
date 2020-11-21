@@ -20,6 +20,9 @@ public class ResetQuestSub extends BpSubCommand<CommandSender> {
 
     public ResetQuestSub(BattlePlugin plugin) {
         super(plugin);
+        this.questCache = plugin.getQuestCache();
+        this.controller = plugin.getQuestController();
+
         this.inheritPermission();
         this.addFlats("reset", "quest");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()
@@ -28,8 +31,6 @@ public class ResetQuestSub extends BpSubCommand<CommandSender> {
                 .collect(Collectors.toList()));
         this.addArgument(Integer.class, "week");
         this.addArgument(String.class, "id");
-        this.questCache = plugin.getQuestCache();
-        this.controller = plugin.getQuestController();
     }
 
     @Override

@@ -23,6 +23,7 @@ public class SetPassSub extends BpSubCommand<CommandSender> {
         super(plugin, true);
         this.api = plugin.getLocalApi();
         this.passLoader = plugin.getPassLoader();
+
         this.inheritPermission();
         this.addFlats("set", "pass");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()

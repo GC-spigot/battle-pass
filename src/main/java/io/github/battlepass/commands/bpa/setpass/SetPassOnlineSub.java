@@ -27,6 +27,7 @@ public class SetPassOnlineSub extends BpSubCommand<CommandSender> {
         this.passLoader = plugin.getPassLoader();
         this.api = plugin.getLocalApi();
 
+        this.inheritPermission();
         this.addFlats("set", "pass", "online");
         this.addArgument(String.class, "passId", sender -> Lists.newArrayList("free", "premium"));
     }
