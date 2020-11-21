@@ -20,9 +20,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-public class EnchantQuest extends QuestExecutor {
+public class EnchantQuests extends QuestExecutor {
 
-    public EnchantQuest(BattlePlugin plugin) {
+    public EnchantQuests(BattlePlugin plugin) {
         super(plugin);
     }
 

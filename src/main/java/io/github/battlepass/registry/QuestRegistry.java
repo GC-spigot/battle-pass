@@ -48,23 +48,24 @@ public class QuestRegistry implements Registry {
                 ConsumeQuest::new,
                 CraftQuest::new,
                 DamageQuest::new,
-                EnchantQuest::new,
+                EnchantQuests::new,
                 ExecuteCommandQuest::new,
                 FishingQuest::new,
                 GainExpQuest::new,
-                MovementQuests::new,
                 ItemBreakQuest::new,
                 KillMobQuest::new,
                 KillPlayerQuest::new,
                 LoginQuest::new,
                 MilkQuest::new,
+                MovementQuests::new,
+                ProjectileQuest::new,
                 RegenerateQuest::new,
                 RideMobQuest::new,
                 ShearSheepQuest::new,
                 SmeltQuest::new,
                 TameQuest::new
         );
-        if (!plugin.getConfig("settings").bool("enable-play-time")) {
+        if (this.plugin.getConfig("settings").bool("enable-play-time")) {
             new PlayTimeQuest(this.plugin);
         }
         this.hook("AdvancedEnchantments", AdvancedEnchantmentsQuests::new);
