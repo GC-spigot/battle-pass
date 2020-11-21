@@ -2,6 +2,7 @@
 
 could-not-find-user: "&7Could not find the user &e%player%"
 no-permission: "&7You do not have permission to execute this command."
+disallowed-permission: "&7You do not have permission to use the battlepass." # This is used if you give a user battlepass.block to disallow them from using the battlepass.
 collectable-rewards-notification: "&e&lHEY! &eYou have rewards available to claim. Check them out in /bp open rewards."
 
 daily-quest-reset: '&eThere have been some quests that have reset.'
@@ -22,6 +23,7 @@ stats-command:
   - '  &8- &ePass Type: &f%pass_type%'
   - '  &8- &eTier: &f%tier%'
   - '  &8- &eTotal Points: &f%total_points%'
+  #- '  &8- &eBalance: &f%balance%' # Only used if you use internal for excess points in the settings.yml
 
 quests:
   # The base message will be used for all quests unless another message is set.

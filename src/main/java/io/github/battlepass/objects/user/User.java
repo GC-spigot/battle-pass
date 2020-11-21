@@ -19,19 +19,21 @@ public class User {
     private String passId;
     private int tier;
     private BigInteger points;
+    private BigInteger currency;
     private boolean bypassLockedWeeks;
     private final Map<String, TreeSet<Integer>> pendingTiers;
 
     public User(UUID uuid) {
-        this(uuid, new QuestStore(), 1, BigInteger.ZERO, "free", false, Maps.newHashMap());
+        this(uuid, new QuestStore(), 1, BigInteger.ZERO, BigInteger.ZERO, "free", false, Maps.newHashMap());
     }
 
-    public User(UUID uuid, QuestStore questStore, int tier, BigInteger points, String passId, boolean bypassLockedWeeks, Map<String, TreeSet<Integer>> pendingTiers) {
+    public User(UUID uuid, QuestStore questStore, int tier, BigInteger points, BigInteger currency, String passId, boolean bypassLockedWeeks, Map<String, TreeSet<Integer>> pendingTiers) {
         this.uuid = uuid;
         this.questStore = questStore;
         this.tier = tier;
         this.passId = passId;
         this.points = points;
+        this.currency = currency;
         this.bypassLockedWeeks = bypassLockedWeeks;
         this.pendingTiers = pendingTiers;
     }
@@ -77,6 +79,15 @@ public class User {
     public BigInteger updatePoints(UnaryOperator<BigInteger> current) {
         this.points = current.apply(this.points);
         return this.points;
+    }
+
+    public BigInteger getCurrency() {
+        return this.currency;
+    }
+
+    public BigInteger updateCurrency(UnaryOperator<BigInteger> current) {
+        this.currency = current.apply(this.currency);
+        return this.currency;
     }
 
     public boolean bypassesLockedWeeks() {

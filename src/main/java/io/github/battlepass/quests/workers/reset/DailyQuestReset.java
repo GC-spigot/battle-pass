@@ -9,6 +9,7 @@ import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.enums.Category;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
+import io.github.battlepass.validator.DailyQuestValidator;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.service.simple.Simple;
 import org.apache.commons.lang.StringUtils;
@@ -24,6 +25,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class DailyQuestReset {
     private final BattlePlugin plugin;
@@ -35,14 +37,21 @@ public class DailyQuestReset {
     protected final QuestCache questCache;
     protected final UserCache userCache;
     protected Set<Quest> currentQuests;
+    protected Set<Quest> permanentQuests;
 
     public DailyQuestReset(BattlePlugin plugin, Set<Quest> currentQuests, Function<DailyQuestReset, ZonedDateTime> whenReset) {
+        DailyQuestValidator validator = plugin.getDailyQuestValidator();
         Config settings = plugin.getConfig("settings");
         this.plugin = plugin;
         this.api = plugin.getLocalApi();
         this.questCache = plugin.getQuestCache();
         this.userCache = plugin.getUserCache();
         this.currentQuests = currentQuests;
+        this.permanentQuests = settings.stringList("permanent-daily-quest-ids")
+                .stream()
+                .map(id -> this.questCache.getQuest(Category.DAILY.id(), id))
+                .filter(validator::checkQuest)
+                .collect(Collectors.toSet());
         this.amount = settings.integer("current-season.daily-quest-amount");
         this.timeZone = ZoneId.of(settings.string("current-season.time-zone"));
         this.whenReset = this.parseTime(this.now().withSecond(0), settings.string("current-season.daily-quest-reset-time"));
@@ -87,8 +96,8 @@ public class DailyQuestReset {
             return;
         }
         this.userCache.asyncModifyAll(user -> user.getQuestStore().asMap().put(Category.DAILY.id(), new ConcurrentHashMap<>()));
-        this.currentQuests.clear();
-        int max = Math.min(this.questCache.getQuests(Category.DAILY.id()).size(), this.amount);
+        this.currentQuests = this.permanentQuests;
+        int max = Math.min(this.questCache.getQuests(Category.DAILY.id()).size(), this.amount) - this.permanentQuests.size();
         int iterations = 0;
         List<Quest> allQuests = Lists.newArrayList(this.questCache.getQuests(Category.DAILY.id()).values());
         Collections.shuffle(allQuests);

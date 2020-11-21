@@ -3,7 +3,6 @@ package io.github.battlepass.validator;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.logger.DebugLogger;
 import io.github.battlepass.objects.quests.Quest;
-import org.bukkit.Bukkit;
 
 import java.util.logging.Level;
 

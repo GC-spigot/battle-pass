@@ -38,7 +38,7 @@ quests:
       amount: 1
       name: '&eSwimmer'
       lore:
-        - '&7Talk in chat &e500 meters'
+        - '&7Talk in chat &e500 times'
         - ''
         - '&7Progress &e%total_progress%&7/&e%required_progress%'
   4:

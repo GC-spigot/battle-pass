@@ -25,10 +25,8 @@ public class DamageQuest extends QuestExecutor {
         Player player = (Player) event.getDamager();
         int damage = (int) Math.round(event.getDamage());
 
-        if (Bukkit.getPluginManager().isPluginEnabled("Citizens")) {
-            if (CitizensAPI.getNPCRegistry().isNPC(player)) {
-                return;
-            }
+        if (Bukkit.getPluginManager().isPluginEnabled("Citizens") && CitizensAPI.getNPCRegistry().isNPC(player)) {
+            return;
         }
         this.execute("damage-player", player, damage, QuestResult::none, replacer -> replacer.set("damage", damage));
     }

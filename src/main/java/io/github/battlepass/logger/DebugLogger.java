@@ -3,6 +3,7 @@ package io.github.battlepass.logger;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.logger.containers.BasicContainer;
 import io.github.battlepass.logger.containers.LogContainer;
 import lombok.SneakyThrows;
@@ -94,6 +95,7 @@ public class DebugLogger {
         this.writeLine(writer, "BattlePass version: ".concat(this.plugin.getDescription().getVersion()));
         this.writeLine(writer, "Registered Authors: ".concat(String.join(", ", this.plugin.getDescription().getAuthors())));
         this.writeLine(writer, "Registered Hooks: ".concat(String.join(", ", this.plugin.getQuestRegistry().getRegisteredHooks())));
+        this.writeLine(writer, "Point Information: ".concat(this.getPassInfo()));
         this.writeLine(writer, System.getProperty("line.separator"));
     }
 
@@ -101,6 +103,11 @@ public class DebugLogger {
     private void writeLine(Writer writer, String line) {
         writer.write(line);
         writer.write(System.getProperty("line.separator"));
+    }
+
+    private String getPassInfo() {
+        PassLoader passLoader = this.plugin.getPassLoader();
+        return passLoader.passTypeOfId("free").getTotalPoints(passLoader.getMaxTier()) + " total free points and " + passLoader.passTypeOfId("premium").getTotalPoints(passLoader.getMaxTier()) + " total premium points.";
     }
 
     @SneakyThrows

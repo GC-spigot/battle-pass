@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,15 +39,16 @@ public class CompletionStep {
         this.lang = plugin.getLang();
     }
 
-    public void process(User user, Quest quest, int originalProgress, int progressIncrement, boolean overrideUpdate) {
+    public void process(User user, Quest quest, BigInteger originalProgress, BigInteger progressIncrement, boolean overrideUpdate) {
         Optional<Player> maybePlayer = Optional.ofNullable(Bukkit.getPlayer(user.getUuid()));
-        int newTotalProgress = Math.min(progressIncrement, quest.getRequiredProgress());
-        int updatedProgress = overrideUpdate ? this.controller.setQuestProgress(user, quest, newTotalProgress) : this.controller.addQuestProgress(user, quest, newTotalProgress);
+        BigInteger newTotalProgress = progressIncrement.min(quest.getRequiredProgress());
+        BigInteger updatedProgress = overrideUpdate ? this.controller.setQuestProgress(user, quest, newTotalProgress) : this.controller.addQuestProgress(user, quest, newTotalProgress);
         String methodType = this.settingsConfig.string("current-season.notification-method");
         maybePlayer.ifPresent(player -> {
             Action.executeSimple(player, this.completionActions, this.plugin, new Replacer().set("player", player.getName()).set("quest_name", quest.getName()).set("quest_category", quest.getCategoryId()));
-            for (int notifyAt : quest.getNotifyAt()) {
-                if (updatedProgress == notifyAt || (notifyAt > originalProgress && notifyAt < updatedProgress)) {
+            for (BigInteger notifyAt : quest.getNotifyAt()) {
+                int compared = updatedProgress.compareTo(notifyAt);
+                if (compared == 0 || (notifyAt.compareTo(originalProgress) > 0 && compared > -1)) {
                     String message = this.lang.questProgressedMessage(quest, updatedProgress);
                     if (methodType.contains("chat")) {
                         Text.sendMessage(player, message);
@@ -61,7 +63,7 @@ public class CompletionStep {
         //this.questValidationStep.notifyPipelineCompletion(user.getUuid(), quest.getId());
 
         if (this.controller.isQuestDone(user, quest)) {
-            if (updatedProgress >= quest.getRequiredProgress()) {
+            if (updatedProgress.compareTo(quest.getRequiredProgress()) > -1) {
                 String message = this.lang.questCompleteMessage(quest);
                 maybePlayer.ifPresent(player -> {
                     if (methodType.contains("chat")) {

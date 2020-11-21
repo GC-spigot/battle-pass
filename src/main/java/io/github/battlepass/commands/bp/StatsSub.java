@@ -24,6 +24,10 @@ public class StatsSub extends BpSubCommand<Player> {
 
     @Override
     public void onExecute(Player sender, String[] args) {
+        if (sender.hasPermission("battlepass.block") && this.plugin.getConfig("settings").bool("enable-ban-permission") && !sender.isOp()) {
+            this.lang.external("disallowed-permission").to(sender);
+            return;
+        }
         if (!this.lang.has("stats-command")) {
             sender.sendMessage("&cThe stats command is not configured.");
             return;
@@ -45,7 +49,8 @@ public class StatsSub extends BpSubCommand<Player> {
                         .set("tier", tier)
                         .set("points", user.getPoints())
                         .set("required_points", this.api.getRequiredPoints(tier, userPassId))
-                        .set("total_points", finalTotalPoints.toString()))
+                        .set("total_points", finalTotalPoints.toString())
+                        .set("balance", user.getCurrency().toString()))
                         .to(sender);
             });
         });

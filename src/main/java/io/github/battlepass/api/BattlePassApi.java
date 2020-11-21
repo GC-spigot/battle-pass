@@ -7,12 +7,14 @@ import io.github.battlepass.api.events.user.UserTierUpEvent;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.RewardCache;
 import io.github.battlepass.cache.UserCache;
+import io.github.battlepass.lang.Lang;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.objects.pass.PassType;
 import io.github.battlepass.objects.pass.Tier;
 import io.github.battlepass.objects.reward.Reward;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.registry.QuestRegistry;
+import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.text.Replacer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -27,19 +29,25 @@ import java.util.concurrent.CompletableFuture;
 
 public class BattlePassApi {
     private final BattlePlugin plugin;
+    private final Lang lang;
     private final PassLoader passLoader;
     private final UserCache userCache;
     private final RewardCache rewardCache;
     private final QuestCache questCache;
     private final QuestRegistry questRegistry;
+    private final Config settingsConfig;
+    private final boolean useImprovedTierPoints;
 
     public BattlePassApi(BattlePlugin plugin) {
         this.plugin = plugin;
+        this.lang = plugin.getLang();
         this.passLoader = plugin.getPassLoader();
         this.userCache = plugin.getUserCache();
         this.rewardCache = plugin.getRewardCache();
         this.questCache = plugin.getQuestCache();
         this.questRegistry = plugin.getQuestRegistry();
+        this.settingsConfig = plugin.getConfig("settings");
+        this.useImprovedTierPoints = this.settingsConfig.bool("fixes.use-improved-tier-points");
     }
 
     public QuestRegistry getQuestRegistry() {
@@ -55,12 +63,21 @@ public class BattlePassApi {
     }
 
     public boolean hasSeasonEnded() {
-        ZonedDateTime startTime = this.plugin.getSeasonStartDate();
-        return ZonedDateTime.now().isAfter(startTime.plusWeeks(this.questCache.getMaxWeek()));
+        return ZonedDateTime.now().isAfter(this.plugin.getSeasonEndDate());
+    }
+
+    public String getWeekFormatted() {
+        String finishedSection = "season-finished-message";
+        return this.hasSeasonEnded() ? this.lang.has(finishedSection) ? this.lang.external(finishedSection).asString()
+                : String.valueOf(this.currentDisplayWeek()) : String.valueOf(this.currentDisplayWeek());
+    }
+
+    public ZoneId getZone() {
+        return ZoneId.of(this.plugin.getConfig("settings").string("current-season.time-zone"));
     }
 
     public long currentWeek() {
-        ZoneId zoneId = ZoneId.of(this.plugin.getConfig("settings").string("current-season.time-zone"));
+        ZoneId zoneId = this.getZone();
         long daysBetween = ChronoUnit.DAYS.between(this.plugin.getSeasonStartDate(), ZonedDateTime.now().withZoneSameInstant(zoneId));
         return daysBetween < 0 ? 0 : (daysBetween / 7) + 1;
     }
@@ -98,6 +115,7 @@ public class BattlePassApi {
     public void givePoints(User user, int points) {
         int maxTier = this.passLoader.getMaxTier();
         if (user.getTier() >= maxTier) {
+            this.rewardCurrency(user, points);
             return;
         }
         user.updatePoints(current -> current.add(BigInteger.valueOf(points)));
@@ -106,12 +124,13 @@ public class BattlePassApi {
 
     /**
      * Updates the tier of a user / fixes it if they're over the points of that tier. Say they have 100/50 points, it will tier them up and they will have 50 points
+     *
      * @param user The user to update their tier for.
      */
     public void updateUserTier(User user) {
         int maxTier = this.passLoader.getMaxTier();
         for (int tier = user.getTier() + 1; tier <= maxTier; tier++) {
-            int required = this.getRequiredPoints(user.getTier(), user.getPassId());
+            int required = this.getRequiredPoints(this.useImprovedTierPoints ? user.getTier() + 1 : user.getTier(), user.getPassId());
             if (user.getPoints().compareTo(BigInteger.valueOf(required)) >= 0) {
                 user.updatePoints(current -> current.subtract(BigInteger.valueOf(required)));
                 Bukkit.getPluginManager().callEvent(new UserTierUpEvent(user, tier));
@@ -126,7 +145,10 @@ public class BattlePassApi {
             }
         }
         if (user.getTier() >= maxTier) {
-            user.updatePoints(current -> BigInteger.ZERO);
+            user.updatePoints(current -> {
+                this.rewardCurrency(user, current.intValue());
+                return BigInteger.ZERO;
+            });
         }
     }
 
@@ -135,7 +157,7 @@ public class BattlePassApi {
     }
 
     public void reward(User user, String passId, int tier, boolean ignoreRestrictions) {
-        boolean autoReceiveRewards = this.plugin.getConfig("settings").bool("current-season.auto-receive-rewards");
+        boolean autoReceiveRewards = this.settingsConfig.bool("current-season.auto-receive-rewards");
         Tier tierObject = this.getTier(tier, passId);
         if (tierObject == null) {
             return;
@@ -155,6 +177,25 @@ public class BattlePassApi {
                     event.ifNotCancelled(consumerEvent -> maybeReward.get().reward(player, tier));
                 }
             }
+        }
+    }
+
+    public void rewardCurrency(User user, int points) {
+        String method = this.settingsConfig.string("reward-excess-points.method");
+        if (method == null || method.isEmpty() || method.equalsIgnoreCase("none")) {
+            return;
+        }
+        int rewardAmount = points * this.settingsConfig.integer("reward-excess-points.currency-per-point.".concat(user.getPassId()));
+        switch (method.toLowerCase()) {
+            case "vault":
+                if (this.plugin.getEconomy() != null) {
+                    this.plugin.getEconomy().depositPlayer(user.getPlayer(), rewardAmount);
+                }
+                break;
+            case "internal":
+                this.plugin.runSync(() -> user.updateCurrency(current -> current.add(BigInteger.valueOf(rewardAmount))));
+            default:
+                this.plugin.getLogger().severe("Unknown reward method 'reward-excess-points.method'.");
         }
     }
 }

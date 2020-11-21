@@ -5,7 +5,6 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.objects.pass.PassType;
 import lombok.SneakyThrows;
 import me.hyfe.simplespigot.config.Config;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;

@@ -9,9 +9,11 @@ import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.item.SpigotItem;
 import me.hyfe.simplespigot.text.Text;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -35,9 +37,12 @@ public class PassType {
                 continue;
             }
             int tier = Integer.parseInt(key);
-            int requiredPoints = config.has("tiers.".concat(key).concat(".required-points")) ? config.integer("tiers.".concat(key).concat(".required-points")) : this.defaultPointsRequired;
-            List<String> rewardIds = config.stringList("tiers.".concat(key).concat(".rewards"));
-            this.tiers.put(tier, new Tier(tier, requiredPoints, rewardIds));
+            int requiredPoints = config.has("tiers." + key + ".required-points") ? config.integer("tiers." + key + ".required-points") : this.defaultPointsRequired;
+            List<String> rewardIds = config.stringList("tiers." + key + ".rewards");
+            ItemStack lockedTierItem = this.config.has("tiers." + key + ".locked-tier-item") ? SpigotItem.toItem(this.config, "tiers." + key + ".locked-tier-item") : null;
+            ItemStack unlockedTierItem = this.config.has("tiers." + key + ".unlocked-tier-item") ? SpigotItem.toItem(this.config, "tiers." + key + ".unlocked-tier-item") : null;
+            ItemStack claimedTierItem = this.config.has("tiers." + key + ".claimed-tier-item") ? SpigotItem.toItem(this.config, "tiers." + key + ".claimed-tier-item") : null;
+            this.tiers.put(tier, new Tier(tier, requiredPoints, rewardIds, lockedTierItem, unlockedTierItem, claimedTierItem));
         }
         for (String action : config.stringList("tier-up-actions")) {
             this.tierUpActions.add(Action.parse(action));
@@ -60,6 +65,14 @@ public class PassType {
         return this.defaultPointsRequired;
     }
 
+    public BigInteger getTotalPoints(int maxTier) {
+        BigInteger totalPoints = BigInteger.ZERO;
+        for (int i = 2; i <= maxTier; i++) {
+            totalPoints = totalPoints.add(BigInteger.valueOf(this.tiers.containsKey(i) ? this.tiers.get(i).getRequiredPoints() : this.defaultPointsRequired));
+        }
+        return totalPoints;
+    }
+
     public TreeMap<Integer, Tier> getTiers() {
         return this.tiers;
     }
@@ -71,11 +84,18 @@ public class PassType {
     public ItemStack tierToItem(RewardCache rewardCache, User user, String passId, Tier tier, boolean hasTier) {
         boolean hasPass = user.hasPassId(passId);
         boolean hasClaimed = user.getPendingTiers(passId) != null && !user.getPendingTiers(passId).contains(tier.getTier());
-        ItemStack itemStack = SpigotItem.toItem(this.config, "items.".concat(hasPass ? (hasTier ? (hasClaimed ? "claimed-tier-item" : "unlocked-tier-item") : "locked-tier-item") : "doesnt-have-pass-item"),
-                replacer -> replacer.set("tier", tier.getTier()));
-        if (itemStack == null) {
-            itemStack = SpigotItem.toItem(this.config, "items.".concat(hasTier ? (hasClaimed ? "claimed-tier-item" : "unlocked-tier-item") : "locked-tier-item"),
-                    replacer -> replacer.set("tier", tier.getTier()));
+        String itemKey;
+        ItemStack itemStack ;
+        if (this.config.has("items.".concat("doesnt-have-pass-item"))) {
+            itemKey = hasPass ? (hasTier ? (hasClaimed ? "claimed-tier-item" : "unlocked-tier-item") : "locked-tier-item") : "doesnt-have-pass-item";
+            itemStack = SpigotItem.toItem(this.config, "items.".concat(itemKey), replacer -> replacer.set("tier", tier.getTier()));
+        } else {
+            itemKey = hasTier ? (hasClaimed ? "claimed-tier-item" : "unlocked-tier-item") : "locked-tier-item";
+            itemStack = SpigotItem.toItem(this.config, "items.".concat(itemKey), replacer -> replacer.set("tier", tier.getTier()));
+        }
+        ItemStack tierItem = tier.getItem(itemKey);
+        if (tierItem != null && !tierItem.getType().equals(Material.DIRT)) {
+            itemStack = tierItem;
         }
         if (itemStack.getItemMeta() == null || itemStack.getItemMeta().getLore() == null) {
             return itemStack;

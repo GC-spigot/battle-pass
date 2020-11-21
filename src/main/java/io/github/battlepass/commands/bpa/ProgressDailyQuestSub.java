@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.math.BigInteger;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class ProgressDailyQuestSub extends BpSubCommand<CommandSender> {
                 .map(Player::getName)
                 .collect(Collectors.toList()));
         this.addArgument(String.class, "quest id");
-        this.addArgument(Integer.class, "amount");
+        this.addArgument(BigInteger.class, "amount");
     }
 
     @Override
@@ -43,10 +44,14 @@ public class ProgressDailyQuestSub extends BpSubCommand<CommandSender> {
         Optional<User> maybeUser = this.parseArgument(args, 3);
         Player player = maybeUser.map(value -> Bukkit.getPlayer(value.getUuid())).orElse(null);
         String id = this.parseArgument(args, 4);
-        int amount = this.parseArgument(args, 5);
+        BigInteger amount = this.parseArgument(args, 5);
 
         if (!maybeUser.isPresent() || player == null) {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
+            return;
+        }
+        if (player.hasPermission("battlepass.block") && this.plugin.getConfig("settings").bool("enable-ban-permission") && !sender.isOp()) {
+            this.lang.local("blocked-from-pass", sender.getName()).to(sender);
             return;
         }
         User user = maybeUser.get();

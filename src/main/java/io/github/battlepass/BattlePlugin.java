@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.battlepass.actions.Action;
 import io.github.battlepass.api.BattlePassApi;
+import io.github.battlepass.api.events.server.PluginReloadEvent;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.RewardCache;
 import io.github.battlepass.cache.UserCache;
@@ -15,6 +16,7 @@ import io.github.battlepass.commands.AliasesListener;
 import io.github.battlepass.commands.bp.BpCommand;
 import io.github.battlepass.commands.bpa.BpaCommand;
 import io.github.battlepass.controller.QuestController;
+import io.github.battlepass.controller.UserController;
 import io.github.battlepass.lang.Lang;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.logger.DebugLogger;
@@ -38,9 +40,11 @@ import me.hyfe.simplespigot.menu.listener.MenuListener;
 import me.hyfe.simplespigot.plugin.SpigotPlugin;
 import me.hyfe.simplespigot.storage.StorageSettings;
 import me.hyfe.simplespigot.storage.storage.Storage;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.nio.file.Path;
 import java.time.ZoneId;
@@ -49,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class BattlePlugin extends SpigotPlugin {
@@ -65,6 +70,7 @@ public final class BattlePlugin extends SpigotPlugin {
     private QuestPipeline questPipeline;
     private QuestRegistry questRegistry;
     private QuestController questController;
+    private UserController userController;
     private DailyQuestReset dailyQuestReset;
     private MenuFactory menuFactory;
     private MenuIllustrator menuIllustrator;
@@ -72,9 +78,12 @@ public final class BattlePlugin extends SpigotPlugin {
     private Storage<DailyQuestReset> resetStorage;
     private Cache<String, Map<Integer, List<Action>>> actionCache;
     private PlaceholderApiHook placeholderApiHook;
+    private Economy economy;
     private Lang lang;
     private ZonedDateTime seasonStartDate;
+    private ZonedDateTime seasonEndDate;
     private int placeholderRuns = 0;
+    private int economyRuns = 0;
 
     @Override
     public void onEnable() {
@@ -87,7 +96,8 @@ public final class BattlePlugin extends SpigotPlugin {
         }
         this.configRelations();
         this.load();
-        this.placeholders();
+        this.placeholderHook();
+        this.vaultHook();
         this.debugLogger.finishedStartup(true);
     }
 
@@ -154,6 +164,10 @@ public final class BattlePlugin extends SpigotPlugin {
         return this.questController;
     }
 
+    public UserController getUserController() {
+        return this.userController;
+    }
+
     public DailyQuestReset getDailyQuestReset() {
         return this.dailyQuestReset;
     }
@@ -182,8 +196,16 @@ public final class BattlePlugin extends SpigotPlugin {
         return this.actionCache;
     }
 
+    public Economy getEconomy() {
+        return this.economy;
+    }
+
     public ZonedDateTime getSeasonStartDate() {
         return this.seasonStartDate;
+    }
+
+    public ZonedDateTime getSeasonEndDate() {
+        return this.seasonEndDate;
     }
 
     public Config getConfig(String name) {
@@ -214,16 +236,15 @@ public final class BattlePlugin extends SpigotPlugin {
         this.load();
         if (this.placeholderApiHook == null) {
             this.placeholderRuns = 0;
-            this.placeholders();
+            this.placeholderHook();
         } else {
-            this.placeholderApiHook.reload(this);
+            this.placeholderApiHook.setClassValues(this);
         }
-        System.gc();
+        this.runSync(() -> Bukkit.getPluginManager().callEvent(new PluginReloadEvent()));
     }
 
     private void load() {
         this.setStorageSettings();
-        this.setSeasonStartDate();
 
         this.questValidator = new QuestValidator();
         this.dailyQuestValidator = new DailyQuestValidator(this);
@@ -234,13 +255,16 @@ public final class BattlePlugin extends SpigotPlugin {
         this.passLoader = new PassLoader(this);
         this.questCache = new QuestCache(this);
         this.questController = new QuestController(this);
+        this.userController = new UserController(this);
         this.userCache = new UserCache(this);
         this.menuFactory = new MenuFactory(this);
         this.questRegistry = new QuestRegistry(this);
 
+        this.questCache.cache();
+        this.setSeasonDate();
+
         this.rewardCache.cache();
         this.passLoader.load();
-        this.questCache.cache();
         this.userCache.loadOnline();
 
         this.localApi = new BattlePassApi(this);
@@ -293,7 +317,7 @@ public final class BattlePlugin extends SpigotPlugin {
         }
     }
 
-    private void placeholders() {
+    private void placeholderHook() {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             this.placeholderApiHook = new PlaceholderApiHook(this);
             this.placeholderApiHook.register();
@@ -301,7 +325,26 @@ public final class BattlePlugin extends SpigotPlugin {
         }
         if (this.placeholderApiHook == null && this.placeholderRuns < 10) {
             this.placeholderRuns++;
-            Bukkit.getScheduler().runTaskLater(this, this::placeholders, 100);
+            Bukkit.getScheduler().runTaskLater(this, this::placeholderHook, 100);
+        }
+    }
+
+    private void vaultHook() {
+        if (!this.getConfig("settings").has("reward-excess-points.method") || this.getConfig("settings").string("reward-excess-points.method").equalsIgnoreCase("none")) {
+            return;
+        }
+        if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+            RegisteredServiceProvider<Economy> ecoProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
+            if (ecoProvider != null) {
+                this.economy = ecoProvider.getProvider();
+                Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into vault");
+                return;
+            }
+            return;
+        }
+        if (this.economy == null && this.economyRuns < 10) {
+            this.economyRuns++;
+            Bukkit.getScheduler().runTaskLater(this, this::vaultHook, 100);
         }
     }
 
@@ -341,7 +384,7 @@ public final class BattlePlugin extends SpigotPlugin {
         storageSettings.setProperties(additionalProperties);
     }
 
-    private void setSeasonStartDate() {
+    private void setSeasonDate() {
         Config config = this.getConfig("settings");
         String[] date = config.string("current-season.start-date").split("/");
         String[] time = config.string("current-season.start-time").split(":");
@@ -352,5 +395,6 @@ public final class BattlePlugin extends SpigotPlugin {
         int minute = Integer.parseInt(time[1]);
         String zoneId = config.string("current-season.time-zone");
         this.seasonStartDate = ZonedDateTime.of(year, month, day, hour, minute, 0, 0, ZoneId.of(zoneId));
+        this.seasonEndDate = this.seasonStartDate.plusWeeks(this.questCache.getMaxWeek());
     }
 }

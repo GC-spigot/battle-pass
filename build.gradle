@@ -9,7 +9,7 @@ buildscript {
 }
 
 group 'io.github.battlepass'
-version '3.9'
+version '3.10'
 
 apply plugin: 'java'
 apply plugin: 'com.github.johnrengelman.shadow'
@@ -38,7 +38,7 @@ dependencies {
     compileOnly 'com.andrei1058.bedwars:bedwars-api:20.7'
     compileOnly 'com.github.Angeschossen:LandsAPI:4.5.2.0'
     compileOnly 'com.github.electro2560:ClueScrollsAPI:-SNAPSHOT'
-    implementation 'com.github.hyfe-dev:simple-spigot:1.0.10.10'
+    implementation 'com.github.hyfe-dev:simple-spigot:1.0.10.11'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
 

@@ -7,9 +7,9 @@ import io.github.battlepass.objects.quests.Quest;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.text.Replace;
 import me.hyfe.simplespigot.text.Text;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
+import java.math.BigInteger;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -46,6 +46,7 @@ public class Lang {
         this.localLang.put("cooldown-has-seconds", "&cPlease wait %s seconds before using this again.");
         this.localLang.put("confirm-new-season", "&cType the command again within 30 seconds to confirm this action. This command can be destructive, read the wiki first.");
         this.localLang.put("new-season-reset", "&cReset user tiers, points, quest progress and pending rewards.");
+        this.localLang.put("blocked-from-pass", "&c%s is blocked from the battlepass.");
         this.load();
     }
 
@@ -100,7 +101,7 @@ public class Lang {
         return Text.modify(this.external(this.getCompletionPath(quest)).asString(), replacer -> replacer.set("quest_name", quest.getName()));
     }
 
-    public String questProgressedMessage(Quest quest, int progress) {
+    public String questProgressedMessage(Quest quest, BigInteger progress) {
         return Text.modify(this.external(this.getProgressionPath(quest)).asString(), replacer -> replacer
                 .set("quest_name", quest.getName())
                 .set("progress", progress)

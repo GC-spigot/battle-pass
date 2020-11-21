@@ -8,12 +8,12 @@ import io.github.battlepass.menus.service.extensions.PageableConfigMenu;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.quests.workers.reset.DailyQuestReset;
+import io.github.battlepass.service.PercentageUtils;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.menu.item.MenuItem;
 import me.hyfe.simplespigot.menu.service.MenuService;
 import me.hyfe.simplespigot.text.Text;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -52,8 +52,8 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
             return MenuItem.builderOf(Text.modify(quest.getItemStack(), replacer -> replacer
                     .set("total_progress", this.questController.getQuestProgress(this.user, quest))
                     .set("required_progress", quest.getRequiredProgress())
-                    .set("percentage_progress", this.getPercentage(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
-                    .set("progress_bar", this.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()))))
+                    .set("percentage_progress", PercentageUtils.getPercentage(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
+                    .set("progress_bar", PercentageUtils.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress(), this.lang))))
                     .build();
         } catch (Exception e) {
             BattlePlugin.logger().log(Level.INFO, "Quest: " + quest);
@@ -72,24 +72,5 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
     @Override
     public boolean isUserViable() {
         return this.user != null;
-    }
-
-    private String getPercentage(double progress, double requiredProgress) {
-        return String.valueOf((progress / requiredProgress) * 100);
-    }
-
-    private String getProgressBar(int progress, int requiredProgress) {
-        float progressFloat = (float) progress / requiredProgress;
-        float complete = 30 * progressFloat;
-        float incomplete = 30 - complete;
-        String progressBar = Text.modify(this.lang.external("progress-bar.complete-color").asString());
-        for (int i = 0; i < complete; i++) {
-            progressBar = progressBar.concat(this.lang.external("progress-bar.symbol").asString());
-        }
-        progressBar = progressBar.concat(this.lang.external("progress-bar.incomplete-color").asString());
-        for (int i = 0; i < incomplete; i++) {
-            progressBar = progressBar.concat(this.lang.external("progress-bar.symbol").asString());
-        }
-        return progressBar;
     }
 }

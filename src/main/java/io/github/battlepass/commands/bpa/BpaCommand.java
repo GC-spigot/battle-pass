@@ -42,25 +42,28 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
 
     @Override
     public void onExecute(CommandSender sender, String[] args) {
-        Text.sendMessage(sender, "\n"
-                .concat("\n&bBattlePass Admin Help:\n")
-                .concat("/bpa - This page.")
-                .concat("/bpa reload - Reloads all the reloadable files.")
-                .concat("/bpa debug dump - Dumps a debug log with lots of information.")
-                .concat("/bpa debug dump <player> - Dumps a debug log with player pertinent information.")
-                .concat("/bpa set pass <player/online/all> <pass type> - Sets a player/group of players' pass type.")
-                .concat("/bpa set points <player> <points> - Set a players points.")
-                .concat("/bpa give points <player> <points> - Give a player points.")
-                .concat("/bpa delete user <player> - Delete all data of a user.")
-                .concat("/bpa quest ids <week> - List all of the weeks quest ids and their names.")
-                .concat("/bpa daily quest ids - List all of the daily quest ids and their names.")
-                .concat("/bpa reset quest <player> <week> <id> - Resets a specific quest of a player.")
-                .concat("/bpa progress quest <player> <week> <quest id> <amount> - Progress a specific quest of a player.")
-                .concat("/bpa progress daily quest <player> <quest id> <amount> - Progress a specific quest of a player.")
-                .concat("/bpa refresh daily quests - Refresh daily quests.")
-                .concat("/bpa new season - Resets user tiers, pending rewards and points.")
-                .concat("/bpa material <block/item> - Get the config name of the item you're holding or block you're looking at.")
-                .concat("/bpa bypass locked quests <player> - Allows the player to bypass week locks and complete quests anyway.")
+        Text.sendMessage(sender, ("\n"
+                + "\n&bBattlePass Admin Help:\n"
+                + "/bpa - This page."
+                + "/bpa reload - Reloads all the reloadable files."
+                + "/bpa debug dump - Dumps a debug log with lots of information."
+                + "/bpa debug dump <player> - Dumps a debug log with player pertinent information."
+                + "/bpa set pass <player/online/all> <pass type> - Sets a player/group of players' pass type."
+                + "/bpa set points <player> <points> - Set a players points."
+                + "/bpa give points <player> <points> - Give a player points."
+                + "/bpa delete user <player> - Delete all data of a user."
+                + "/bpa quest ids <week> - List all of the weeks quest ids and their names."
+                + "/bpa daily quest ids - List all of the daily quest ids and their names."
+                + "/bpa reset quest <player> <week> <id> - Resets a specific quest of a player."
+                + "/bpa progress quest <player> <week> <quest id> <amount> - Progress a specific quest of a player."
+                + "/bpa progress daily quest <player> <quest id> <amount> - Progress a specific quest of a player."
+                + "/bpa refresh daily quests - Refresh daily quests."
+                + "/bpa new season - Resets user tiers, pending rewards and points."
+                + "/bpa material <block/item> - Get the config name of the item you're holding or block you're looking at."
+                + "/bpa bypass locked quests <player> - Allows the player to bypass week locks and complete quests anyway."
+                + "/bpa give balance <player> <amount> - Give a certain amount of internal balance to a player."
+                + "/bpa set balance <player> <amount> - Set the internal balance of a player."
+                + "/bpa remove balance <player> <amount> - Remove a certain amount of internal balance from a player.")
                 .replace("- ", "&8- &7")
                 .replace("/bpa", "&e/bpa")
                 .replace(".", ".\n"));
