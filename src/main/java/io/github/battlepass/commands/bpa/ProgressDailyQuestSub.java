@@ -29,6 +29,7 @@ public class ProgressDailyQuestSub extends BpSubCommand<CommandSender> {
         this.controller = plugin.getQuestController();
         this.questValidationStep = new QuestValidationStep(plugin);
         this.completionStep = new CompletionStep(plugin);
+
         this.inheritPermission();
         this.addFlats("progress", "daily", "quest");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()
