@@ -12,6 +12,6 @@ public class RewardStep {
     }
 
     public void process(User user, Quest quest) {
-            this.plugin.runSync(() -> this.plugin.getLocalApi().givePoints(user, quest.getPoints()));
+        this.plugin.runSync(() -> this.plugin.getLocalApi().givePoints(user, quest.getPoints()));
     }
 }

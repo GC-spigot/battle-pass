@@ -42,7 +42,7 @@ public class QuestPipeline {
         }
         this.logger.log(LogContainer.of("(PIPELINE) Quest type " + name + " for player %s has entered the pipeline. Root: " + questResult.getEffectiveRoot(), player));
         this.userCache.get(player.getUniqueId()).thenAccept(maybeUser -> maybeUser.ifPresent(user -> {
-            this.questValidationStep.process(player, user, name, progress, questResult, this.questCache.getAllQuests(), overrideUpdate);
+            this.questValidationStep.processCompletion(player, user, name, progress, questResult, this.questCache.getAllQuests(), overrideUpdate);
         })).exceptionally(ex -> {
             this.logger.log("(PIPELINE) Generic Error ".concat(ex.getMessage()));
             ex.printStackTrace();

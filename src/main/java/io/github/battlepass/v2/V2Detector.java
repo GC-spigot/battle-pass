@@ -27,8 +27,8 @@ public class V2Detector {
             BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4 "));
             BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4BattlePass v3 could not load. You have v2 configurations present."));
             BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4 "));
-            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4Please read https://github.com/Hyfe-JavaDebug/battlepass-wiki-v3/wiki/Moving-from-v2--to--v3 for information."));
-            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4As BattlePass v3 is not a drop-in replacement for v2. Join our Discord https://discord.gg/hsedh6n for more help."));
+            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4Please read https://github.com/titanlabs-mc/battle-pass/wiki/Moving-from-v2--to--v3 for information."));
+            BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4As BattlePass v3 is not a drop-in replacement for v2. Join our Discord https://discord.gg/5Yn7EdB8gX for more help."));
             BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4You can still download v2 from the Version History on Spigot if you're not ready to update yet."));
             BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4 "));
             BattlePlugin.logger().log(Level.SEVERE, Text.modify("&4----- [BattlePass v3] -----"));
