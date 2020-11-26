@@ -181,10 +181,6 @@ public class QuestValidationStep {
         }
     }
 
-    private void applyAntiAbuseMeasures(Player player, User user, Quest quest, String currentType, int progress, QuestResult questResult) {
-        this.applyAntiAbuseMeasures(player, user, quest, currentType, BigInteger.valueOf(progress), questResult);
-    }
-
     private void applyAntiAbuseMeasures(Player player, User user, Quest quest, String currentType, BigInteger progress, QuestResult questResult) {
         if (this.controller.isQuestDone(user, quest)
                 || (!currentType.equals("block-break") && !currentType.equals("block-place"))
