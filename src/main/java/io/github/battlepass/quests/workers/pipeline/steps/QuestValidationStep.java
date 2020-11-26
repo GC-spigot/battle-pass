@@ -145,7 +145,7 @@ public class QuestValidationStep {
             return;
         }
         BigInteger originalProgress = this.controller.getQuestProgress(user, quest);
-        if (overrideUpdate && originalProgress.compareTo(progress) == 0) {
+        if (overrideUpdate && originalProgress.compareTo(progress) <= 0) { // since 0 == equal and -1 == less
             return;
         }
         if (!this.controller.isQuestDone(user, quest)) {
