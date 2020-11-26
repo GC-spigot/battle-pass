@@ -37,6 +37,7 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                 new SetPassOnlineSub(plugin),
                 new SetPassSub(plugin),
                 new BypassLockedQuestsSub(plugin),
+                new CloseMenuSub(plugin),
                 new DailyQuestIdsSub(plugin),
                 new DeleteUserSub(plugin),
                 new GivePointsSub(plugin),
@@ -76,7 +77,8 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                 + "/bpa refresh daily quests - Refresh daily quests."
                 + "/bpa new season - Resets user tiers, pending rewards and points."
                 + "/bpa material <block/item> - Get the config name of the item you're holding or block you're looking at."
-                + "/bpa bypass locked quests <player> - Allows the player to bypass week locks and complete quests anyway.")
+                + "/bpa bypass locked quests <player> - Allows the player to bypass week locks and complete quests anyway."
+                + "/bpa close menu <player> - Closes a player's open menu ")
                 .replace("- ", "&8- &7")
                 .replace("/bpa", "&e/bpa")
                 .replace(".", ".\n"));

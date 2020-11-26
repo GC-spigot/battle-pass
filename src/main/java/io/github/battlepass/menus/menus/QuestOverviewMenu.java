@@ -5,6 +5,7 @@ import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.lang.Lang;
+import io.github.battlepass.menus.MenuFactory;
 import io.github.battlepass.menus.UserDependent;
 import io.github.battlepass.menus.service.extensions.PageableConfigMenu;
 import io.github.battlepass.objects.user.User;
@@ -22,6 +23,7 @@ import java.util.stream.IntStream;
 
 public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements UserDependent {
     private final BattlePassApi api;
+    private final MenuFactory menuFactory;
     private final QuestCache questCache;
     private final QuestController questController;
     private final DailyQuestReset dailyQuestReset;
@@ -31,6 +33,7 @@ public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements Us
     public QuestOverviewMenu(BattlePlugin plugin, Config config, Player player) {
         super(plugin, config, player, replacer -> replacer);
         this.api = plugin.getLocalApi();
+        this.menuFactory = plugin.getMenuFactory();
         this.questCache = plugin.getQuestCache();
         this.questController = plugin.getQuestController();
         this.dailyQuestReset = plugin.getDailyQuestReset();
@@ -59,6 +62,7 @@ public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements Us
                 .onClick((menuItem, clickType) -> {
                     if (!locked) {
                         WeekMenu weekMenu = new WeekMenu(this.plugin, this.plugin.getConfig("week-menu"), this.player, weekInt);
+                        this.menuFactory.getOpenMenus().put(this.player.getUniqueId(), weekMenu);
                         weekMenu.show();
                     }
                 }).build();

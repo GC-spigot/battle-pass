@@ -5,7 +5,6 @@ import me.hyfe.simplespigot.annotations.Nullable;
 import me.hyfe.simplespigot.menu.Menu;
 import me.hyfe.simplespigot.text.Replacer;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryHolder;
 
 public abstract class Action {
     protected final String condition;
@@ -46,8 +45,11 @@ public abstract class Action {
             } else if (action instanceof ConsoleCommandAction) {
                 ((ConsoleCommandAction) action).accept(replacer);
             } else if (action instanceof MenuAction && plugin != null) {
-                InventoryHolder inventoryHolder = player.getOpenInventory().getTopInventory().getHolder();
-                ((MenuAction) action).accept(plugin.getMenuFactory(), inventoryHolder instanceof Menu ? (Menu) inventoryHolder : null, player);
+                Menu openMenu = plugin.getMenuFactory().getOpenMenus().get(player.getUniqueId());
+                if (openMenu == null) {
+                    return;
+                }
+                ((MenuAction) action).accept(plugin.getMenuFactory(), openMenu, player);
             }
         }
     }

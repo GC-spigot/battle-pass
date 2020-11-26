@@ -308,7 +308,7 @@ public final class BattlePlugin extends SpigotPlugin {
         this.resetStorage.save("daily-data", this.dailyQuestReset);
         this.userStorage.closeBack();
         this.resetStorage.closeBack();
-        for (UUID uuid : this.menuFactory.getInsideMenu()) {
+        for (UUID uuid : this.menuFactory.getOpenMenus().keySet()) {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) {
                 continue;

@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -21,7 +20,7 @@ import java.util.function.Supplier;
 public class MenuFactory {
     private final BattlePlugin plugin;
     private final Lang lang;
-    private final Set<UUID> insideMenu = Sets.newHashSet();
+    private final Map<UUID, Menu> openMenus = Maps.newHashMap();
     private final Map<Collection<String>, Function<Player, Menu>> menus = Maps.newHashMap();
 
     public MenuFactory(BattlePlugin plugin) {
@@ -43,8 +42,8 @@ public class MenuFactory {
         return null;
     }
 
-    public Set<UUID> getInsideMenu() {
-        return this.insideMenu;
+    public Map<UUID, Menu> getOpenMenus() {
+        return this.openMenus;
     }
 
     /**
@@ -57,9 +56,9 @@ public class MenuFactory {
     }
 
     private Menu initiateMenu(Player player, Supplier<Menu> supplier) {
-        this.insideMenu.add(player.getUniqueId());
         Menu menu = supplier.get();
-        menu.setCloseAction(() -> this.insideMenu.remove(player.getUniqueId()));
+        this.openMenus.put(player.getUniqueId(), menu);
+        menu.setCloseAction(() -> this.openMenus.remove(player.getUniqueId()));
         return menu;
     }
 
