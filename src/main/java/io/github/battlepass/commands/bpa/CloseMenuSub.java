@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class CloseMenuSub extends BpSubCommand<CommandSender> {
 
     public CloseMenuSub(BattlePlugin plugin) {
-        super(plugin);
+        super(plugin, true);
 
         this.inheritPermission();
         this.addFlats("close", "menu");
@@ -31,6 +31,7 @@ public class CloseMenuSub extends BpSubCommand<CommandSender> {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
             return;
         }
+        this.lang.local("closed-player-menu", player.getName()).to(sender);
         Action.executeSimple(player, Lists.newArrayList(Action.parse("[menu]{close}")), this.plugin, new Replacer());
     }
 }

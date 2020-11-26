@@ -39,9 +39,9 @@ public class PassType {
             int tier = Integer.parseInt(key);
             int requiredPoints = config.has("tiers." + key + ".required-points") ? config.integer("tiers." + key + ".required-points") : this.defaultPointsRequired;
             List<String> rewardIds = config.stringList("tiers." + key + ".rewards");
-            ItemStack lockedTierItem = this.config.has("tiers." + key + ".locked-tier-item") ? SpigotItem.toItem(this.config, "tiers." + key + ".locked-tier-item") : null;
-            ItemStack unlockedTierItem = this.config.has("tiers." + key + ".unlocked-tier-item") ? SpigotItem.toItem(this.config, "tiers." + key + ".unlocked-tier-item") : null;
-            ItemStack claimedTierItem = this.config.has("tiers." + key + ".claimed-tier-item") ? SpigotItem.toItem(this.config, "tiers." + key + ".claimed-tier-item") : null;
+            ItemStack lockedTierItem = SpigotItem.toItem(this.config, "tiers." + key + ".locked-tier-item", replacer -> replacer.set("tier", tier));
+            ItemStack unlockedTierItem = SpigotItem.toItem(this.config, "tiers." + key + ".unlocked-tier-item", replacer -> replacer.set("tier", tier));
+            ItemStack claimedTierItem = SpigotItem.toItem(this.config, "tiers." + key + ".claimed-tier-item", replacer -> replacer.set("tier", tier));
             this.tiers.put(tier, new Tier(tier, requiredPoints, rewardIds, lockedTierItem, unlockedTierItem, claimedTierItem));
         }
         for (String action : config.stringList("tier-up-actions")) {
@@ -85,7 +85,7 @@ public class PassType {
         boolean hasPass = user.hasPassId(passId);
         boolean hasClaimed = user.getPendingTiers(passId) != null && !user.getPendingTiers(passId).contains(tier.getTier());
         String itemKey;
-        ItemStack itemStack ;
+        ItemStack itemStack;
         if (this.config.has("items.".concat("doesnt-have-pass-item"))) {
             itemKey = hasPass ? (hasTier ? (hasClaimed ? "claimed-tier-item" : "unlocked-tier-item") : "locked-tier-item") : "doesnt-have-pass-item";
             itemStack = SpigotItem.toItem(this.config, "items.".concat(itemKey), replacer -> replacer.set("tier", tier.getTier()));

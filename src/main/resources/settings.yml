@@ -63,7 +63,7 @@ blacklisted-worlds: # World names where quests cannot be progressed.
 
 daily-quests-enabled: true # If this value is set to false it will disable calculation of daily quests
 
-permanent-quest-ids: [] # ['1', '3', '5']
+permanent-daily-quest-ids: [] # ['1', '3', '5']
 
 # Actions that are run whenever any player completes any quest, for that player.
 # This is empty by default, set it like this if you want actions:

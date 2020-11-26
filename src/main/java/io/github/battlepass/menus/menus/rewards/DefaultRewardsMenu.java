@@ -34,6 +34,7 @@ public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserD
     private final Map<Integer, Set<Integer>> premiumCachedPageIndexes = Maps.newHashMap();
     private final boolean autoReceiveRewards;
     private final boolean hideTiersWithoutRewards;
+    private final boolean closeOnClaim;
     private final User user;
 
     private int page = 1;
@@ -48,6 +49,7 @@ public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserD
         this.premiumTierSlots = Lists.newArrayList(MenuService.parseSlots(this, this.config, "premium-reward-slots"));
         this.progressTrackSlots = MenuService.parseSlots(this, this.config, "progress-track-slots");
         this.autoReceiveRewards = this.plugin.getConfig("settings").bool("current-season.auto-receive-rewards");
+        this.closeOnClaim = config.bool("close-on-reward-claim");
         this.hideTiersWithoutRewards = config.bool("hide-tiers-without-rewards");
         this.user = plugin.getUserCache().getOrThrow(player.getUniqueId());
     }
@@ -137,9 +139,14 @@ public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserD
                     .onClick((menuItem, clickType) -> {
                         int tierNum = tier.getTier();
                         if (!this.autoReceiveRewards && this.user.hasPendingTier(passId, tierNum)) {
+                            if (this.closeOnClaim) {
+                                this.close();
+                            }
                             this.api.reward(this.user, passId, tier.getTier(), true);
                             this.user.getPendingTiers(passId).remove(tierNum);
-                            this.redraw();
+                            if (!this.closeOnClaim) {
+                                this.redraw();
+                            }
                         }
                     })
                     .build()

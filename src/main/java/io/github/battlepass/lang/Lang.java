@@ -48,6 +48,7 @@ public class Lang {
         this.localLang.put("confirm-new-season", "&cType the command again within 30 seconds to confirm this action. This command can be destructive, read the wiki first.");
         this.localLang.put("new-season-reset", "&cReset user tiers, points, quest progress and pending rewards.");
         this.localLang.put("blocked-from-pass", "&c%s is blocked from the battlepass.");
+        this.localLang.put("closed-player-menu", "&aClosed %s's open menu if they had one.");
         this.load();
     }
 

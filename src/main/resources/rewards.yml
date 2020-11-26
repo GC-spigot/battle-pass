@@ -9,7 +9,7 @@
 '2':
   type: item
   lore-addon:
-    - '&7- &eWOAH! Something cool'
+    - '&7 - &eWOAH! Something cool'
   items:
     '1': # The first item reward (required)
       material: diamond_block:0
