@@ -67,8 +67,10 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
             this.lang.local("quest-already-done", args[2]);
             return;
         }
-        this.questValidationStep.isQuestValid(player, user, quest, amount, false);
-        this.completionStep.process(user, quest, this.controller.getQuestProgress(user, quest), amount, false);
-        this.lang.local("successful-quest-progress", quest.getName()).to(sender);
+        if (this.questValidationStep.proceed(player, user, quest, amount, null, false)) {
+            this.lang.local("successful-quest-progress", quest.getName()).to(sender);
+        } else {
+            this.lang.local("failed-quest-progress", quest.getName()).to(sender);
+        }
     }
 }

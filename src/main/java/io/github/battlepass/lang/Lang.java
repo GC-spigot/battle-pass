@@ -29,6 +29,7 @@ public class Lang {
         this.localLang.put("successful-quest-reset", "&aSuccessfully&7 reset the quest &a%s&7 for &a%s&7.");
         this.localLang.put("failed-quest-reset", "&cFailed&7 to reset the quest &c%s&7 for &c%s&7.");
         this.localLang.put("successful-quest-progress", "&aSuccessfully&7 progressed the quest &a%s&7.");
+        this.localLang.put("failed-quest-progress", "&cFailed to progress the quest &a%s&c.");
         this.localLang.put("invalid-pass-id", "&7Could not find a pass type with the id &c%s&7.");
         this.localLang.put("successful-set-pass", "&aSuccessfully&7 set &a%s's&7 pass type to &a%s.");
         this.localLang.put("successful-give-points", "&aSuccessfully&7 gave %s &a%d&7 points.");

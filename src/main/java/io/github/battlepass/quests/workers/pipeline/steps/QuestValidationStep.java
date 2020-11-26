@@ -21,7 +21,6 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
 
 public class QuestValidationStep {
     private final AntiAbuseProcessor antiAbuseProcessor;
@@ -84,83 +83,70 @@ public class QuestValidationStep {
         }
     }
 
-    private void proceed(Player player, User user, Quest quest, BigInteger progress, QuestResult questResult, boolean overrideUpdate) {
+    public boolean proceed(Player player, User user, Quest quest, BigInteger progress, QuestResult questResult, boolean overrideUpdate) {
         BigInteger originalProgress = this.controller.getQuestProgress(user, quest);
         if (overrideUpdate && originalProgress.compareTo(progress) == 0) {
-            return;
+            return false;
+        }
+        if (!this.isQuestValid(player, user, quest, progress, overrideUpdate) || this.controller.isQuestDone(user, quest)) {
+            return false;
         }
         Variable subVariable = quest.getVariable();
-        if (!this.controller.isQuestDone(user, quest) && questResult.isEligible(player, subVariable)) {
-            this.method(user, quest, progress, event -> event.ifNotCancelled(eventConsumer -> this.completionStep.process(user, quest, originalProgress, eventConsumer.getAddedProgress(), overrideUpdate)));
+        if (questResult == null || questResult.isEligible(player, subVariable)) {
+            UserQuestProgressionEvent event = new UserQuestProgressionEvent(user, quest, progress);
+            this.plugin.runSync(() -> {
+                Bukkit.getPluginManager().callEvent(event);
+            });
+            event.ifNotCancelled(eventConsumer -> this.completionStep.process(user, quest, originalProgress, eventConsumer.getAddedProgress(), overrideUpdate));
+            return true;
         }
+        return false;
     }
 
-    public void isQuestValid(Player player, User user, Quest quest, BigInteger progress, boolean overrideUpdate) {
+    public boolean isQuestValid(Player player, User user, Quest quest, BigInteger progress, boolean overrideUpdate) {
         String playerWorld = player.getWorld().getName();
         boolean seasonEnded = this.api.hasSeasonEnded();
         if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {
-            return;
+            return false;
         }
         if ((!this.whitelistedWorlds.isEmpty() && !this.whitelistedWorlds.contains(playerWorld)) || this.blacklistedWorlds.contains(playerWorld)) {
-            return;
+            return false;
         }
         if (seasonEnded && (quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd)) {
-            return;
+            return false;
         }
         Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
         if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
-            return;
+            return false;
         }
         BigInteger originalProgress = this.controller.getQuestProgress(user, quest);
         if (overrideUpdate && originalProgress.compareTo(progress) <= 0) { // since 0 == equal and -1 == less
-            return;
+            return false;
         }
-        if (!this.controller.isQuestDone(user, quest)) {
-            this.method(user, quest, progress, event -> {});
+        if (this.controller.isQuestDone(user, quest)) {
+            return false;
         }
-    }
-
-    private void method(User user, Quest quest, BigInteger progress, Consumer<UserQuestProgressionEvent> eventConsumer) {
         String exclusiveTo = quest.getExclusiveTo();
         if (exclusiveTo != null && !exclusiveTo.equalsIgnoreCase(user.getPassId())) {
-            return;
+            return false;
         }
         int week = Category.stripWeek(quest.getCategoryId());
         boolean isDaily = week == 0;
         if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
-            return;
+            return false;
         }
         if (this.requirePreviousCompletion && !isDaily && !user.bypassesLockedWeeks()) {
-            /*String targetedCategoryId = "week-" + (week - 1);
-            if (this.questCache.keySet().contains(targetedCategoryId)) {
-                boolean failed = false;
-
-                for (Quest requiredQuest : this.questCache.getQuests(targetedCategoryId).values()) {
-                    if (!this.controller.isQuestDone(user, requiredQuest)) {
-                        failed = true;
-                        break;
-                    }
-                }
-                if (failed) {
-                    return;
-                }
-            }*/
             int previousWeek = week - 1;
             if (previousWeek > 1) {
                 while (previousWeek > 0) {
-                    System.out.println("Testing for week " + previousWeek + "result " + this.controller.isWeekDone(user, previousWeek));
+                    System.out.println("Testing for week " + previousWeek + " result " + this.controller.isWeekDone(user, previousWeek));
                     if (!this.controller.isWeekDone(user, previousWeek)) {
-                        return;
+                        return false;
                     }
                     previousWeek--;
                 }
             }
         }
-        BattlePlugin.logger().info("Went by require previous completion thingy");
-        UserQuestProgressionEvent event = new UserQuestProgressionEvent(user, quest, progress);
-        this.plugin.runSync(() -> {
-            Bukkit.getPluginManager().callEvent(event);
-            eventConsumer.accept(event);
-        });
+        return true;
     }
 }
