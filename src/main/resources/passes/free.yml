@@ -1,6 +1,6 @@
 name: 'Free'
 default-points-required: 100
-dont-give-premium-free-rewards: false
+dont-give-premium-free-rewards: false # This will mean that premium users will not receive free rewards
 
 items:
   doesnt-have-pass-item: # This is ONLY shown/used if you have dont-give-premium-free-rewards: true. This is used to make it so premium users can only have premium rewards.

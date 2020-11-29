@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.api.events.user.UserQuestProgressionEvent;
-import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.enums.Category;
 import io.github.battlepass.objects.quests.Quest;
@@ -28,7 +27,6 @@ public class QuestValidationStep {
     private final BattlePlugin plugin;
     private final BattlePassApi api;
     private final QuestController controller;
-    private final QuestCache questCache;
     private final Set<String> whitelistedWorlds;
     private final Set<String> blacklistedWorlds;
     private final boolean lockPreviousWeeks;
@@ -44,7 +42,6 @@ public class QuestValidationStep {
         this.plugin = plugin;
         this.api = plugin.getLocalApi();
         this.controller = plugin.getQuestController();
-        this.questCache = plugin.getQuestCache();
         this.whitelistedWorlds = Sets.newHashSet(settings.stringList("whitelisted-worlds"));
         this.blacklistedWorlds = Sets.newHashSet(settings.stringList("blacklisted-worlds"));
         this.lockPreviousWeeks = settings.bool("current-season.unlocks.lock-previous-weeks");

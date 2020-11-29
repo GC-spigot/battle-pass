@@ -16,12 +16,10 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.logging.Level;
 
 public class MenuIllustrator {
-    private final Map<UUID, Menu> openedMenus = Maps.newHashMap();
 
     public void draw(Menu menu, Config config, MenuFactory menuFactory, Player player, Cache<String, Map<Integer, List<Action>>> actionCache, Map<String, Runnable> customActions, Replace replace) {
         Function<Integer, List<Action>> actionSupplier = slot -> {

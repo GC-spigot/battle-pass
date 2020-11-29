@@ -9,7 +9,6 @@ import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.item.SpigotItem;
 import me.hyfe.simplespigot.text.Text;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

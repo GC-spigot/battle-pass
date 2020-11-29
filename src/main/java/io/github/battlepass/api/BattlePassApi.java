@@ -199,8 +199,10 @@ public class BattlePassApi {
                 break;
             case "internal":
                 this.plugin.runSync(() -> user.updateCurrency(current -> current.add(BigInteger.valueOf(rewardAmount))));
+                break;
             default:
                 this.plugin.getLogger().severe("Unknown reward method 'reward-excess-points.method'.");
+                break;
         }
     }
 }

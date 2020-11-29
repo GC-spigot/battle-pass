@@ -18,7 +18,7 @@ public interface BossBar {
 
     void endDisplay();
 
-    class BossBarCreator {
+    class Builder {
         public static BossBar create(BattlePlugin plugin, Player player, String title) {
             if (ServerVersion.getVersion().getVersionId() > 183) {
                 return new NewBossBar(plugin, player, title);

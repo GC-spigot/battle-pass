@@ -7,7 +7,6 @@ import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.enums.Category;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
-import io.github.battlepass.quests.workers.pipeline.steps.CompletionStep;
 import io.github.battlepass.quests.workers.pipeline.steps.QuestValidationStep;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -21,14 +20,12 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
     private final QuestCache questCache;
     private final QuestController controller;
     private final QuestValidationStep questValidationStep;
-    private final CompletionStep completionStep;
 
     public ProgressQuestSub(BattlePlugin plugin) {
         super(plugin);
         this.questCache = plugin.getQuestCache();
         this.controller = plugin.getQuestController();
         this.questValidationStep = new QuestValidationStep(plugin);
-        this.completionStep = new CompletionStep(plugin);
 
         this.inheritPermission();
         this.addFlats("progress", "quest");

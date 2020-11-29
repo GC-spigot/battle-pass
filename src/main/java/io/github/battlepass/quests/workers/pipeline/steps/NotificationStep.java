@@ -96,7 +96,7 @@ public class NotificationStep implements Listener {
         }
         BossBar bossBar = this.bossBars.get(player.getUniqueId());
         if (bossBar == null) {
-            bossBar = BossBar.BossBarCreator.create(this.plugin, player, message);
+            bossBar = BossBar.Builder.create(this.plugin, player, message);
             this.bossBars.put(player.getUniqueId(), bossBar);
         } else {
             bossBar.setTitle(message);

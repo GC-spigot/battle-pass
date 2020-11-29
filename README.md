@@ -17,4 +17,4 @@ If you want the list of all the plugins in our hidden lib folder, here you go (m
 
 ## About our contributions
 
-If you go to contribution history, you can see Zak commited all the code here. This is not realistic and at least 75% - 80% of the code is by Hyfe it's this way because the code was moved over from a private to a public repo.
+If you go to contribution history, you can see Zak committed all the code here. This is not realistic and at least 75% - 80% of the code is by Hyfe it's this way because the code was moved over from a private to a public repo.
