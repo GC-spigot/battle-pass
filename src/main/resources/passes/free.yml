@@ -1,7 +1,14 @@
 name: 'Free'
 default-points-required: 100
+dont-give-premium-free-rewards: false
 
 items:
+  doesnt-have-pass-item: # This is ONLY shown/used if you have dont-give-premium-free-rewards: true. This is used to make it so premium users can only have premium rewards.
+    material: 'minecart:0'
+    name: '&eTier %tier%'
+    lore:
+      - ''
+      - '&cYou can only claim premium rewards'
   locked-tier-item:
     material: 'furnace_minecart:0'
     name: '&eTier %tier%'

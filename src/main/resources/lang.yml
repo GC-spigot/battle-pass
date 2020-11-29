@@ -30,6 +30,9 @@ quests:
   base-message-progressed: "&8[&eQuests&8] &7You progressed the quest &e%quest_name% &8(&e%progress%&7/&8&e%required_progress%&8)"
   base-message-completed: "&8[&eQuests&8] &7You completed the quest &e%quest_name%"
 
+  boss-bar-message-progressed: "&7&e%quest_name% Quest Progressed &8(&e%progress%&7/&8&e%required_progress%&8)"
+  boss-bar-message-completed: "&7&e%quest_name% Quest Completed"
+
   # The message set below will overwrite the one set as the base message.
   # <quest name>-progressed: "<Your  message>"
   # <quest-name>-completed: "<Your Message>"
@@ -42,6 +45,9 @@ daily-quests:
   # This section is coded so you can remove it entirely and only use the quests messages if you wish.
   base-message-progressed: "&8[&eQuests&8] &7You progressed the daily quest &e%quest_name% &8(&e%progress%&7/&8&e%required_progress%&8)"
   base-message-completed: "&8[&eQuests&8] &7You completed the daily quest &e%quest_name%"
+
+  boss-bar-message-progressed: "&7&e%quest_name% Quest Progressed &8(&e%progress%&7/&8&e%required_progress%&8)"
+  boss-bar-message-completed: "&7&e%quest_name% Quest Completed"
 
   askyblock_createisland-progressed: "&eQuests >> &7Custom ASkyblock daily progression message :D. &8(&e%progress%&7/&8%required_progress%&8)"
   askyblock_createisland-completed: "&eQuests >> &7You completed the ASkyblock island daily quest!"

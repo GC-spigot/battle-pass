@@ -36,6 +36,7 @@ public class BattlePassApi {
     private final QuestCache questCache;
     private final QuestRegistry questRegistry;
     private final Config settingsConfig;
+    private final Config freePassConfig;
     private final boolean useImprovedTierPoints;
 
     public BattlePassApi(BattlePlugin plugin) {
@@ -47,6 +48,7 @@ public class BattlePassApi {
         this.questCache = plugin.getQuestCache();
         this.questRegistry = plugin.getQuestRegistry();
         this.settingsConfig = plugin.getConfig("settings");
+        this.freePassConfig = plugin.getPassLoader().passTypeOfId("free").getConfig();
         this.useImprovedTierPoints = this.settingsConfig.bool("fixes.use-improved-tier-points");
     }
 
@@ -96,6 +98,9 @@ public class BattlePassApi {
             user.getPendingTiers().remove("premium");
         }
         if (passId.equals("premium")) {
+            if (this.freePassConfig.bool("dont-give-premium-free-rewards")) {
+                user.getPendingTiers().remove("free");
+            }
             for (int tier = 1; tier <= user.getTier(); tier++) {
                 this.reward(user, "premium", tier, false);
             }
@@ -162,7 +167,7 @@ public class BattlePassApi {
         if (tierObject == null) {
             return;
         }
-        if (user.hasPassId(passId)) {
+        if (user.hasPassId(passId) && (user.getPassId().equals("free") || passId.equals("premium") || !this.freePassConfig.bool("dont-give-premium-free-rewards"))) {
             Player player = user.getPlayer();
             if (player == null || (!ignoreRestrictions && !autoReceiveRewards)) {
                 user.addPendingTier(passId, tier);

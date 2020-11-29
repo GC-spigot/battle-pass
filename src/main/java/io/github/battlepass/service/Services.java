@@ -50,8 +50,12 @@ public class Services {
         }
     }
 
-    public static String getPercentage(BigInteger progress, BigInteger requiredProgress) {
-        return new BigDecimal(progress).divide(new BigDecimal(requiredProgress), MathContext.DECIMAL32).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_EVEN).toString(); // TODO probs broken
+    public static String getPercentageString(BigInteger progress, BigInteger requiredProgress) {
+        return getPercentage(progress, requiredProgress).toString();
+    }
+
+    public static BigDecimal getPercentage(BigInteger progress, BigInteger requiredProgress) {
+        return new BigDecimal(progress).divide(new BigDecimal(requiredProgress), MathContext.DECIMAL32).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_EVEN);
     }
 
     public static String getProgressBar(BigInteger progress, BigInteger requiredProgress, Lang lang) {

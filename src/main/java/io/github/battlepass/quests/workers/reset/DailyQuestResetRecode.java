@@ -11,7 +11,6 @@ import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.validator.DailyQuestValidator;
 import me.hyfe.simplespigot.config.Config;
-import me.hyfe.simplespigot.service.simple.Simple;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

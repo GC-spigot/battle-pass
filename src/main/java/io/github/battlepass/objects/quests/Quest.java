@@ -1,11 +1,12 @@
 package io.github.battlepass.objects.quests;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Maps;
 import io.github.battlepass.objects.quests.variable.Variable;
 import me.hyfe.simplespigot.annotations.Nullable;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigInteger;
+import java.util.Map;
 import java.util.Set;
 
 public class Quest {
@@ -16,7 +17,7 @@ public class Quest {
     private final BigInteger requiredProgress;
     private final Variable variable;
     private final int points;
-    private final Set<BigInteger> notifyAt = Sets.newHashSet();
+    private final Map<BigInteger, Integer> notifyAt = Maps.newHashMap();
     private final Set<String> whitelistedWorlds;
     private final Set<String> blacklistedWorlds;
     private final String exclusiveTo;
@@ -49,7 +50,7 @@ public class Quest {
         this.exclusiveTo = exclusiveTo;
         this.antiAbuse = antiAbuse;
         for (int percentage : notifyPercentages) {
-            this.notifyAt.add(this.requiredProgress.multiply(BigInteger.valueOf(percentage)).divide(BigInteger.valueOf(100)));
+            this.notifyAt.put(this.requiredProgress.multiply(BigInteger.valueOf(percentage)).divide(BigInteger.valueOf(100)), percentage);
         }
     }
 
@@ -81,7 +82,7 @@ public class Quest {
         return this.points;
     }
 
-    public Set<BigInteger> getNotifyAt() {
+    public Map<BigInteger, Integer> getNotifyAt() {
         return this.notifyAt;
     }
 

@@ -103,8 +103,19 @@ public class Lang {
         return Text.modify(this.external(this.getCompletionPath(quest)).asString(), replacer -> replacer.set("quest_name", quest.getName()));
     }
 
+    public String questBossCompleteMessage(Quest quest) {
+        return Text.modify(this.external(this.getBossBarCompletionPath(quest)).asString(), replacer -> replacer.set("quest_name", quest.getName()));
+    }
+
     public String questProgressedMessage(Quest quest, BigInteger progress) {
         return Text.modify(this.external(this.getProgressionPath(quest)).asString(), replacer -> replacer
+                .set("quest_name", quest.getName())
+                .set("progress", progress)
+                .set("required_progress", quest.getRequiredProgress()));
+    }
+
+    public String questBossProgressedMessage(Quest quest, BigInteger progress) {
+        return Text.modify(this.external(this.getBossBarProgressionPath(quest)).asString(), replacer -> replacer
                 .set("quest_name", quest.getName())
                 .set("progress", progress)
                 .set("required_progress", quest.getRequiredProgress()));
@@ -138,6 +149,10 @@ public class Lang {
         return "quests.base-message-completed";
     }
 
+    private String getBossBarCompletionPath(Quest quest) {
+        return (quest.getCategoryId().contains("daily") ? "daily-" : "") + "quests.boss-bar-message-completed";
+    }
+
     private String getProgressionPath(Quest quest) {
         if (quest.getCategoryId().contains("daily")) {
             if (this.has("daily-quests.".concat(quest.getType()))) {
@@ -151,6 +166,10 @@ public class Lang {
             return "quests.".concat(quest.getType());
         }
         return "quests.base-message-progressed";
+    }
+
+    private String getBossBarProgressionPath(Quest quest) {
+        return (quest.getCategoryId().contains("daily") ? "daily-" : "") + "quests.boss-bar-message-progressed";
     }
 
     public static class LangSub {

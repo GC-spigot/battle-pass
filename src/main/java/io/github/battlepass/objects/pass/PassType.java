@@ -9,6 +9,7 @@ import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.item.SpigotItem;
 import me.hyfe.simplespigot.text.Text;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -49,6 +50,10 @@ public class PassType {
         }
     }
 
+    public Config getConfig() {
+        return this.config;
+    }
+
     public String getId() {
         return this.id;
     }
@@ -82,7 +87,7 @@ public class PassType {
     }
 
     public ItemStack tierToItem(RewardCache rewardCache, User user, String passId, Tier tier, boolean hasTier) {
-        boolean hasPass = user.hasPassId(passId);
+        boolean hasPass = user.hasPassId(passId) && (passId.equals("premium") || user.getPassId().equals("free") || !this.config.bool("dont-give-premium-free-rewards")); // Second part is to allow for premium rewards only
         boolean hasClaimed = user.getPendingTiers(passId) != null && !user.getPendingTiers(passId).contains(tier.getTier());
         String itemKey;
         ItemStack itemStack;

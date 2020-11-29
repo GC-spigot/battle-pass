@@ -104,3 +104,19 @@ reward-excess-points: # If set to vault, Vault & an economy plugin is required. 
 
 fixes:
   use-improved-tier-points: true # Previously if you set 300 points for tier 10, that would mean 300 points to tier 11. This makes it so it's logical and it's 300 points to reach tier 10.
+
+boss-bar:
+  enabled: false
+  persistent: false
+  hide-after: 5 # How long to show the boss bar after a quest is progressed (IN SECONDS). If persistent, this setting does not apply
+  use-notify-percentages: true # If true, the boss bar will only be shown when one of the progression thresholds is reached
+  disabled-quest-types:
+    - 'fly'
+    - 'glide'
+    - 'sneak'
+    - 'walk'
+    - 'sprint'
+    - 'move'
+  # 1.9+ settings ONLY
+  color: PINK # must be a color from https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarColor.html and in all caps
+  style: SOLID # must be a style from https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarStyle.html and in all caps

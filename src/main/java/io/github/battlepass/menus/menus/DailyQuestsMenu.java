@@ -52,7 +52,7 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
             return MenuItem.builderOf(Text.modify(quest.getItemStack(), replacer -> replacer
                     .set("total_progress", this.questController.getQuestProgress(this.user, quest))
                     .set("required_progress", quest.getRequiredProgress())
-                    .set("percentage_progress", Services.getPercentage(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
+                    .set("percentage_progress", Services.getPercentageString(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
                     .set("progress_bar", Services.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress(), this.lang))))
                     .build();
         } catch (Exception e) {

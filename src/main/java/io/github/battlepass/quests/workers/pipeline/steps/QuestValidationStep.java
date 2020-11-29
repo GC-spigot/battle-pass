@@ -97,7 +97,7 @@ public class QuestValidationStep {
             this.plugin.runSync(() -> {
                 Bukkit.getPluginManager().callEvent(event);
             });
-            event.ifNotCancelled(eventConsumer -> this.completionStep.process(user, quest, originalProgress, eventConsumer.getAddedProgress(), overrideUpdate));
+            event.ifNotCancelled(eventConsumer -> this.completionStep.process(player, user, quest, originalProgress, eventConsumer.getAddedProgress(), overrideUpdate));
             return true;
         }
         return false;
@@ -139,7 +139,6 @@ public class QuestValidationStep {
             int previousWeek = week - 1;
             if (previousWeek > 1) {
                 while (previousWeek > 0) {
-                    System.out.println("Testing for week " + previousWeek + " result " + this.controller.isWeekDone(user, previousWeek));
                     if (!this.controller.isWeekDone(user, previousWeek)) {
                         return false;
                     }
