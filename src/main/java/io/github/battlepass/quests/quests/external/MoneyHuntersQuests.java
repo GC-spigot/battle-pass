@@ -18,9 +18,9 @@ public class MoneyHuntersQuests extends ExternalQuestExecutor {
         Player player = event.getPlayer();
         String jobName = event.getJob().getName();
 
-        this.execute("level_up", player, result -> {
+        this.execute("level_up", player, event.getNewLevel(), result -> {
             return result.root(jobName);
-        });
+        }, replacer -> replacer, true);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -28,6 +28,6 @@ public class MoneyHuntersQuests extends ExternalQuestExecutor {
         Player player = event.getPlayer();
         String jobName = event.getJob().getName();
 
-        this.execute("gain_exp", player, result -> result.root(jobName));
+        this.execute("gain_exp", player, event.getExp(), result -> result.root(jobName));
     }
 }

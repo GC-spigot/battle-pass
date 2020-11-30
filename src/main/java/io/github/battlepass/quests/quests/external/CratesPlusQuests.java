@@ -21,8 +21,6 @@ public class CratesPlusQuests extends ExternalQuestExecutor {
         if (crateName == null || location == null) {
             return;
         }
-        this.execute("open", player, result -> {
-            return result.root(crateName);
-        });
+        this.execute("open", player, result -> result.root(crateName));
     }
 }

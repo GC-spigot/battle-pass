@@ -7,9 +7,9 @@ import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecuto
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-public class ShopkeeperQuests extends ExternalQuestExecutor {
+public class ShopkeepersQuests extends ExternalQuestExecutor {
 
-    public ShopkeeperQuests(BattlePlugin plugin) {
+    public ShopkeepersQuests(BattlePlugin plugin) {
         super(plugin, "shopkeepers");
     }
 

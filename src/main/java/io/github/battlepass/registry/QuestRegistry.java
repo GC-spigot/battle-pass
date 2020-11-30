@@ -95,7 +95,7 @@ public class QuestRegistry implements Registry {
         this.hook("PlotSquared", PlotSquaredQuests::new);
         this.hook("ProCosmetics", ProCosmeticsQuests::new);
         this.hook("CrazyEnvoy", CrazyEnvoyQuests::new);
-        this.hook("Shopkeepers", ShopkeeperQuests::new, "nisovin");
+        this.hook("Shopkeepers", ShopkeepersQuests::new, "nisovin");
         this.hook("SkillAPI", SkillApiQuests::new);
         this.hook("StrikePractice", StrikePracticeQuests::new);
         this.hook("SuperiorSkyblock2", SuperiorSkyblockQuests::new);

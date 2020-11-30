@@ -30,5 +30,6 @@ public class ASkyblockQuests extends ExternalQuestExecutor {
         Player player = Bukkit.getPlayer(event.getCreator());
 
         this.execute("warp", player, QuestResult::none);
+        this.execute("create_warp", player, QuestResult::none);
     }
 }
