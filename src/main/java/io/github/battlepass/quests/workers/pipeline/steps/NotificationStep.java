@@ -57,7 +57,7 @@ public class NotificationStep implements Listener {
         // this.questController.isQuestDone was removed as a check here as I think below does the same with just... less computation?
         // If any weird behaviour happens with messages it's below
         if (updatedProgress.compareTo(quest.getRequiredProgress()) > -1) {
-            this.sendBossBarIfEnabled(player, quest, 100, this.lang.questBossCompleteMessage(quest));
+            this.sendBossBarIfEnabled(player, quest, 100, updatedProgress, true);
             String message = this.lang.questCompleteMessage(quest);
             if (this.notificationMethod.contains("chat")) {
                 Text.sendMessage(player, message);
@@ -69,14 +69,14 @@ public class NotificationStep implements Listener {
         } else {
             if (!this.useNotifyPercentages) {
                 double progress = Services.getPercentage(updatedProgress, quest.getRequiredProgress()).doubleValue();
-                this.sendBossBarIfEnabled(player, quest, progress, this.lang.questBossProgressedMessage(quest, updatedProgress));
+                this.sendBossBarIfEnabled(player, quest, progress, updatedProgress, false);
             }
             for (BigInteger notifyAt : quest.getNotifyAt().keySet()) {
                 String message = this.lang.questProgressedMessage(quest, updatedProgress);
                 int compared = updatedProgress.compareTo(notifyAt);
                 if (compared == 0 || (notifyAt.compareTo(originalProgress) > 0 && compared > -1)) {
                     if (this.useNotifyPercentages) {
-                        this.sendBossBarIfEnabled(player, quest, quest.getNotifyAt().get(notifyAt), this.lang.questBossProgressedMessage(quest, updatedProgress));
+                        this.sendBossBarIfEnabled(player, quest, quest.getNotifyAt().get(notifyAt), updatedProgress, false);
                     }
                     if (this.notificationMethod.contains("chat")) {
                         Text.sendMessage(player, message);
@@ -90,7 +90,13 @@ public class NotificationStep implements Listener {
         }
     }
 
-    private void sendBossBarIfEnabled(Player player, Quest quest, double progress, String message) {
+    private void sendBossBarIfEnabled(Player player, Quest quest, double percentageProgress, BigInteger progress, boolean completed) {
+        String message;
+        if (completed) {
+            message = this.lang.questBossCompleteMessage(quest);
+        } else {
+            message = this.lang.questBossProgressedMessage(quest, progress);
+        }
         if (!this.bossBarEnabled || this.disabledBossQuests.contains(quest.getType())) {
             return;
         }
@@ -101,7 +107,7 @@ public class NotificationStep implements Listener {
         } else {
             bossBar.setTitle(message);
         }
-        bossBar.setProgress(progress);
+        bossBar.setProgress(percentageProgress);
         bossBar.schedule(this.bossBarLength);
     }
 
