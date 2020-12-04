@@ -53,12 +53,12 @@ public class NotificationStep implements Listener {
     }
 
     public void process(Player player, User user, Quest quest, BigInteger originalProgress, BigInteger updatedProgress) {
-        this.plugin.runSync(() -> {
-            Action.executeSimple(player, this.completionActions, this.plugin, new Replacer().set("player", player.getName()).set("quest_name", quest.getName()).set("quest_category", quest.getCategoryId()));
-        });
         // this.questController.isQuestDone was removed as a check here as I think below does the same with just... less computation?
         // If any weird behaviour happens with messages it's below
         if (updatedProgress.compareTo(quest.getRequiredProgress()) > -1) {
+            this.plugin.runSync(() -> {
+                Action.executeSimple(player, this.completionActions, this.plugin, new Replacer().set("player", player.getName()).set("quest_name", quest.getName()).set("quest_category", quest.getCategoryId()));
+            });
             this.sendBossBarIfEnabled(player, quest, 100, updatedProgress, true);
             String message = this.lang.questCompleteMessage(quest);
             if (this.notificationMethod.contains("chat")) {
