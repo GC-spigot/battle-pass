@@ -23,62 +23,56 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DailyQuestReset {
     private final BattlePlugin plugin;
     private final BattlePassApi api;
+    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final int amount;
     private final ZoneId timeZone;
-    private ZonedDateTime whenReset;
+    private ZonedDateTime resetTime;
 
     protected final QuestCache questCache;
     protected final UserCache userCache;
     protected Set<Quest> currentQuests;
     protected Set<Quest> permanentQuests;
 
-    public DailyQuestReset(BattlePlugin plugin, Set<Quest> currentQuests, Function<DailyQuestReset, ZonedDateTime> whenReset) {
+    public DailyQuestReset(BattlePlugin plugin, Set<Quest> currentQuests) {
         DailyQuestValidator validator = plugin.getDailyQuestValidator();
         Config settings = plugin.getConfig("settings");
         this.plugin = plugin;
         this.api = plugin.getLocalApi();
         this.questCache = plugin.getQuestCache();
         this.userCache = plugin.getUserCache();
+        this.amount = settings.integer("current-season.daily-quest-amount");
+        this.timeZone = ZoneId.of(settings.string("current-season.time-zone"));
+        this.resetTime = this.parseTime(this.now().withSecond(0), settings.string("current-season.daily-quest-reset-time"));
         this.currentQuests = currentQuests;
         this.permanentQuests = settings.stringList("permanent-daily-quest-ids")
                 .stream()
                 .map(id -> this.questCache.getQuest(Category.DAILY.id(), id))
                 .filter(validator::checkQuest)
                 .collect(Collectors.toSet());
-        this.amount = settings.integer("current-season.daily-quest-amount");
-        this.timeZone = ZoneId.of(settings.string("current-season.time-zone"));
-        this.whenReset = this.parseTime(this.now().withSecond(0), settings.string("current-season.daily-quest-reset-time"));
-    }
-
-    public DailyQuestReset(BattlePlugin plugin, Set<Quest> currentQuests) {
-        this(plugin, currentQuests, DailyQuestReset::now);
-        this.reset();
     }
 
     public Set<Quest> getCurrentQuests() {
         return this.currentQuests;
     }
 
-    public ZonedDateTime getWhenReset() {
-        return this.whenReset;
+    public ZonedDateTime getResetTime() {
+        return this.resetTime;
     }
 
     public void start() {
-        if (!this.shouldDoDailyQuests()) {
+        if (this.shouldNotDoDailyQuests()) {
             this.currentQuests.clear();
             return;
         }
-        if (this.between() <= 0) {
-            this.whenReset = this.whenReset.plusDays(1);
-        }
-        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+        this.executorService.schedule(() -> {
             this.reset();
             this.start();
             for (User user : this.plugin.getUserCache().values()) {
@@ -87,11 +81,11 @@ public class DailyQuestReset {
                     this.plugin.getLang().external("daily-quest-reset").to(player);
                 }
             }
-        }, this.between() * 20 + 40);
+        }, this.timeToResetSeconds(), TimeUnit.SECONDS);
     }
 
     public void reset() {
-        if (!this.shouldDoDailyQuests()) {
+        if (this.shouldNotDoDailyQuests()) {
             this.currentQuests.clear();
             return;
         }
@@ -111,26 +105,29 @@ public class DailyQuestReset {
         Bukkit.getPluginManager().callEvent(new DailyQuestsRefreshEvent(this.currentQuests));
     }
 
+    public long timeToResetSeconds() {
+        if (this.now().until(this.resetTime, ChronoUnit.SECONDS) <= 0) {
+            this.resetTime = this.resetTime.plusDays(1);
+        }
+        return this.now().until(this.resetTime, ChronoUnit.SECONDS);
+    }
+
     public String asString() {
-        return Simple.time().format(TimeUnit.SECONDS, this.between());
+        return Simple.time().format(TimeUnit.SECONDS, this.timeToResetSeconds());
+    }
+
+    private boolean shouldNotDoDailyQuests() {
+        Config settings = this.plugin.getConfig("settings");
+        String configKey = "season-finished.stop-daily-quests";
+        return !this.plugin.areDailyQuestsEnabled() || this.api.hasSeasonEnded() && settings.has(configKey) && settings.bool(configKey);
     }
 
     private ZonedDateTime now() {
         return ZonedDateTime.now().withZoneSameInstant(this.timeZone);
     }
 
-    private long between() {
-        return ChronoUnit.SECONDS.between(this.now(), this.whenReset);
-    }
-
     private ZonedDateTime parseTime(ZonedDateTime date, String time) {
         String[] timeSplit = time.split(":");
         return date.withHour(StringUtils.isNumeric(timeSplit[0]) ? Integer.parseInt(timeSplit[0]) : 0).withMinute(timeSplit.length > 1 ? StringUtils.isNumeric(timeSplit[1]) ? Integer.parseInt(timeSplit[1]) : 0 : 0);
-    }
-
-    private boolean shouldDoDailyQuests() {
-        Config settings = this.plugin.getConfig("settings");
-        String configKey = "season-finished.stop-daily-quests";
-        return this.plugin.areDailyQuestsEnabled() && !(this.api.hasSeasonEnded() && settings.has(configKey) && settings.bool(configKey));
     }
 }
