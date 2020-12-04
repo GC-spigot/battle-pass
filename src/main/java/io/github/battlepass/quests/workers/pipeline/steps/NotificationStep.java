@@ -11,7 +11,7 @@ import io.github.battlepass.objects.user.User;
 import io.github.battlepass.service.Services;
 import io.github.battlepass.service.bossbar.BossBar;
 import me.hyfe.simplespigot.config.Config;
-import me.hyfe.simplespigot.text.Replacer;
+import me.hyfe.simplespigot.text.replacer.Replacer;
 import me.hyfe.simplespigot.text.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -74,9 +74,9 @@ public class NotificationStep implements Listener {
                 this.sendBossBarIfEnabled(player, quest, progress, updatedProgress, false);
             }
             for (BigInteger notifyAt : quest.getNotifyAt().keySet()) {
-                String message = this.lang.questProgressedMessage(quest, updatedProgress);
                 int compared = updatedProgress.compareTo(notifyAt);
                 if (compared == 0 || (notifyAt.compareTo(originalProgress) > 0 && compared > -1)) {
+                    String message = this.lang.questProgressedMessage(quest, updatedProgress);
                     if (this.useNotifyPercentages) {
                         this.sendBossBarIfEnabled(player, quest, quest.getNotifyAt().get(notifyAt), updatedProgress, false);
                     }

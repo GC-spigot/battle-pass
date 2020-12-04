@@ -5,8 +5,8 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.logger.Zone;
 import io.github.battlepass.objects.quests.Quest;
 import me.hyfe.simplespigot.config.Config;
-import me.hyfe.simplespigot.text.Replace;
 import me.hyfe.simplespigot.text.Text;
+import me.hyfe.simplespigot.text.replacer.Replace;
 import org.bukkit.command.CommandSender;
 
 import java.math.BigInteger;

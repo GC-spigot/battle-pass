@@ -31,7 +31,7 @@ public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements Us
     private final Lang lang;
 
     public QuestOverviewMenu(BattlePlugin plugin, Config config, Player player) {
-        super(plugin, config, player, replacer -> replacer);
+        super(plugin, config, player, replacer -> replacer.tryAddPapi(player));
         this.api = plugin.getLocalApi();
         this.menuFactory = plugin.getMenuFactory();
         this.questCache = plugin.getQuestCache();
@@ -44,7 +44,7 @@ public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements Us
 
     @Override
     public void redraw() {
-        this.drawPageableItems(() -> this.drawConfigItems(replacer -> replacer.set("daily_time_left", this.dailyQuestReset.asString())));
+        this.drawPageableItems(() -> this.drawConfigItems(replacer -> replacer.set("daily_time_left", this.dailyQuestReset.asString()).tryAddPapi(this.player)));
     }
 
     @Override

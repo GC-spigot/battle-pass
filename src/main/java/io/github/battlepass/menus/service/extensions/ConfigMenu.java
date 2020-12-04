@@ -4,7 +4,7 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.menus.service.MenuIllustrator;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.menu.Menu;
-import me.hyfe.simplespigot.text.Replace;
+import me.hyfe.simplespigot.text.replacer.Replace;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -24,7 +24,7 @@ public abstract class ConfigMenu extends Menu {
 
     @Override
     public void redraw() {
-        this.drawConfigItems(null);
+        this.drawConfigItems(replacer -> replacer.tryAddPapi(this.player));
     }
 
     public void drawConfigItems(Replace replace) {

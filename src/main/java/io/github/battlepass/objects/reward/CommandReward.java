@@ -1,7 +1,7 @@
 package io.github.battlepass.objects.reward;
 
 import com.google.common.collect.Multiset;
-import me.hyfe.simplespigot.text.Replacer;
+import me.hyfe.simplespigot.text.replacer.Replacer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

@@ -56,7 +56,9 @@ public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserD
 
     @Override
     public void redraw() {
-        this.drawAndComputePageableItems(() -> this.drawConfigItems(replacer -> replacer.set("daily_time_left", this.dailyQuestReset.asString())));
+        this.drawAndComputePageableItems(() -> this.drawConfigItems(replacer -> replacer
+                .set("daily_time_left", this.dailyQuestReset.asString())
+                .tryAddPapi(this.player)));
     }
 
     @Override
@@ -104,7 +106,7 @@ public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserD
                     .builderOf(SpigotItem.toItem(
                             this.config,
                             "static-items.progress-track-".concat(this.user.getTier() < tier ? "locked" : "unlocked").concat("-item"),
-                            replacer -> replacer.set("tier", tier)))
+                            replacer -> replacer.set("tier", tier).tryAddPapi(this.player)))
                     .rawSlot(slot)
                     .build());
             iterations++;

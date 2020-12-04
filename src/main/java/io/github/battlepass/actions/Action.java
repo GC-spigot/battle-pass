@@ -3,7 +3,7 @@ package io.github.battlepass.actions;
 import io.github.battlepass.BattlePlugin;
 import me.hyfe.simplespigot.annotations.Nullable;
 import me.hyfe.simplespigot.menu.Menu;
-import me.hyfe.simplespigot.text.Replacer;
+import me.hyfe.simplespigot.text.replacer.Replacer;
 import org.bukkit.entity.Player;
 
 public abstract class Action {

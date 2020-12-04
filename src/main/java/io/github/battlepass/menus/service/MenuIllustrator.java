@@ -10,8 +10,8 @@ import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.menu.Menu;
 import me.hyfe.simplespigot.menu.item.MenuItem;
 import me.hyfe.simplespigot.menu.service.MenuService;
-import me.hyfe.simplespigot.text.Replace;
-import me.hyfe.simplespigot.text.Replacer;
+import me.hyfe.simplespigot.text.replacer.Replace;
+import me.hyfe.simplespigot.text.replacer.Replacer;
 import org.bukkit.entity.Player;
 
 import java.util.List;

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.actions.Action;
 import io.github.battlepass.commands.BpSubCommand;
-import me.hyfe.simplespigot.text.Replacer;
+import me.hyfe.simplespigot.text.replacer.Replacer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

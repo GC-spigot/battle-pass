@@ -60,6 +60,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
                                 "Finished" :
                         Simple.time().format(TimeUnit.SECONDS, ChronoUnit.SECONDS.between(ZonedDateTime.now().withZoneSameInstant(this.api.getZone()), this.seasonEndDate));
             default:
+                break;
         }
         if (offlinePlayer == null) {
             BattlePlugin.logger().log(Level.WARNING, "Could not get placeholder ".concat(placeholder).concat(" (player null)"));

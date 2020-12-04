@@ -1,8 +1,8 @@
 package io.github.battlepass.actions;
 
 import me.hyfe.simplespigot.annotations.Nullable;
-import me.hyfe.simplespigot.text.Replacer;
 import me.hyfe.simplespigot.text.Text;
+import me.hyfe.simplespigot.text.replacer.Replacer;
 import org.bukkit.entity.Player;
 
 public class MessageAction extends Action {

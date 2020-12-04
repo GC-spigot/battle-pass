@@ -28,7 +28,7 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
     private final User user;
 
     public DailyQuestsMenu(BattlePlugin plugin, Config config, Player player) {
-        super(plugin, config, player, replacer -> replacer);
+        super(plugin, config, player, replacer -> replacer.tryAddPapi(player));
         this.dailyQuestReset = plugin.getDailyQuestReset();
         this.questController = plugin.getQuestController();
         this.lang = plugin.getLang();
@@ -43,7 +43,8 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
     public void redraw() {
         this.drawPageableItems(() -> this.drawConfigItems(replacer -> replacer
                 .set("time_left", this.dailyQuestReset.asString())
-                .set("daily_time_left", this.dailyQuestReset.asString())));
+                .set("daily_time_left", this.dailyQuestReset.asString())
+                .tryAddPapi(this.player)));
     }
 
     @Override
@@ -53,7 +54,8 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
                     .set("total_progress", this.questController.getQuestProgress(this.user, quest))
                     .set("required_progress", quest.getRequiredProgress())
                     .set("percentage_progress", Services.getPercentageString(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
-                    .set("progress_bar", Services.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress(), this.lang))))
+                    .set("progress_bar", Services.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress(), this.lang))
+                    .tryAddPapi(this.player)))
                     .build();
         } catch (Exception e) {
             BattlePlugin.logger().log(Level.INFO, "Quest: " + quest);

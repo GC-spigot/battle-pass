@@ -33,6 +33,7 @@ public class PortalMenu extends ConfigMenu implements UserDependent {
                 .set("tier", this.user.getTier())
                 .set("points", this.user.getPoints().toString())
                 .set("required_points", this.api.getRequiredPoints(this.user.getTier(), this.user.getPassId()))
+                .tryAddPapi(this.player)
         );
     }
 

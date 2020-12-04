@@ -7,7 +7,7 @@ import io.github.battlepass.logger.DebugLogger;
 import io.github.battlepass.logger.containers.LogContainer;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.workers.pipeline.steps.QuestValidationStep;
-import me.hyfe.simplespigot.text.Replacer;
+import me.hyfe.simplespigot.text.replacer.Replacer;
 import org.bukkit.entity.Player;
 
 import java.math.BigInteger;

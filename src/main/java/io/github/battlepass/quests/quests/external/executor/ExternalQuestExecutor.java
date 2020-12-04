@@ -3,7 +3,7 @@ package io.github.battlepass.quests.quests.external.executor;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.QuestExecutor;
-import me.hyfe.simplespigot.text.Replace;
+import me.hyfe.simplespigot.text.replacer.Replace;
 import org.bukkit.entity.Player;
 
 import java.math.BigInteger;
