@@ -87,8 +87,16 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
             case "completed_quests":
                 return String.valueOf(this.userController.getQuestsDone(user, true));
             default:
-                return "Invalid Placeholder";
+                break;
         }
+        if (placeholder.startsWith("completed_quests_")) {
+            String category = placeholder.replace("completed_quests_", "").replace(" ", "");
+            if (category.isEmpty()) {
+                return "category empty";
+            }
+            return String.valueOf(this.userController.getQuestsDone(user, category));
+        }
+        return "Invalid Placeholder";
     }
 
     @Override

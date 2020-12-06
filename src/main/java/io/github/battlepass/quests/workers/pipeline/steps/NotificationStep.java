@@ -93,14 +93,14 @@ public class NotificationStep implements Listener {
     }
 
     private void sendBossBarIfEnabled(Player player, Quest quest, double percentageProgress, BigInteger progress, boolean completed) {
+        if (!this.bossBarEnabled || this.disabledBossQuests.contains(quest.getType())) {
+            return;
+        }
         String message;
         if (completed) {
             message = this.lang.questBossCompleteMessage(quest);
         } else {
             message = this.lang.questBossProgressedMessage(quest, progress);
-        }
-        if (!this.bossBarEnabled || this.disabledBossQuests.contains(quest.getType())) {
-            return;
         }
         BossBar bossBar = this.bossBars.get(player.getUniqueId());
         if (bossBar == null) {

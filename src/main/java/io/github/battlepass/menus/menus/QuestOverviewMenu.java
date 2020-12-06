@@ -58,7 +58,7 @@ public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements Us
                 this.config, "static-items." + (locked ? isWeekFuture ? "locked-week" : "requires-previous-completion" : "week") + "-item", replacer -> replacer
                         .set("week", weekInt)
                         .set("status", this.lang.external("week-status-".concat(!locked ? "un" : "").concat("locked")).asString()
-                                .concat(userBypasses ? " &o&7(&cBYPASSING&7)" : ""))))
+                                .concat(userBypasses ? " &o&7(&cBYPASSING&7)" : "")).tryAddPapi(this.player)))
                 .onClick((menuItem, clickType) -> {
                     if (!locked) {
                         WeekMenu weekMenu = new WeekMenu(this.plugin, this.plugin.getConfig("week-menu"), this.player, weekInt);
