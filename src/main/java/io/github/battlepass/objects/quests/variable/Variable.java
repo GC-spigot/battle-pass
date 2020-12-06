@@ -63,9 +63,9 @@ public class Variable {
                 apply(consumer, config, variableSection, "holding.name");
                 apply(consumer, config, variableSection, "holding.amount");
             }
-            for (String subRoot : config.stringList(section.concat("variable"))) {
+            for (String subRoot : config.keys(section.concat("variable"), false)) {
                 if (!subRoot.equalsIgnoreCase("root") && !subRoot.equalsIgnoreCase("holding")) {
-                    consumer.accept(subRoot, () -> config.string(section + "." + subRoot));
+                    consumer.accept(subRoot, () -> config.string(section + "variable." + subRoot));
                 }
             }
             return new Variable(root, subRoots);
