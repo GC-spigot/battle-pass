@@ -116,6 +116,18 @@ public class ExecutableQuestResult implements QuestResult {
             }
             return !subRoots.containsKey("holding.amount") || Integer.parseInt(subRoots.get("holding.amount").get(0)) == holding.getAmount();
         }
+        for (Map.Entry<String, String> subRoot : this.subRoots.entrySet()) {
+            String key = subRoot.getKey();
+            if (!subRoots.containsKey(key)) { // If the required sub roots does not contain a sub root this quest progression
+                continue;
+            }
+            if (!this.subRoots.containsKey(key)) { // If the sub roots this progression do not contain a required sub root
+                return false;
+            }
+            if (!subRoots.get(key).contains(this.subRoots.get(key))) { // If the required sub roots for this type does not contain the sub root value of this progression
+                return false;
+            }
+        }
         return true;
     }
 }
