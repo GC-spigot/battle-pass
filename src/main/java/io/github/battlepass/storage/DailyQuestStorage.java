@@ -27,7 +27,6 @@ public class DailyQuestStorage extends Storage<DailyQuestReset> {
     public Serializer<DailyQuestReset> serializer() {
         return ((dailyQuestReset, json, gson) -> {
             json.addProperty("current-quests", gson.toJson(dailyQuestReset.getCurrentQuests().stream().map(Quest::getId).collect(Collectors.toList())));
-            //json.addProperty("current-date", dailyQuestReset.getWhenReset().toString());
             return json;
         });
     }
@@ -36,7 +35,6 @@ public class DailyQuestStorage extends Storage<DailyQuestReset> {
     public Deserializer<DailyQuestReset> deserializer() {
         return (json, gson) -> {
             List<String> currentQuests = gson.fromJson(json.get("current-quests").getAsString(), TypeTokens.findType());
-            //ZonedDateTime whenReset = ZonedDateTime.parse(json.get("current-date").getAsString());
             return new DailyQuestReset(this.plugin, currentQuests
                     .stream()
                     .map(id -> this.plugin.getQuestCache().getQuest(Category.DAILY.id(), id))
