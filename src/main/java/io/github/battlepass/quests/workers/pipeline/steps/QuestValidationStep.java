@@ -82,9 +82,6 @@ public class QuestValidationStep {
 
     public boolean proceed(Player player, User user, Quest quest, BigInteger progress, QuestResult questResult, boolean overrideUpdate) {
         BigInteger originalProgress = this.controller.getQuestProgress(user, quest);
-        if (overrideUpdate && originalProgress.compareTo(progress) == 0) {
-            return false;
-        }
         if (!this.isQuestValid(player, user, quest, progress, overrideUpdate) || this.controller.isQuestDone(user, quest)) {
             return false;
         }
@@ -117,7 +114,7 @@ public class QuestValidationStep {
             return false;
         }
         BigInteger originalProgress = this.controller.getQuestProgress(user, quest);
-        if (overrideUpdate && originalProgress.compareTo(progress) <= 0) { // since 0 == equal and -1 == less
+        if (overrideUpdate && originalProgress.compareTo(progress) == 0) { // since 0 == equal and -1 == less
             return false;
         }
         if (this.controller.isQuestDone(user, quest)) {
