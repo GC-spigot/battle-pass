@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import io.github.battlepass.actions.Action;
 import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.api.events.server.PluginReloadEvent;
+import io.github.battlepass.bstats.BStats;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.RewardCache;
 import io.github.battlepass.cache.UserCache;
@@ -99,6 +100,7 @@ public final class BattlePlugin extends SpigotPlugin {
         this.placeholderHook();
         this.vaultHook();
         this.debugLogger.finishedStartup(true);
+        new BStats(this);
     }
 
     @Override

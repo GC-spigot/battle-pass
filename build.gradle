@@ -9,7 +9,7 @@ buildscript {
 }
 
 group 'io.github.battlepass'
-version '3.10.1'
+version '3.10.2'
 
 apply plugin: 'java'
 apply plugin: 'com.github.johnrengelman.shadow'
@@ -29,6 +29,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.bstats:bstats-bukkit:1.7'
     compileOnly fileTree(include: ['*.jar'], dir: 'lib') // Add everything in the lib folder.
     compileOnly 'org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT'
     compileOnly 'org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT' // Spigot nms api
@@ -57,4 +58,5 @@ shadowJar {
     }
     archiveFileName = fileNameBuilder.toString().concat(".jar")
     relocate 'me.hyfe.simplespigot', "io.github.battlepass.simple-spigot"
+    relocate 'org.bstats', "io.github.battlepass.bstats"
 }
