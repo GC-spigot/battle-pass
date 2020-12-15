@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
 import me.hyfe.simplespigot.version.MultiMaterial;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -55,7 +56,7 @@ public class Variable {
     public static Variable of(Config config, String section) {
         Map<String, List<String>> subRoots = Maps.newHashMap();
         BiConsumer<String, Supplier<String>> consumer = (path, supplier) -> subRoots.put(path, Arrays.asList(supplier.get().split(" OR ")));
-        if (config.has(section.concat("variable.root"))) {
+        if (config.get(section.concat("variable")) instanceof MemorySection) {
             String root = config.has("variable.root") ? config.string(section.concat("variable.root")) : "none";
             String variableSection = section.concat("variable.");
             if (config.has(variableSection.concat("holding"))) {
