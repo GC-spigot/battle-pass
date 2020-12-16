@@ -3,7 +3,6 @@ package io.github.battlepass.commands.bpa.setpass;
 import com.google.common.collect.Lists;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.BattlePassApi;
-import io.github.battlepass.api.events.user.UserPassChangeEvent;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.objects.pass.PassType;
@@ -56,11 +55,7 @@ public class SetPassSub extends BpSubCommand<CommandSender> {
             this.lang.local("failed-set-pass-require-permission", passId, passType.getRequiredPermission()).to(sender);
             return;
         }
-        UserPassChangeEvent event = new UserPassChangeEvent(user, passId);
-        Bukkit.getPluginManager().callEvent(event);
-        event.ifNotCancelled(consumerEvent -> {
-            this.api.setPassId(user, consumerEvent.getNewPassId());
-            this.lang.local("successful-set-pass", args[2], passId).to(sender);
-        });
+        this.api.setPassId(user, passId);
+        this.lang.local("successful-set-pass", args[2], passId).to(sender);
     }
 }

@@ -32,6 +32,8 @@ public class Lang {
         this.localLang.put("failed-quest-progress", "&cFailed to progress the quest &a%s&c.");
         this.localLang.put("invalid-pass-id", "&7Could not find a pass type with the id &c%s&7.");
         this.localLang.put("successful-set-pass", "&aSuccessfully&7 set &a%s's&7 pass type to &a%s.");
+        this.localLang.put("successful-set-pass-online", "&aSuccessfully&7 set &aall online player's&7 pass type to &a%s.");
+        this.localLang.put("successful-set-pass-global", "&aSuccessfully&7 set &aevery user's&7 pass type to &a%s.");
         this.localLang.put("successful-give-points", "&aSuccessfully&7 gave %s &a%d&7 points.");
         this.localLang.put("successful-set-points", "&aSuccessfully&7 set &a%s's&7 points to &a%d&7.");
         this.localLang.put("failed-set-pass-require-permission", "&7You &ccan not&7 set the pass type to &c%s&7 because you have &crequired-permission&7 enabled. This value is set to &c%s&7.");

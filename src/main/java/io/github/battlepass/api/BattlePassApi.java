@@ -2,6 +2,7 @@ package io.github.battlepass.api;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.actions.Action;
+import io.github.battlepass.api.events.user.UserPassChangeEvent;
 import io.github.battlepass.api.events.user.UserRewardReceiveEvent;
 import io.github.battlepass.api.events.user.UserTierUpEvent;
 import io.github.battlepass.cache.QuestCache;
@@ -93,18 +94,22 @@ public class BattlePassApi {
         if (currentPassId.equals(passId)) {
             return;
         }
-        user.setPassId(passId);
-        if (passId.equals("free")) {
-            user.getPendingTiers().remove("premium");
-        }
-        if (passId.equals("premium")) {
-            if (this.freePassConfig.bool("dont-give-premium-free-rewards")) {
-                user.getPendingTiers().remove("free");
+        UserPassChangeEvent event = new UserPassChangeEvent(user, passId);
+        this.plugin.runSync(() -> Bukkit.getPluginManager().callEvent(event));
+        event.ifNotCancelled(consumerEvent -> {
+            user.setPassId(consumerEvent.getNewPassId());
+            if (passId.equals("free")) {
+                user.getPendingTiers().remove("premium");
             }
-            for (int tier = 1; tier <= user.getTier(); tier++) {
-                this.reward(user, "premium", tier, false);
+            if (passId.equals("premium")) {
+                if (this.freePassConfig.bool("dont-give-premium-free-rewards")) {
+                    user.getPendingTiers().remove("free");
+                }
+                for (int tier = 1; tier <= user.getTier(); tier++) {
+                    this.reward(user, "premium", tier, false);
+                }
             }
-        }
+        });
     }
 
     public Tier getTier(int tier, String passId) {

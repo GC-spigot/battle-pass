@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.BattlePassApi;
-import io.github.battlepass.api.events.user.UserPassChangeEvent;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.loader.PassLoader;
@@ -48,13 +47,9 @@ public class SetPassOnlineSub extends BpSubCommand<CommandSender> {
         for (Player player : Bukkit.getOnlinePlayers()) {
             onlineUuids.add(player.getUniqueId());
         }
+        this.lang.local("successful-set-pass-online", passId).to(sender);
         this.userCache.asyncModifyMultiple(user -> {
-            UserPassChangeEvent event = new UserPassChangeEvent(user, passId);
-            this.plugin.runSync(() -> Bukkit.getPluginManager().callEvent(event));
-            event.ifNotCancelled(consumerEvent -> {
-                this.api.setPassId(user, consumerEvent.getNewPassId());
-                this.lang.local("successful-set-pass", args[2], passId).to(sender);
-            });
+            this.api.setPassId(user, passId);
         }, onlineUuids);
     }
 }

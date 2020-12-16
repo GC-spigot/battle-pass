@@ -3,12 +3,10 @@ package io.github.battlepass.commands.bpa.setpass;
 import com.google.common.collect.Lists;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.BattlePassApi;
-import io.github.battlepass.api.events.user.UserPassChangeEvent;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.objects.pass.PassType;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 public class SetPassAllSub extends BpSubCommand<CommandSender> {
@@ -39,13 +37,9 @@ public class SetPassAllSub extends BpSubCommand<CommandSender> {
             this.lang.local("failed-set-pass-require-permission", passId, passType.getRequiredPermission()).to(sender);
             return;
         }
+        this.lang.local("successful-set-pass-global", passId).to(sender);
         this.userCache.asyncModifyAll(user -> {
-            UserPassChangeEvent event = new UserPassChangeEvent(user, passId);
-            this.plugin.runSync(() -> Bukkit.getPluginManager().callEvent(event));
-            event.ifNotCancelled(consumerEvent -> {
-                this.api.setPassId(user, consumerEvent.getNewPassId());
-                this.lang.local("successful-set-pass", args[2], passId).to(sender);
-            });
+            this.api.setPassId(user, passId);
         });
     }
 }
