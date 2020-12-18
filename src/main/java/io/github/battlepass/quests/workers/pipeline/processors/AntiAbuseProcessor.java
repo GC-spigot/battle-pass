@@ -30,7 +30,7 @@ public class AntiAbuseProcessor {
                     || !questResult.isEligible(player, quest.getVariable())) {
                 return;
             }
-            this.debugLogger.log(LogContainer.of("Anti abuse measures applied for player %s on quest " + quest.getCategoryId() + ":" + quest.getId(), player));
+            this.debugLogger.log(LogContainer.of("Anti abuse measures applied for player %battlepass-player% on quest " + quest.getCategoryId() + ":" + quest.getId(), player));
             BigInteger currentProgress = this.controller.getQuestProgress(user, quest);
             if (currentProgress.compareTo(BigInteger.ZERO) > 0) {
                 this.controller.setQuestProgress(user, quest, currentProgress.subtract(progress).max(BigInteger.ZERO));
