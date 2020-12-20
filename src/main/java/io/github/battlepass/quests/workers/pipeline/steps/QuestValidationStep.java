@@ -70,7 +70,7 @@ public class QuestValidationStep {
             if (!name.equalsIgnoreCase(quest.getType())) {
                 continue;
             }
-            if (seasonEnded && (quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd)) {
+            if (seasonEnded && ((quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd))) {
                 this.debugLogger.log(LogContainer.of("(PIPELINE) Didn't progress for %battlepass-player% and quests of this type are disabled on season end."));
                 continue;
             }
@@ -109,7 +109,7 @@ public class QuestValidationStep {
         if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {
             return false;
         }
-        if (seasonEnded && (quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd)) {
+        if (seasonEnded && ((quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd))) {
             return false;
         }
         if (this.controller.isQuestDone(user, quest)) {
