@@ -57,12 +57,11 @@ public class QuestValidationStep {
 
     public void processCompletion(Player player, User user, String name, BigInteger progress, QuestResult questResult, Collection<Quest> quests, boolean overrideUpdate) {
         String playerWorld = player.getWorld().getName();
-        boolean seasonEnded = this.api.hasSeasonEnded();
-        if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {
+        if (this.areServerQuestsBlocked()) {
             this.debugLogger.log(LogContainer.of("(PIPELINE) Didn't progress for %battlepass-player% as season has ended and dailies & normals are disabled."));
             return;
         }
-        if ((!this.whitelistedWorlds.isEmpty() && !this.whitelistedWorlds.contains(playerWorld)) || this.blacklistedWorlds.contains(playerWorld)) {
+        if (this.isWorldServerBlocked(playerWorld)) {
             return;
         }
         this.antiAbuseProcessor.applyMeasures(player, user, quests, name, progress, questResult);
@@ -70,12 +69,11 @@ public class QuestValidationStep {
             if (!name.equalsIgnoreCase(quest.getType())) {
                 continue;
             }
-            if (seasonEnded && ((quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd))) {
+            if (this.isQuestSeasonEndBlocked(quest)) {
                 this.debugLogger.log(LogContainer.of("(PIPELINE) Didn't progress for %battlepass-player% and quests of this type are disabled on season end."));
                 continue;
             }
-            Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
-            if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
+            if (this.isWorldQuestBlocked(quest, playerWorld)) {
                 continue;
             }
             this.questLock.lock();
@@ -109,7 +107,7 @@ public class QuestValidationStep {
         if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {
             return false;
         }
-        if (seasonEnded && ((quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd))) {
+        if (this.isQuestSeasonEndBlocked(quest)) {
             return false;
         }
         if (this.controller.isQuestDone(user, quest)) {
@@ -141,6 +139,26 @@ public class QuestValidationStep {
         }
         Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
         return (questWhitelistedWorlds.isEmpty() || questWhitelistedWorlds.contains(playerWorld)) && !quest.getBlacklistedWorlds().contains(playerWorld);
+    }
+
+    private boolean areServerQuestsBlocked() {
+        return this.api.hasSeasonEnded() && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd;
+    }
+
+    private boolean isWorldServerBlocked(String worldName) {
+        return (!this.whitelistedWorlds.isEmpty() && !this.whitelistedWorlds.contains(worldName)) || this.blacklistedWorlds.contains(worldName);
+    }
+
+    private boolean isQuestSeasonEndBlocked(Quest quest) {
+        return this.api.hasSeasonEnded() && (
+                (quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd)
+                        || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd)
+        );
+    }
+
+    private boolean isWorldQuestBlocked(Quest quest, String worldName) {
+        return quest.getBlacklistedWorlds().contains(worldName) ||
+                 (!quest.getWhitelistedWorlds().isEmpty() && !quest.getWhitelistedWorlds().contains(worldName));
     }
 
     private boolean isPreviousWeekLocked(User user, int week) {
