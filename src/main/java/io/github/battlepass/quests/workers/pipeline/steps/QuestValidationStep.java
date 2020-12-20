@@ -6,6 +6,8 @@ import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.api.events.user.UserQuestProgressionEvent;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.enums.Category;
+import io.github.battlepass.logger.DebugLogger;
+import io.github.battlepass.logger.containers.LogContainer;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.objects.quests.variable.Variable;
@@ -26,6 +28,7 @@ public class QuestValidationStep {
     private final QuestCompletionStep completionStep;
     private final BattlePlugin plugin;
     private final BattlePassApi api;
+    private final DebugLogger debugLogger;
     private final QuestController controller;
     private final Set<String> whitelistedWorlds;
     private final Set<String> blacklistedWorlds;
@@ -34,6 +37,7 @@ public class QuestValidationStep {
     private final boolean disableDailiesOnSeasonEnd;
     private final boolean disableNormalsOnSeasonEnd;
     private final ReentrantLock questLock = Locks.newReentrantLock();
+
 
     public QuestValidationStep(BattlePlugin plugin) {
         Config settings = plugin.getConfig("settings");
@@ -48,12 +52,14 @@ public class QuestValidationStep {
         this.requirePreviousCompletion = settings.bool("current-season.unlocks.require-previous-completion");
         this.disableDailiesOnSeasonEnd = settings.bool("season-finished.stop-daily-quests");
         this.disableNormalsOnSeasonEnd = settings.bool("season-finished.stop-other-quests");
+        this.debugLogger = plugin.getDebugLogger();
     }
 
     public void processCompletion(Player player, User user, String name, BigInteger progress, QuestResult questResult, Collection<Quest> quests, boolean overrideUpdate) {
         String playerWorld = player.getWorld().getName();
         boolean seasonEnded = this.api.hasSeasonEnded();
         if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {
+            this.debugLogger.log(LogContainer.of("(PIPELINE) Didn't progress for %battlepass-player% as season has ended and dailies & normals are disabled."));
             return;
         }
         if ((!this.whitelistedWorlds.isEmpty() && !this.whitelistedWorlds.contains(playerWorld)) || this.blacklistedWorlds.contains(playerWorld)) {
@@ -65,6 +71,7 @@ public class QuestValidationStep {
                 continue;
             }
             if (seasonEnded && (quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd)) {
+                this.debugLogger.log(LogContainer.of("(PIPELINE) Didn't progress for %battlepass-player% and quests of this type are disabled on season end."));
                 continue;
             }
             Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
