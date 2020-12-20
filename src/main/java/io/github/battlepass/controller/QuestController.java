@@ -52,13 +52,14 @@ public class QuestController {
     }
 
     public BigInteger getQuestProgress(User user, Quest quest) {
-        return this.failedIndex(user, quest).equals(FailedIndex.NONE) ? this.getQuests(user, quest.getCategoryId()).get(quest.getId()) : BigInteger.ZERO;
+        return this.failedIndex(user, quest) == FailedIndex.NONE ? this.getQuests(user, quest.getCategoryId()).get(quest.getId()) : BigInteger.ZERO;
     }
 
     public BigInteger setQuestProgress(User user, Quest quest, BigInteger progress) {
+        BigInteger updatedProgress = quest.getRequiredProgress().min(progress);
         this.fillFailedIndexes(user, quest);
-        this.getQuests(user, quest.getCategoryId()).put(quest.getId(), quest.getRequiredProgress().min(progress));
-        return this.getQuestProgress(user, quest);
+        this.getQuests(user, quest.getCategoryId()).put(quest.getId(), updatedProgress);
+        return updatedProgress;
     }
 
     /**
@@ -73,7 +74,7 @@ public class QuestController {
     public BigInteger addQuestProgress(User user, Quest quest, BigInteger progress, boolean reward) {
         BigInteger initialProgress = this.getQuestProgress(user, quest);
         if (initialProgress.compareTo(quest.getRequiredProgress()) < 0) {
-            BigInteger modifiedProgress = this.setQuestProgress(user, quest, initialProgress.add(progress).min(quest.getRequiredProgress()));
+            BigInteger modifiedProgress = this.setQuestProgress(user, quest, initialProgress.add(progress)); // No need to compare to required progress as it's done in the setQuestProgress
             if (reward && modifiedProgress.compareTo(quest.getRequiredProgress()) > -1) {
                 user.updatePoints(current -> current.add(BigInteger.valueOf(quest.getPoints())));
             }

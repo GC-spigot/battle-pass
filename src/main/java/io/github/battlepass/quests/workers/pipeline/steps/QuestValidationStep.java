@@ -39,6 +39,7 @@ public class QuestValidationStep {
     private final ReentrantLock questLock = Locks.newReentrantLock();
 
 
+    // TODO at some point this all needs to be cleaned up. Things are repeated, bad bad.
     public QuestValidationStep(BattlePlugin plugin) {
         Config settings = plugin.getConfig("settings");
         this.antiAbuseProcessor = new AntiAbuseProcessor(plugin);
@@ -103,30 +104,18 @@ public class QuestValidationStep {
     }
 
     public boolean isQuestPrimarilyValid(User user, Quest quest, BigInteger progress, boolean overrideUpdate) {
-        boolean seasonEnded = this.api.hasSeasonEnded();
-        if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {
-            return false;
-        }
-        if (this.isQuestSeasonEndBlocked(quest)) {
-            return false;
-        }
-        if (this.controller.isQuestDone(user, quest)) {
-            return false;
-        }
-        BigInteger originalProgress = this.controller.getQuestProgress(user, quest);
-        if (overrideUpdate && originalProgress.compareTo(progress) == 0) { // since 0 == equal and -1 == less
-            return false;
-        }
-        String exclusiveTo = quest.getExclusiveTo();
-        if (exclusiveTo != null && !exclusiveTo.equalsIgnoreCase(user.getPassId())) {
-            return false;
-        }
+        if (this.areServerQuestsBlocked() ||
+                this.isQuestSeasonEndBlocked(quest) ||
+                this.controller.isQuestDone(user, quest) ||
+                (overrideUpdate && this.isProgressIdentical(quest, user, progress)) ||
+                this.isPassTypeQuestBlocked(quest, user)
+        ) return false;
         int week = Category.stripWeek(quest.getCategoryId());
         boolean isDaily = week == 0;
         if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
             return false;
         }
-        return !this.requirePreviousCompletion || isDaily || user.bypassesLockedWeeks() || !this.isPreviousWeekLocked(user, week);
+        return !this.requirePreviousCompletion || isDaily || user.bypassesLockedWeeks() || !this.isPreviousWeekBlocked(user, week);
     }
 
     public boolean isQuestValid(Player player, User user, Quest quest, BigInteger progress, boolean overrideUpdate) {
@@ -134,7 +123,7 @@ public class QuestValidationStep {
         if (!this.isQuestPrimarilyValid(user, quest, progress, overrideUpdate)) {
             return false;
         }
-        if ((!this.whitelistedWorlds.isEmpty() && !this.whitelistedWorlds.contains(playerWorld)) || this.blacklistedWorlds.contains(playerWorld)) {
+        if (this.isWorldQuestBlocked(quest, playerWorld)) {
             return false;
         }
         Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
@@ -158,10 +147,18 @@ public class QuestValidationStep {
 
     private boolean isWorldQuestBlocked(Quest quest, String worldName) {
         return quest.getBlacklistedWorlds().contains(worldName) ||
-                 (!quest.getWhitelistedWorlds().isEmpty() && !quest.getWhitelistedWorlds().contains(worldName));
+                (!quest.getWhitelistedWorlds().isEmpty() && !quest.getWhitelistedWorlds().contains(worldName));
     }
 
-    private boolean isPreviousWeekLocked(User user, int week) {
+    private boolean isPassTypeQuestBlocked(Quest quest, User user) {
+        return quest.getExclusiveTo() != null && !quest.getExclusiveTo().equalsIgnoreCase(user.getPassId());
+    }
+
+    private boolean isProgressIdentical(Quest quest, User user, BigInteger progress) {
+        return this.controller.getQuestProgress(user, quest).compareTo(progress) == 0; // 0 is equal to
+    }
+
+    private boolean isPreviousWeekBlocked(User user, int week) {
         int previousWeek = week - 1;
         if (previousWeek > 1) {
             while (previousWeek > 0) {
