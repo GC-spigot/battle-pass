@@ -121,10 +121,7 @@ public class QuestValidationStep {
         if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
             return false;
         }
-        if (this.isPreviousWeekLocked(user, week)) {
-            return false;
-        }
-        return true;
+        return !this.requirePreviousCompletion || isDaily || user.bypassesLockedWeeks() || !this.isPreviousWeekLocked(user, week);
     }
 
     public boolean isQuestValid(Player player, User user, Quest quest, BigInteger progress, boolean overrideUpdate) {
@@ -136,10 +133,7 @@ public class QuestValidationStep {
             return false;
         }
         Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
-        if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
-            return false;
-        }
-        return true;
+        return (questWhitelistedWorlds.isEmpty() || questWhitelistedWorlds.contains(playerWorld)) && !quest.getBlacklistedWorlds().contains(playerWorld);
     }
 
     private boolean isPreviousWeekLocked(User user, int week) {
