@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
 
 import java.math.BigInteger;
 
-public class CompletionStep {
+public class QuestCompletionStep {
     private final QuestController controller;
     private final NotificationStep notificationStep;
 
-    public CompletionStep(BattlePlugin plugin) {
+    public QuestCompletionStep(BattlePlugin plugin) {
         this.notificationStep = new NotificationStep(plugin);
         this.controller = plugin.getQuestController();
     }

@@ -7,6 +7,7 @@ import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.enums.Category;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
+import io.github.battlepass.quests.workers.pipeline.steps.QuestCompletionStep;
 import io.github.battlepass.quests.workers.pipeline.steps.QuestValidationStep;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -20,12 +21,14 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
     private final QuestCache questCache;
     private final QuestController controller;
     private final QuestValidationStep questValidationStep;
+    private final QuestCompletionStep questCompletionStep;
 
     public ProgressQuestSub(BattlePlugin plugin) {
         super(plugin);
         this.questCache = plugin.getQuestCache();
         this.controller = plugin.getQuestController();
         this.questValidationStep = new QuestValidationStep(plugin);
+        this.questCompletionStep = new QuestCompletionStep(plugin);
 
         this.inheritPermission();
         this.addFlats("progress", "quest");
@@ -64,7 +67,8 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
             this.lang.local("quest-already-done", args[2]);
             return;
         }
-        if (this.questValidationStep.proceed(player, user, quest, amount, null, false)) {
+        if (this.questValidationStep.isQuestPrimarilyValid(user, quest, amount, false)) {
+            this.questCompletionStep.process(player, user, quest, this.controller.getQuestProgress(user, quest), amount, false);
             this.lang.local("successful-quest-progress", quest.getName()).to(sender);
         } else {
             this.lang.local("failed-quest-progress", quest.getName()).to(sender);

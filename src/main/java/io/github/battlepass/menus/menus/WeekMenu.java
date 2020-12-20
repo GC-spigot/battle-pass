@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
-import java.util.logging.Level;
 
 public class WeekMenu extends PageableConfigMenu<Quest> {
     private final int week;
@@ -59,9 +58,9 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
                     .tryAddPapi(this.player)))
                     .build();
         } catch (Exception e) {
-            BattlePlugin.logger().log(Level.WARNING, "Quest: ".concat(String.valueOf(quest)));
-            BattlePlugin.logger().log(Level.WARNING, "Error whilst building menu item for quest: " + quest.getId() + " category " + quest.getCategoryId() + " name " + quest.getName());
-            BattlePlugin.logger().log(Level.WARNING, "Quest Item: ".concat(String.valueOf(quest.getItemStack())));
+            BattlePlugin.logger().warning("Quest: ".concat(String.valueOf(quest)));
+            BattlePlugin.logger().warning("Error whilst building menu item for quest: " + quest.getId() + " category " + quest.getCategoryId() + " name " + quest.getName());
+            BattlePlugin.logger().warning("Quest Item: ".concat(String.valueOf(quest.getItemStack())));
             e.printStackTrace();
             return MenuItem.builderOf(new ItemStack(Material.BARRIER)).build();
         }

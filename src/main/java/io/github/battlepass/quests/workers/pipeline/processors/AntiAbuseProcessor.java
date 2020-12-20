@@ -23,17 +23,17 @@ public class AntiAbuseProcessor {
 
     public void applyMeasures(Player player, User user, Collection<Quest> quests, String currentType, BigInteger progress, QuestResult questResult) {
         for (Quest quest : quests) {
-            if (this.controller.isQuestDone(user, quest)
+            if (!quest.isAntiAbuse()
+                    || this.controller.isQuestDone(user, quest)
                     || (!currentType.equals("block-break") && !currentType.equals("block-place"))
                     || currentType.equalsIgnoreCase(quest.getType())
-                    || !quest.isAntiAbuse()
                     || !questResult.isEligible(player, quest.getVariable())) {
                 return;
             }
             this.debugLogger.log(LogContainer.of("Anti abuse measures applied for player %battlepass-player% on quest " + quest.getCategoryId() + ":" + quest.getId(), player));
             BigInteger currentProgress = this.controller.getQuestProgress(user, quest);
             if (currentProgress.compareTo(BigInteger.ZERO) > 0) {
-                this.controller.setQuestProgress(user, quest, currentProgress.subtract(progress).max(BigInteger.ZERO));
+                this.controller.setQuestProgress(user, quest, currentProgress.subtract(progress).max(BigInteger.ZERO).min(quest.getRequiredProgress()));
             }
         }
     }

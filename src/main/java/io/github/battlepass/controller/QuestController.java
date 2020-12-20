@@ -74,7 +74,7 @@ public class QuestController {
         BigInteger initialProgress = this.getQuestProgress(user, quest);
         if (initialProgress.compareTo(quest.getRequiredProgress()) < 0) {
             BigInteger modifiedProgress = this.setQuestProgress(user, quest, initialProgress.add(progress).min(quest.getRequiredProgress()));
-            if (modifiedProgress.compareTo(quest.getRequiredProgress()) > -1 && reward) {
+            if (reward && modifiedProgress.compareTo(quest.getRequiredProgress()) > -1) {
                 user.updatePoints(current -> current.add(BigInteger.valueOf(quest.getPoints())));
             }
             return modifiedProgress;

@@ -23,7 +23,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class QuestValidationStep {
     private final AntiAbuseProcessor antiAbuseProcessor;
-    private final CompletionStep completionStep;
+    private final QuestCompletionStep completionStep;
     private final BattlePlugin plugin;
     private final BattlePassApi api;
     private final QuestController controller;
@@ -38,7 +38,7 @@ public class QuestValidationStep {
     public QuestValidationStep(BattlePlugin plugin) {
         Config settings = plugin.getConfig("settings");
         this.antiAbuseProcessor = new AntiAbuseProcessor(plugin);
-        this.completionStep = new CompletionStep(plugin);
+        this.completionStep = new QuestCompletionStep(plugin);
         this.plugin = plugin;
         this.api = plugin.getLocalApi();
         this.controller = plugin.getQuestController();
@@ -82,7 +82,7 @@ public class QuestValidationStep {
 
     public boolean proceed(Player player, User user, Quest quest, BigInteger progress, QuestResult questResult, boolean overrideUpdate) {
         BigInteger originalProgress = this.controller.getQuestProgress(user, quest);
-        if (!this.isQuestValid(player, user, quest, progress, overrideUpdate) || this.controller.isQuestDone(user, quest)) {
+        if (!this.isQuestValid(player, user, quest, progress, overrideUpdate)) {
             return false;
         }
         Variable subVariable = quest.getVariable();
@@ -97,27 +97,19 @@ public class QuestValidationStep {
         return false;
     }
 
-    public boolean isQuestValid(Player player, User user, Quest quest, BigInteger progress, boolean overrideUpdate) {
-        String playerWorld = player.getWorld().getName();
+    public boolean isQuestPrimarilyValid(User user, Quest quest, BigInteger progress, boolean overrideUpdate) {
         boolean seasonEnded = this.api.hasSeasonEnded();
         if (seasonEnded && this.disableDailiesOnSeasonEnd && this.disableNormalsOnSeasonEnd) {
-            return false;
-        }
-        if ((!this.whitelistedWorlds.isEmpty() && !this.whitelistedWorlds.contains(playerWorld)) || this.blacklistedWorlds.contains(playerWorld)) {
             return false;
         }
         if (seasonEnded && (quest.getCategoryId().contains("daily") && this.disableDailiesOnSeasonEnd) || (quest.getCategoryId().contains("week") && this.disableNormalsOnSeasonEnd)) {
             return false;
         }
-        Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
-        if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
+        if (this.controller.isQuestDone(user, quest)) {
             return false;
         }
         BigInteger originalProgress = this.controller.getQuestProgress(user, quest);
         if (overrideUpdate && originalProgress.compareTo(progress) == 0) { // since 0 == equal and -1 == less
-            return false;
-        }
-        if (this.controller.isQuestDone(user, quest)) {
             return false;
         }
         String exclusiveTo = quest.getExclusiveTo();
@@ -129,17 +121,37 @@ public class QuestValidationStep {
         if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
             return false;
         }
-        if (this.requirePreviousCompletion && !isDaily && !user.bypassesLockedWeeks()) {
-            int previousWeek = week - 1;
-            if (previousWeek > 1) {
-                while (previousWeek > 0) {
-                    if (!this.controller.isWeekDone(user, previousWeek)) {
-                        return false;
-                    }
-                    previousWeek--;
-                }
-            }
+        if (this.isPreviousWeekLocked(user, week)) {
+            return false;
         }
         return true;
+    }
+
+    public boolean isQuestValid(Player player, User user, Quest quest, BigInteger progress, boolean overrideUpdate) {
+        String playerWorld = player.getWorld().getName();
+        if (!this.isQuestPrimarilyValid(user, quest, progress, overrideUpdate)) {
+            return false;
+        }
+        if ((!this.whitelistedWorlds.isEmpty() && !this.whitelistedWorlds.contains(playerWorld)) || this.blacklistedWorlds.contains(playerWorld)) {
+            return false;
+        }
+        Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
+        if ((!questWhitelistedWorlds.isEmpty() && !questWhitelistedWorlds.contains(playerWorld)) || quest.getBlacklistedWorlds().contains(playerWorld)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isPreviousWeekLocked(User user, int week) {
+        int previousWeek = week - 1;
+        if (previousWeek > 1) {
+            while (previousWeek > 0) {
+                if (!this.controller.isWeekDone(user, previousWeek)) {
+                    return true;
+                }
+                previousWeek--;
+            }
+        }
+        return false;
     }
 }
