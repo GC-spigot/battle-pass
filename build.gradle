@@ -56,14 +56,7 @@ processResources {
 }
 
 shadowJar {
-    StringBuilder fileNameBuilder = new StringBuilder(project.name.concat('-'))
-    if (this.project.hasProperty("buildNo")) {
-        project.version = buildNo
-        fileNameBuilder.append(this.project.buildNo)
-    } else {
-        fileNameBuilder.append(this.version)
-    }
-    archiveFileName = fileNameBuilder.toString().concat(".jar")
+    archiveFileName = project.name + "-" + this.version + ".jar"
     relocate 'me.hyfe.simplespigot', "io.github.battlepass.simple-spigot"
     relocate 'org.bstats', "io.github.battlepass.bstats"
 }
