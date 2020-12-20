@@ -20,12 +20,14 @@ public class ConnectionListener implements Listener {
     private final UserCache userCache;
     private final Lang lang;
     private final boolean bungeeFix;
+    private final boolean notificationEnabled;
 
     public ConnectionListener(BattlePlugin plugin) {
         this.plugin = plugin;
         this.userCache = plugin.getUserCache();
         this.lang = plugin.getLang();
         this.bungeeFix = plugin.getConfig("settings").bool("storage-options.bungee-fix");
+        this.notificationEnabled = this.lang.has("collectable-rewards-notification");
     }
 
     @EventHandler
@@ -47,6 +49,9 @@ public class ConnectionListener implements Listener {
 
     private void loadPlayer(Player player) {
         CompletableFuture<User> completableUser = this.userCache.load(player.getUniqueId());
+        if (!this.notificationEnabled) {
+            return;
+        }
         completableUser.thenAccept(user -> {
             Predicate<String> isNotify = passId -> user.getPendingTiers(passId) != null && !user.getPendingTiers(passId).isEmpty();
             if (isNotify.test("free") || isNotify.test("premium")) {
@@ -64,7 +69,7 @@ public class ConnectionListener implements Listener {
         Config settings = this.plugin.getConfig("settings");
         if (settings.has("join-message-delay")) {
             int delay = settings.integer("join-message-delay");
-            Bukkit.getScheduler().runTaskLater(this.plugin, runnable, 20 * delay);
+            Bukkit.getScheduler().runTaskLater(this.plugin, runnable, 20L * delay);
         } else {
             runnable.run();
         }
