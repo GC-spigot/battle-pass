@@ -28,7 +28,7 @@ public class QuestExecutor implements Listener {
     }
 
     protected void execute(String name, Player player, UnaryOperator<QuestResult> result, Replace replace) {
-        this.execute(name, player, 1, result, replace, false);
+        this.execute(name, player, BigInteger.ONE, result, replace, false);
     }
 
     protected void execute(String name, Player player, int progress, UnaryOperator<QuestResult> result) {
@@ -36,7 +36,7 @@ public class QuestExecutor implements Listener {
     }
 
     protected void execute(String name, Player player, UnaryOperator<QuestResult> result) {
-        this.execute(name, player, 1, result);
+        this.execute(name, player, BigInteger.ONE, result);
     }
 
     protected void execute(String name, Player player, BigInteger progress, UnaryOperator<QuestResult> result, Replace replace, boolean overrideUpdate) {

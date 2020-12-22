@@ -26,7 +26,7 @@ public class ExternalQuestExecutor extends QuestExecutor {
     }
 
     protected void execute(String name, Player player, UnaryOperator<QuestResult> result, Replace replace) {
-        this.execute(name, player, 1, result, replace);
+        this.execute(name, player, BigInteger.ONE, result, replace);
     }
 
     protected void execute(String name, Player player, int progress, UnaryOperator<QuestResult> result) {
@@ -34,7 +34,7 @@ public class ExternalQuestExecutor extends QuestExecutor {
     }
 
     protected void execute(String name, Player player, UnaryOperator<QuestResult> result) {
-        this.execute(name, player, 1, result);
+        this.execute(name, player, BigInteger.ONE, result);
     }
 
     protected void execute(String name, Player player, BigInteger progress, UnaryOperator<QuestResult> result, Replace replace, boolean overrideUpdate) {

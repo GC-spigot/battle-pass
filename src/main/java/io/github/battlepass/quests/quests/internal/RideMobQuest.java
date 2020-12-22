@@ -22,7 +22,7 @@ public class RideMobQuest extends QuestExecutor {
         Entity entity = player.getVehicle();
         String entityType = entity.getType().toString();
         String entityName = entity.getCustomName();
-        this.execute("ride-mob", player, 1, result -> {
+        this.execute("ride-mob", player, result -> {
             return result.root(entityType);
         }, replacer -> {
             replacer.set("entity", entityType);
