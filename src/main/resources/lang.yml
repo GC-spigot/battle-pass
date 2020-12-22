@@ -9,7 +9,6 @@ daily-quest-reset: '&eThere have been some quests that have reset.'
 
 week-status-locked: '&cLocked'
 week-status-unlocked: '&aUnlocked'
-week-status-claimed: '&aClaimed'
 
 season-finished-message: '&aFinished' # This is displayed as the %week% if the season is finished. Remove this line to have it go to the minimum week.
 
