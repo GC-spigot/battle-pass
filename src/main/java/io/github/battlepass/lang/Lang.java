@@ -45,6 +45,7 @@ public class Lang {
         this.localLang.put("target-toggle-lock-bypass-off", "&cYou no longer bypass week locks.");
         this.localLang.put("user-data-deleted", "&aYou have successfully deleted %s's data.");
         this.localLang.put("target-user-data-deleted", "&cYour quest data has been wiped.");
+        this.localLang.put("user-data-deleted-null-player", "&cUser data deleted.");
         this.localLang.put("debug-dumped", "&cDumped the debug information to a file called %s");
         this.localLang.put("cooldown-has-seconds", "&cPlease wait %s seconds before using this again.");
         this.localLang.put("confirm-new-season", "&cType the command again within 30 seconds to confirm this action. This command can be destructive, read the wiki first.");

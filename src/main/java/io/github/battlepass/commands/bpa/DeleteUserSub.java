@@ -35,12 +35,17 @@ public class DeleteUserSub extends BpSubCommand<CommandSender> {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
             return;
         }
-        UUID uuid = maybeUser.get().getUuid();
-        Player player = Bukkit.getPlayer(uuid);
+        User targetUser = maybeUser.get();
+        UUID uuid = targetUser.getUuid();
+        Player player = targetUser.getPlayer();
         this.userCache.invalidate(uuid);
         Bukkit.getPluginManager().callEvent(new UserLoadEvent(this.userCache.set(uuid, new User(uuid)), true));
+        if (player == null) {
+            this.lang.local("user-data-deleted-null-player").to(sender);
+            return;
+        }
         this.lang.local("target-user-data-deleted").to(player);
-        if (player != null && !sender.getName().equals(player.getName())) {
+        if (!player.equals(sender)) {
             this.lang.local("user-data-deleted", player.getName()).to(sender);
         }
     }

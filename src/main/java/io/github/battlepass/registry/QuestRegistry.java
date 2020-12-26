@@ -144,7 +144,7 @@ public class QuestRegistry implements Registry {
             }
             return true;
         }
-        this.runRepeatingCheck(name , () -> {
+        this.runRepeatingCheck(name, () -> {
             if (this.hook(name, instantiator, author)) {
                 this.attempts.get(name).getValue().cancel();
             }
@@ -175,7 +175,7 @@ public class QuestRegistry implements Registry {
             }
             return true;
         }
-        this.runRepeatingCheck(name , () -> {
+        this.runRepeatingCheck(name, () -> {
             if (this.hook(name, instantiator, author, versionPredicate)) {
                 this.attempts.get(name).getValue().cancel();
             }
@@ -205,8 +205,8 @@ public class QuestRegistry implements Registry {
             return;
         }
         BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
-            AtomicInteger value = this.attempts.get(name).getKey();
-            if (value.intValue() > 18) {
+            int value = this.attempts.get(name).getKey().incrementAndGet();
+            if (value > 60) {
                 this.attempts.get(name).getValue().cancel();
             }
             runnable.run();
