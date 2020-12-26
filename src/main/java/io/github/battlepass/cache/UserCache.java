@@ -107,9 +107,11 @@ public class UserCache extends FutureCache<UUID, User> implements Savable {
 
     @Override
     public void save() {
-        for (User user : this.values()) {
-            this.storage.save(FastUuid.toString(user.getUuid()), user);
-        }
+        this.plugin.runAsync(() -> {
+            for (User user : this.values()) {
+                this.storage.save(FastUuid.toString(user.getUuid()), user);
+            }
+        });
     }
 
     private void applyPermissionComputation(User user) {
