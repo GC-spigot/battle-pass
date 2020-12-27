@@ -69,6 +69,10 @@ public class BattlePassApi {
         return ZonedDateTime.now().isAfter(this.plugin.getSeasonEndDate());
     }
 
+    public boolean hasSeasonStarted() {
+        return this.plugin.getSeasonStartDate().isBefore(ZonedDateTime.now().withZoneSameInstant(this.getZone()));
+    }
+
     public String getWeekFormatted() {
         String finishedSection = "season-finished-message";
         return this.hasSeasonEnded() ? this.lang.has(finishedSection) ? this.lang.external(finishedSection).asString()
@@ -80,6 +84,9 @@ public class BattlePassApi {
     }
 
     public long currentWeek() {
+        if (!this.hasSeasonStarted()) {
+            return -1;
+        }
         ZoneId zoneId = this.getZone();
         long daysBetween = ChronoUnit.DAYS.between(this.plugin.getSeasonStartDate(), ZonedDateTime.now().withZoneSameInstant(zoneId));
         return daysBetween < 0 ? 0 : (daysBetween / 7) + 1;
