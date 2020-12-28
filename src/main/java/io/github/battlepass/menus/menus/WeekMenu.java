@@ -53,8 +53,8 @@ public class WeekMenu extends PageableConfigMenu<Quest> {
                     .set("daily_time_left", this.dailyQuestReset.asString())
                     .set("total_progress", this.questController.getQuestProgress(this.user, quest))
                     .set("required_progress", quest.getRequiredProgress())
-                    .set("percentage_progress", () -> Services.getPercentageString(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress()).concat("%"))
-                    .set("progress_bar", () -> Services.getProgressBar(this.questController.getQuestProgress(this.user, quest), quest.getRequiredProgress(), this.lang))
+                    .set("percentage_progress", () -> Services.getPercentageString(this.questController.getQuestProgress(this.user, quest).min(quest.getRequiredProgress()), quest.getRequiredProgress()).concat("%"))
+                    .set("progress_bar", () -> Services.getProgressBar(this.questController.getQuestProgress(this.user, quest).min(quest.getRequiredProgress()), quest.getRequiredProgress(), this.lang))
                     .tryAddPapi(this.player)))
                     .build();
         } catch (Exception e) {
