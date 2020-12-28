@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.loader.PassLoader;
+import io.github.battlepass.logger.containers.BasicContainer;
 import io.github.battlepass.logger.containers.LogContainer;
 import lombok.SneakyThrows;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
@@ -28,6 +29,7 @@ public class DebugLogger {
     private final List<String> startupLog = Lists.newArrayList();
     private final Path debugFolder;
     private boolean startupOccurred = false;
+    private boolean enabled = false;
 
     public DebugLogger(BattlePlugin plugin) {
         this.plugin = plugin;
@@ -36,15 +38,15 @@ public class DebugLogger {
     }
 
     public void log(String message) {
-        //this.backlog.add(new BasicContainer(message));
+        this.log(new BasicContainer(message));
     }
 
     public void log(LogContainer logContainer) {
-        //this.backlog.add(logContainer);
+        this.backlog.add(logContainer);
     }
 
     public void log(Zone zone, String message) {
-        /*if (zone == Zone.RELOAD) {
+        if (zone == Zone.RELOAD) {
             this.log("(RELOAD) ".concat(message));
             return;
         }
@@ -56,7 +58,9 @@ public class DebugLogger {
             this.log(Zone.RELOAD, message);
             return;
         }
-        this.log(message);*/
+        if (this.enabled) {
+            this.log(message);
+        }
     }
 
     @SneakyThrows
@@ -136,5 +140,13 @@ public class DebugLogger {
     public void finishedStartup(boolean startupOccurred) {
         this.startupOccurred = startupOccurred;
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, this::cleanup, 1200, 1200);
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
     }
 }
