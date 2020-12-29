@@ -155,7 +155,9 @@ public class BattlePassApi {
                 this.reward(user, tier, false);
                 Player player = Bukkit.getPlayer(user.getUuid());
                 if (player != null) {
-                    Action.executeSimple(player, this.passLoader.getPassTypes().get(user.getPassId()).getTierUpActions(), this.plugin, new Replacer().set("tier", tier));
+                    Action.executeSimple(player, this.passLoader.getPassTypes().get(user.getPassId()).getTierUpActions(), this.plugin, new Replacer()
+                            .set("tier", tier)
+                            .set("player", player.getName()));
                 }
             } else {
                 break;
