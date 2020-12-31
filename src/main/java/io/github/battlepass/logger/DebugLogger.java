@@ -42,7 +42,9 @@ public class DebugLogger {
     }
 
     public void log(LogContainer logContainer) {
-        this.backlog.add(logContainer);
+        if (this.enabled) {
+            this.backlog.add(logContainer);
+        }
     }
 
     public void log(Zone zone, String message) {
