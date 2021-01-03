@@ -102,9 +102,18 @@ public class ExecutableQuestResult implements QuestResult {
 
     private boolean areSubRootsValid(Player player, Variable variable) {
         Map<String, List<String>> subRoots = variable.getSubRoots();
-        if (subRoots.containsKey("name") && (!this.subRoots.containsKey("name") || !subRoots.get("name").contains(this.subRoots.get("name")))) {
-            return false;
-        }
+        return this.isNameSubRootValid(subRoots)
+                && this.isHeldItemSubRootValid(player, subRoots)
+                && this.areCustomSubRootsValid(subRoots);
+    }
+
+    private boolean isNameSubRootValid(Map<String, List<String>> subRoots) {
+        return !subRoots.containsKey("name") || (
+                this.subRoots.containsKey("name") && subRoots.get("name").contains(this.subRoots.get("name"))
+        );
+    }
+
+    private boolean isHeldItemSubRootValid(Player player, Map<String, List<String>> subRoots) {
         if (subRoots.containsKey("holding.item")) {
             ItemStack holding = ServerVersion.getVersion().getVersionId() > 183 ? player.getInventory().getItemInMainHand() : player.getItemInHand();
             if (!(holding.getType().equals(Material.AIR) ? "none" : Services.getItemAsConfigString(holding))
@@ -117,6 +126,10 @@ public class ExecutableQuestResult implements QuestResult {
             }
             return !subRoots.containsKey("holding.amount") || Integer.parseInt(subRoots.get("holding.amount").get(0)) == holding.getAmount();
         }
+        return true;
+    }
+
+    private boolean areCustomSubRootsValid(Map<String, List<String>> subRoots) {
         for (Map.Entry<String, String> subRoot : this.subRoots.entrySet()) {
             String key = subRoot.getKey();
             if (!subRoots.containsKey(key)) { // If the required sub roots does not contain a sub root this quest progression
