@@ -19,7 +19,6 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 public class PlaceholderApiHook extends PlaceholderExpansion {
     private Lang lang;
@@ -63,7 +62,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
                 break;
         }
         if (offlinePlayer == null) {
-            BattlePlugin.logger().log(Level.WARNING, "Could not get placeholder ".concat(placeholder).concat(" (player null)"));
+            BattlePlugin.logger().warning("Could not get placeholder ".concat(placeholder).concat(" (player null)"));
             return "???";
         }
         Optional<User> optionalUser = this.userCache.getSync(offlinePlayer.getUniqueId());

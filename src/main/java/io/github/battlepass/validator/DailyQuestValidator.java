@@ -4,8 +4,6 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.logger.DebugLogger;
 import io.github.battlepass.objects.quests.Quest;
 
-import java.util.logging.Level;
-
 public class DailyQuestValidator {
     private final DebugLogger logger;
 

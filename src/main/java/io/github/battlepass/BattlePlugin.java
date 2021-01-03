@@ -55,7 +55,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class BattlePlugin extends SpigotPlugin {
@@ -341,7 +340,7 @@ public final class BattlePlugin extends SpigotPlugin {
             RegisteredServiceProvider<Economy> ecoProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
             if (ecoProvider != null) {
                 this.economy = ecoProvider.getProvider();
-                Bukkit.getLogger().log(Level.INFO, "[BattlePass] Hooked into vault");
+                Bukkit.getLogger().info("[BattlePass] Hooked into vault");
                 return;
             }
             return;

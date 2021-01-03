@@ -19,7 +19,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
-import java.util.logging.Level;
 
 public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDependent {
     private final DailyQuestReset dailyQuestReset;
@@ -58,9 +57,9 @@ public class DailyQuestsMenu extends PageableConfigMenu<Quest> implements UserDe
                     .tryAddPapi(this.player)))
                     .build();
         } catch (Exception e) {
-            BattlePlugin.logger().log(Level.INFO, "Quest: " + quest);
-            BattlePlugin.logger().log(Level.INFO, "Error whilst building menu item for quest: " + quest.getId() + " category " + quest.getCategoryId() + " name " + quest.getName());
-            BattlePlugin.logger().log(Level.INFO, "Quest Item: " + quest.getItemStack());
+            BattlePlugin.logger().info("Quest: " + quest);
+            BattlePlugin.logger().info("Error whilst building menu item for quest: " + quest.getId() + " category " + quest.getCategoryId() + " name " + quest.getName());
+            BattlePlugin.logger().info("Quest Item: " + quest.getItemStack());
             e.printStackTrace();
             return MenuItem.builderOf(new ItemStack(Material.BARRIER)).build();
         }

@@ -4,8 +4,6 @@ import io.github.battlepass.BattlePlugin;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.util.logging.Level;
-
 public class SoundAction extends Action {
 
     public SoundAction(String condition, String value) {

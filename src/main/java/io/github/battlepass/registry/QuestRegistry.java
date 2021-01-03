@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import java.util.logging.Level;
 
 public class QuestRegistry implements Registry {
     private final BattlePlugin plugin;
@@ -139,7 +138,7 @@ public class QuestRegistry implements Registry {
         if (plugin != null && plugin.isEnabled()) {
             if (!this.isHookDisabled(name) && (author.isEmpty() || plugin.getDescription().getAuthors().contains(author))) {
                 this.manager.registerEvents(instantiator.init(this.plugin), this.plugin);
-                BattlePlugin.logger().log(Level.INFO, "Hooked into ".concat(name));
+                BattlePlugin.logger().info("Hooked into ".concat(name));
                 this.registeredHooks.add(name);
             }
             return true;
@@ -164,13 +163,13 @@ public class QuestRegistry implements Registry {
         if (plugin != null && plugin.isEnabled()) {
             if (!this.isHookDisabled(name) && (author.isEmpty() || plugin.getDescription().getAuthors().contains(author))) {
                 double version = this.extractVersion(plugin);
-                BattlePlugin.logger().log(Level.INFO, "Using internal version as " + version + " for loading " + name + ".");
+                BattlePlugin.logger().info("Using internal version as " + version + " for loading " + name + ".");
                 if (versionPredicate.test(version)) {
                     this.manager.registerEvents(instantiator.init(this.plugin), this.plugin);
-                    BattlePlugin.logger().log(Level.INFO, "Hooked into ".concat(name));
+                    BattlePlugin.logger().info("Hooked into ".concat(name));
                     this.registeredHooks.add(name);
                 } else {
-                    BattlePlugin.logger().log(Level.INFO, name.concat(" was present but its version is not supported."));
+                    BattlePlugin.logger().info(name.concat(" was present but its version is not supported."));
                 }
             }
             return true;

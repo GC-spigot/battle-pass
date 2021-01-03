@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 
 import java.math.BigInteger;
 import java.util.Set;
-import java.util.logging.Level;
 
 public class PlaceholderApiQuests extends ExternalQuestExecutor {
     private final BattlePlugin plugin;
@@ -35,7 +34,7 @@ public class PlaceholderApiQuests extends ExternalQuestExecutor {
                 logger.log(LogContainer.of("(PlaceholderAPI Quests) Adding placeholderapi match quest with placeholder ".concat(toAdd)));
                 this.matchPlaceholders.add(toAdd);
             } else {
-                BattlePlugin.logger().log(Level.WARNING, "Failed to parse PlaceholderAPI quest variable: ".concat(placeholder));
+                BattlePlugin.logger().warning("Failed to parse PlaceholderAPI quest variable: ".concat(placeholder));
             }
         }
         this.placeholderRun();

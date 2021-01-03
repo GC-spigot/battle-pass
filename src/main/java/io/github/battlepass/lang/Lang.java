@@ -11,7 +11,6 @@ import org.bukkit.command.CommandSender;
 
 import java.math.BigInteger;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class Lang {
     private final BattlePlugin plugin;
@@ -97,11 +96,11 @@ public class Lang {
     public LangSub external(String id, Replace replace) {
         Object requested = this.externalLang.get(id);
         if (requested == null) {
-            BattlePlugin.logger().log(Level.INFO, "^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
-            BattlePlugin.logger().log(Level.INFO, " ");
-            BattlePlugin.logger().log(Level.INFO, "Missing the configuration value '".concat(id).concat("', located in the file 'lang.yml'"));
-            BattlePlugin.logger().log(Level.INFO, " ");
-            BattlePlugin.logger().log(Level.INFO, "^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
+            BattlePlugin.logger().info("^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
+            BattlePlugin.logger().info(" ");
+            BattlePlugin.logger().info("Missing the configuration value '".concat(id).concat("', located in the file 'lang.yml'"));
+            BattlePlugin.logger().info(" ");
+            BattlePlugin.logger().info("^^^^^^^^^^ -[BattlePass]- ^^^^^^^^^^");
             return null;
         }
         return new LangSub(Text.modify(String.valueOf(requested), replace));

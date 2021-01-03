@@ -7,7 +7,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class QuestValidator {
