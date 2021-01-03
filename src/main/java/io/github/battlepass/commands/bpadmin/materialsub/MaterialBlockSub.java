@@ -20,7 +20,7 @@ public class MaterialBlockSub extends SubCommand<Player> {
     @Override
     public void onExecute(Player sender, String[] args) {
         Block targetBlock = this.getBlockAtEyes(sender);
-        Text.sendMessage(sender, "&eName of block you are looking at: " + targetBlock.getType().toString() + ":" + targetBlock.getData());
+        Text.sendMessage(sender, "&eName of block you are looking at: " + targetBlock.getType().toString().toLowerCase() + ":" + targetBlock.getData());
     }
 
     private Block getBlockAtEyes(Player player) {

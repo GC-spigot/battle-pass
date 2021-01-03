@@ -1,5 +1,6 @@
 package io.github.battlepass.commands.bpadmin.materialsub;
 
+import io.github.battlepass.service.Services;
 import me.hyfe.simplespigot.command.command.SubCommand;
 import me.hyfe.simplespigot.plugin.SimplePlugin;
 import me.hyfe.simplespigot.text.Text;
@@ -19,6 +20,6 @@ public class MaterialItemSub extends SubCommand<Player> {
     @Override
     public void onExecute(Player sender, String[] args) {
         ItemStack itemInHand = ServerVersion.isOver_V1_12() ? sender.getInventory().getItemInMainHand() : sender.getItemInHand();
-        Text.sendMessage(sender, "&eName of item in hand: ".concat(itemInHand.getType().toString()).concat(":").concat(String.valueOf(itemInHand.getData().getData())));
+        Text.sendMessage(sender, "&eName of item in hand: ".concat(Services.getItemAsConfigString(itemInHand)));
     }
 }

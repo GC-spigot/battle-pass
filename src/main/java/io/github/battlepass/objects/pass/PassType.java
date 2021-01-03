@@ -101,11 +101,16 @@ public class PassType {
         if (tierItem != null && !tierItem.getType().equals(Material.DIRT)) {
             itemStack = tierItem;
         }
+        this.updateLore(rewardCache, tier, itemStack);
+        return itemStack;
+    }
+
+    private void updateLore(RewardCache rewardCache, Tier tier, ItemStack itemStack) {
         if (itemStack.getItemMeta() == null || itemStack.getItemMeta().getLore() == null) {
-            return itemStack;
+            return;
         }
-        List<String> updatedLore = Lists.newArrayList();
         ItemMeta itemMeta = itemStack.getItemMeta();
+        List<String> updatedLore = Lists.newArrayList();
         for (String line : itemMeta.getLore()) {
             if (line.contains("%lore_addon%")) {
                 for (String rewardId : tier.getRewardIds()) {
@@ -117,6 +122,5 @@ public class PassType {
         }
         itemMeta.setLore(updatedLore);
         itemStack.setItemMeta(itemMeta);
-        return itemStack;
     }
 }

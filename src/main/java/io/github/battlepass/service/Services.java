@@ -7,6 +7,7 @@ import me.hyfe.simplespigot.version.ServerVersion;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -71,5 +72,9 @@ public class Services {
             progressBar = progressBar.concat(lang.external("progress-bar.symbol").asString());
         }
         return progressBar;
+    }
+
+    public static String getItemAsConfigString(ItemStack itemStack) {
+        return itemStack.getType().toString().toLowerCase() + ":" + itemStack.getData().getData();
     }
 }

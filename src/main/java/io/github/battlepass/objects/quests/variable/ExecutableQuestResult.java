@@ -1,6 +1,7 @@
 package io.github.battlepass.objects.quests.variable;
 
 import com.google.common.collect.Maps;
+import io.github.battlepass.service.Services;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
 import me.hyfe.simplespigot.version.ServerVersion;
 import org.bukkit.Material;
@@ -106,7 +107,7 @@ public class ExecutableQuestResult implements QuestResult {
         }
         if (subRoots.containsKey("holding.item")) {
             ItemStack holding = ServerVersion.getVersion().getVersionId() > 183 ? player.getInventory().getItemInMainHand() : player.getItemInHand();
-            if (!(holding.getType().equals(Material.AIR) ? "none" : holding.getType().toString().toLowerCase().concat(":").concat(Byte.toString(holding.getData().getData())))
+            if (!(holding.getType().equals(Material.AIR) ? "none" : Services.getItemAsConfigString(holding))
                     .equalsIgnoreCase(subRoots.get("holding.item").get(0))) {
                 return false;
             }
