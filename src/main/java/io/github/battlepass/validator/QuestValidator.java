@@ -15,42 +15,75 @@ public class QuestValidator {
 
     public boolean checkQuest(Quest quest, AtomicInteger failCounter) {
         String prefix = "[Quest Validator] You have a broken quest. ";
+        if (this.checkQuest(prefix, quest, failCounter)) {
+            return false;
+        }
+        prefix += " Category: " + quest.getCategoryId() + " | ID: " + quest.getId() + " | ";
+        return !(
+                this.checkName(prefix, quest, failCounter)
+                        || this.checkType(prefix, quest, failCounter)
+                        || this.checkRequiredProgress(prefix, quest, failCounter)
+                        || this.checkPoints(prefix, quest, failCounter)
+                        || this.checkItemStack(prefix, quest, failCounter)
+        );
+    }
+
+    private boolean checkQuest(String prefix, Quest quest, AtomicInteger counter) {
         if (quest == null) {
-            this.logger.log(Level.SEVERE, prefix.concat("Quest itself is null."));
-            return false;
+            this.logger.severe(prefix.concat("Quest itself is null."));
+            counter.getAndIncrement();
+            return true;
         }
-        String categoryId = quest.getCategoryId();
-        String id = quest.getId();
-        if (categoryId == null || id == null || categoryId.isEmpty() || id.isEmpty()) {
-            this.logger.log(Level.SEVERE, prefix.concat("(issue with category or quest ID.)"));
-            return false;
-        }
-        prefix = prefix.concat(" Category: ").concat(categoryId).concat(" | ID: ").concat(id).concat(" | ");
-        if (quest.getName() == null || quest.getName().isEmpty()) {
+        return false;
+    }
+
+    private boolean checkName(String prefix, Quest quest, AtomicInteger counter) {
+        if (quest.getName() == null || quest.getName().replace(" ", "").isEmpty()) {
             this.log(prefix.concat("This quest has no name."));
-            return false;
+            counter.getAndIncrement();
+            return true;
         }
-        if (quest.getType() == null || quest.getType().isEmpty()) {
+        return false;
+    }
+
+    private boolean checkType(String prefix, Quest quest, AtomicInteger counter) {
+        if (quest.getType() == null || quest.getType().replace(" ", "").isEmpty()) {
             this.log(prefix.concat("This quest has no type (e.g block-break or block-place)."));
-            return false;
+            counter.getAndIncrement();
+            return true;
         }
+        return false;
+    }
+
+    private boolean checkRequiredProgress(String prefix, Quest quest, AtomicInteger counter) {
         if (quest.getRequiredProgress().compareTo(BigInteger.ONE) < 0) {
             this.log(prefix.concat("This quest's progress is not set or is lower than 1."));
-            return false;
+            counter.getAndIncrement();
+            return true;
         }
+        return false;
+    }
+
+    private boolean checkPoints(String prefix, Quest quest, AtomicInteger counter) {
         if (quest.getPoints() < 1) {
             this.log(prefix.concat("This quest's points reward is not set or is lower than one."));
-            return false;
+            counter.getAndIncrement();
+            return true;
         }
+        return false;
+    }
+
+    private boolean checkItemStack(String prefix, Quest quest, AtomicInteger counter) {
         if (quest.getItemStack() == null) {
             this.log(prefix.concat("This quest's item is not present or is broken."));
             quest.setItemStack(new ItemStack(Material.BARRIER));
-            failCounter.getAndIncrement();
+            counter.getAndIncrement();
+            return true;
         }
-        return true;
+        return false;
     }
 
     private void log(String message) {
-        this.logger.log(Level.WARNING, message);
+        this.logger.warning(message);
     }
 }

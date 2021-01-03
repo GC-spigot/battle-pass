@@ -20,7 +20,7 @@ public class MaterialBlockSub extends SubCommand<Player> {
     @Override
     public void onExecute(Player sender, String[] args) {
         Block targetBlock = this.getBlockAtEyes(sender);
-        Text.sendMessage(sender, "&eName of block you are looking at: ".concat(targetBlock.getType().toString()).concat(":").concat(String.valueOf(targetBlock.getData())));
+        Text.sendMessage(sender, "&eName of block you are looking at: " + targetBlock.getType().toString() + ":" + targetBlock.getData());
     }
 
     private Block getBlockAtEyes(Player player) {
@@ -28,10 +28,9 @@ public class MaterialBlockSub extends SubCommand<Player> {
         Block lastBlock = blockIterator.next();
         while (blockIterator.hasNext()) {
             lastBlock = blockIterator.next();
-            if (lastBlock.getType().equals(Material.AIR)) {
-                continue;
+            if (!lastBlock.getType().equals(Material.AIR)) {
+                return lastBlock;
             }
-            break;
         }
         return lastBlock;
     }

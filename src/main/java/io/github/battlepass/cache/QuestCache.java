@@ -3,6 +3,7 @@ package io.github.battlepass.cache;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
+import io.github.battlepass.enums.Category;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.quests.variable.Variable;
 import io.github.battlepass.validator.QuestValidator;
@@ -10,7 +11,6 @@ import lombok.SneakyThrows;
 import me.hyfe.simplespigot.cache.SimpleCache;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.item.SpigotItem;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -88,26 +88,17 @@ public class QuestCache extends SimpleCache<String, Map<String, Quest>> {
             for (String key : questsConfig.keys("quests", false)) {
                 Quest quest = this.parseSection(questsConfig, key, id, "quests.".concat(key).concat("."));
                 if (!this.questValidator.checkQuest(quest, failureCounter)) {
-                    failureCounter.incrementAndGet();
                     continue;
                 }
                 if (quest.getType().startsWith("placeholderapi_")) { // PlaceholderAPI quest
-                    placeholderTypes.add(quest.getType());
+                    this.placeholderTypes.add(quest.getType());
                 }
                 this.getQuests(id).put(key, quest);
                 if (id.contains("week")) {
                     this.weeklyQuests.add(quest);
                 }
             }
-            if (id.contains("week")) {
-                String strippedId = id.replaceAll("[^0-9]", "");
-                if (StringUtils.isNumeric(strippedId)) {
-                    int numericValue = Integer.parseInt(strippedId);
-                    if (this.maxWeek < numericValue) {
-                        this.maxWeek = numericValue;
-                    }
-                }
-            }
+            this.maxWeek = Math.max(this.maxWeek, Category.stripWeek(id));
             BattlePlugin.logger().info("Finished loading the " + id + " quests. ".concat(failureCounter.intValue() == 0 ? "All quests loaded successfully."
                     : failureCounter.toString() + " quests failed to load. See the console for more info."));
         }

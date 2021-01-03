@@ -34,7 +34,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
 
     public PlaceholderApiHook(BattlePlugin plugin) {
         this.setClassValues(plugin);
-        BattlePlugin.logger().log(Level.FINE, "Register PlaceholderAPI placeholders");
+        BattlePlugin.logger().info("Register PlaceholderAPI placeholders");
     }
 
     @Override
@@ -90,7 +90,7 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
                 break;
         }
         if (placeholder.startsWith("completed_quests_")) {
-            String category = placeholder.replace("completed_quests_", "").replace(" ", "");
+            String category = placeholder.substring(17).replace(" ", "");
             if (category.isEmpty()) {
                 return "category empty";
             }

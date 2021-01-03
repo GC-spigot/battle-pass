@@ -23,7 +23,7 @@ public class SoundAction extends Action {
                 volume = Float.parseFloat(splitValue[1]);
                 pitch = splitValue.length == 3 ? Integer.parseInt(splitValue[2]) : 1;
             } catch (NumberFormatException ex) {
-                BattlePlugin.logger().log(Level.SEVERE, "Incorrect sound format. Must me specified as such: NAME:volume:pitch.");
+                BattlePlugin.logger().severe("Incorrect sound format. Must me specified as such: NAME:volume:pitch.");
             }
         }
         player.playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
