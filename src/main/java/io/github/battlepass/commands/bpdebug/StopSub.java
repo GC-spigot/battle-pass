@@ -13,7 +13,7 @@ public class StopSub extends BpSubCommand<CommandSender> {
         this.logger = plugin.getDebugLogger();
 
         this.inheritPermission();
-        this.addFlat("start");
+        this.addFlat("stop");
     }
 
     @Override

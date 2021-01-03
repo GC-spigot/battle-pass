@@ -1,14 +1,14 @@
-package io.github.battlepass.commands.bpa;
+package io.github.battlepass.commands.bpadmin;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.commands.bpa.balance.GiveBalanceSub;
-import io.github.battlepass.commands.bpa.balance.RemoveBalanceSub;
-import io.github.battlepass.commands.bpa.balance.SetBalanceSub;
-import io.github.battlepass.commands.bpa.materialsub.MaterialBlockSub;
-import io.github.battlepass.commands.bpa.materialsub.MaterialItemSub;
-import io.github.battlepass.commands.bpa.setpass.SetPassAllSub;
-import io.github.battlepass.commands.bpa.setpass.SetPassOnlineSub;
-import io.github.battlepass.commands.bpa.setpass.SetPassSub;
+import io.github.battlepass.commands.bpadmin.balance.GiveBalanceSub;
+import io.github.battlepass.commands.bpadmin.balance.RemoveBalanceSub;
+import io.github.battlepass.commands.bpadmin.balance.SetBalanceSub;
+import io.github.battlepass.commands.bpadmin.materialsub.MaterialBlockSub;
+import io.github.battlepass.commands.bpadmin.materialsub.MaterialItemSub;
+import io.github.battlepass.commands.bpadmin.setpass.SetPassAllSub;
+import io.github.battlepass.commands.bpadmin.setpass.SetPassOnlineSub;
+import io.github.battlepass.commands.bpadmin.setpass.SetPassSub;
 import me.hyfe.simplespigot.command.command.SimpleCommand;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.text.Text;

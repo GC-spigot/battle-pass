@@ -1,4 +1,4 @@
-package io.github.battlepass.commands.bpa.materialsub;
+package io.github.battlepass.commands.bpadmin.materialsub;
 
 import me.hyfe.simplespigot.command.command.SubCommand;
 import me.hyfe.simplespigot.plugin.SimplePlugin;

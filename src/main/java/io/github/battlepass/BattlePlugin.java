@@ -15,7 +15,7 @@ import io.github.battlepass.cache.listener.ConnectionListener;
 import io.github.battlepass.cache.listener.UserLoadListener;
 import io.github.battlepass.commands.AliasesListener;
 import io.github.battlepass.commands.bp.BpCommand;
-import io.github.battlepass.commands.bpa.BpaCommand;
+import io.github.battlepass.commands.bpadmin.BpaCommand;
 import io.github.battlepass.commands.bpdebug.BpDebugCommand;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.controller.UserController;

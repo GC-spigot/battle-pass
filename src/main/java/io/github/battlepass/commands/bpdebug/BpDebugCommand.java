@@ -23,14 +23,14 @@ public class BpDebugCommand extends SimpleCommand<CommandSender> {
     public void onExecute(CommandSender sender, String[] args) {
         Text.sendMessage(sender, ("\n"
                 + "\n&bBattlePass Debug Help:\n"
-                + "/bpdebug - This page."
-                + "/bpdebug create - Creates a debug dump."
-                + "/bpdebug create <player> - Creates a debug dump for a specific player."
-                + "/bpdebug start - Starts logging actions."
-                + "/bpdebug stop - Stops logging actions."
-                + "/bpdebug clear - ?.")
+                + "/bpd - This page."
+                + "/bpd start - Starts logging actions."
+                + "/bpd stop - Stops logging actions."
+                + "/bpd create - Creates a debug dump."
+                + "/bpd create <player> - Creates a debug dump for a specific player."
+                + "/bpd clear - Clears the current log.")
                 .replace("- ", "&8- &7")
-                .replace("/bpa", "&e/bpa")
+                .replace("/bpd", "&e/bpd")
                 .replace(".", ".\n"));
     }
 }

@@ -1,4 +1,4 @@
-package io.github.battlepass.commands.bpa;
+package io.github.battlepass.commands.bpadmin;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.BattlePassApi;
@@ -8,19 +8,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.math.BigInteger;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class SetPointsSub extends BpSubCommand<CommandSender> {
+public class GivePointsSub extends BpSubCommand<CommandSender> {
     private final BattlePassApi api;
 
-    public SetPointsSub(BattlePlugin plugin) {
+    public GivePointsSub(BattlePlugin plugin) {
         super(plugin, true);
         this.api = plugin.getLocalApi();
 
         this.inheritPermission();
-        this.addFlats("set", "points");
+        this.addFlats("give", "points");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()
                 .stream()
                 .map(Player::getName)
@@ -37,9 +36,7 @@ public class SetPointsSub extends BpSubCommand<CommandSender> {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
             return;
         }
-        User user = maybeUser.get();
-        user.updatePoints(current -> BigInteger.valueOf(points));
-        this.api.updateUserTier(user);
-        this.lang.local("successful-set-points", args[2], points).to(sender);
+        this.api.givePoints(maybeUser.get(), points);
+        this.lang.local("successful-give-points", args[2], points).to(sender);
     }
 }

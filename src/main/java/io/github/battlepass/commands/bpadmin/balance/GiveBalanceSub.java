@@ -1,4 +1,4 @@
-package io.github.battlepass.commands.bpa.balance;
+package io.github.battlepass.commands.bpadmin.balance;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.commands.BpSubCommand;
@@ -11,13 +11,13 @@ import java.math.BigInteger;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class SetBalanceSub extends BpSubCommand<CommandSender> {
+public class GiveBalanceSub extends BpSubCommand<CommandSender> {
 
-    public SetBalanceSub(BattlePlugin plugin) {
+    public GiveBalanceSub(BattlePlugin plugin) {
         super(plugin);
         this.inheritPermission();
 
-        this.addFlats("set");
+        this.addFlat("give");
         this.addFlatWithAliases("balance", "bal", "currency");
         this.addArgument(User.class, "player", sender -> Bukkit.getOnlinePlayers()
                 .stream()
@@ -36,10 +36,10 @@ public class SetBalanceSub extends BpSubCommand<CommandSender> {
         User user = maybeUser.get();
         BigInteger amount = this.parseArgument(args, 3);
         if (amount == null) {
-            this.lang.local("invalid-number-input").to(sender);
+            this.lang.local("invalid-number-input");
             return;
         }
-        this.lang.local("set-user-balance").to(sender);
-        user.updateCurrency(current -> amount);
+        this.lang.local("given-user-balance").to(sender);
+        user.updateCurrency(current -> current.add(amount));
     }
 }

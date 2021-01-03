@@ -1,4 +1,4 @@
-package io.github.battlepass.commands.bpa;
+package io.github.battlepass.commands.bpadmin;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.events.user.UserLoadEvent;
