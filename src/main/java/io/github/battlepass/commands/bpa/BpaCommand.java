@@ -4,8 +4,6 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.commands.bpa.balance.GiveBalanceSub;
 import io.github.battlepass.commands.bpa.balance.RemoveBalanceSub;
 import io.github.battlepass.commands.bpa.balance.SetBalanceSub;
-import io.github.battlepass.commands.bpa.debugger.DebugDumpSub;
-import io.github.battlepass.commands.bpa.debugger.PlayerDebugDumpSub;
 import io.github.battlepass.commands.bpa.materialsub.MaterialBlockSub;
 import io.github.battlepass.commands.bpa.materialsub.MaterialItemSub;
 import io.github.battlepass.commands.bpa.setpass.SetPassAllSub;
@@ -29,8 +27,6 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                 new GiveBalanceSub(plugin),
                 new RemoveBalanceSub(plugin),
                 new SetBalanceSub(plugin),
-                new DebugDumpSub(plugin),
-                new PlayerDebugDumpSub(plugin),
                 new MaterialBlockSub(plugin),
                 new MaterialItemSub(plugin),
                 new SetPassAllSub(plugin),

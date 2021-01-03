@@ -16,6 +16,7 @@ import io.github.battlepass.cache.listener.UserLoadListener;
 import io.github.battlepass.commands.AliasesListener;
 import io.github.battlepass.commands.bp.BpCommand;
 import io.github.battlepass.commands.bpa.BpaCommand;
+import io.github.battlepass.commands.bpdebug.BpDebugCommand;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.controller.UserController;
 import io.github.battlepass.lang.Lang;
@@ -297,7 +298,8 @@ public final class BattlePlugin extends SpigotPlugin {
             this.getCommandBase().getCommands().clear();
             this.registerCommands(
                     new BpaCommand(this),
-                    new BpCommand(this)
+                    new BpCommand(this),
+                    new BpDebugCommand(this)
             );
         });
     }

@@ -47,6 +47,11 @@ public class Lang {
         this.localLang.put("target-user-data-deleted", "&cYour quest data has been wiped.");
         this.localLang.put("user-data-deleted-null-player", "&cUser data deleted.");
         this.localLang.put("debug-dumped", "&cDumped the debug information to a file called %s");
+        this.localLang.put("debug-start", "&aDebugger started.");
+        this.localLang.put("debug-stop", "&cDebugger stopped.");
+        this.localLang.put("debug-not-running", "&cThe debugger is not running.");
+        this.localLang.put("debug-already-running", "&cThe debugger is already running.");
+        this.localLang.put("debug-cleared", "&aThe debugger has been cleared.");
         this.localLang.put("cooldown-has-seconds", "&cPlease wait %s seconds before using this again.");
         this.localLang.put("confirm-new-season", "&cType the command again within 30 seconds to confirm this action. This command can be destructive, read the wiki first.");
         this.localLang.put("new-season-reset", "&cReset user tiers, points, quest progress and pending rewards.");

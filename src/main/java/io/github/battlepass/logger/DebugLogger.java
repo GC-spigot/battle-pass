@@ -151,4 +151,8 @@ public class DebugLogger {
     public boolean isEnabled() {
         return this.enabled;
     }
+
+    public void clear() {
+        this.backlog.clear();
+    }
 }

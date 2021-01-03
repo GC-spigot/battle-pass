@@ -1,24 +1,28 @@
-package io.github.battlepass.commands.bpa.debugger;
+package io.github.battlepass.commands.bpdebug;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.logger.DebugLogger;
 import org.bukkit.command.CommandSender;
 
-public class DebugDumpSub extends BpSubCommand<CommandSender> {
+public class StartSub extends BpSubCommand<CommandSender> {
     private final DebugLogger logger;
 
-    public DebugDumpSub(BattlePlugin plugin) {
+    public StartSub(BattlePlugin plugin) {
         super(plugin, true);
         this.logger = plugin.getDebugLogger();
 
         this.inheritPermission();
-        this.addFlats("debug", "dump");
+        this.addFlat("start");
     }
 
     @Override
     public void onExecute(CommandSender sender, String[] args) {
-        String fileName = this.logger.dump(null);
-        this.lang.local("debug-dumped", fileName).to(sender);
+        if (this.logger.isEnabled()) {
+            this.lang.local("debug-already-running").to(sender);
+            return;
+        }
+        this.logger.setEnabled(true);
+        this.lang.local("debug-start").to(sender);
     }
 }
