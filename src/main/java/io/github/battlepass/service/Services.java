@@ -77,4 +77,17 @@ public class Services {
     public static String getItemAsConfigString(ItemStack itemStack) {
         return itemStack.getType().toString().toLowerCase() + ":" + itemStack.getData().getData();
     }
+
+    public static int getEmptySlotCountInInventory(Player player) {
+        if (player.getInventory().firstEmpty() == -1) {
+            return 0;
+        }
+        int emptySlots = 0;
+        for (int i = 0; i < 36; i++) {
+            if (player.getInventory().getItem(i) == null) {
+                emptySlots++;
+            }
+        }
+        return emptySlots;
+    }
 }

@@ -3,6 +3,7 @@ package io.github.battlepass.quests.quests.internal;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.service.Services;
 import me.hyfe.simplespigot.version.MultiMaterial;
 import me.hyfe.simplespigot.version.ServerVersion;
 import org.bukkit.enchantments.Enchantment;
@@ -63,16 +64,21 @@ public class EnchantQuests extends QuestExecutor {
                 event.getSlotType() != InventoryType.SlotType.RESULT || event.getClick() == ClickType.MIDDLE) {
             return;
         }
+        Player player = (Player) event.getWhoClicked();
 
         AnvilInventory inventory = (AnvilInventory) event.getInventory();
         ItemStack book = inventory.getItem(1);
-        if (book == null || book.getType() != MultiMaterial.ENCHANTED_BOOK.getMaterial()) {
+        if (book == null || book.getType() != MultiMaterial.ENCHANTED_BOOK.getMaterial() || (
+                (event.getClick().toString().contains("SHIFT") && Services.getEmptySlotCountInInventory(player) < 1)) // If they don't shift, they pick up the item so they don't need inv space
+        ) {
             return;
         }
+        ItemStack enchantedItem = event.getCurrentItem();
         for (Map.Entry<Enchantment, Integer> entry : ((EnchantmentStorageMeta) book.getItemMeta()).getStoredEnchants().entrySet()) {
             String enchantName = this.getEnchantName(entry.getKey());
             UnaryOperator<QuestResult> resultOperator = result -> {
                 result.subRoot("level", String.valueOf(entry.getValue()));
+                result.subRoot(enchantedItem);
                 return result.root(enchantName);
             };
 
