@@ -66,7 +66,7 @@ public class Variable {
             }
             for (String subRoot : config.keys(section.concat("variable"), false)) {
                 if (!subRoot.equalsIgnoreCase("root") && !subRoot.equalsIgnoreCase("holding")) {
-                    consumer.accept(subRoot, () -> config.string(section + "variable." + subRoot));
+                    consumer.accept(subRoot, () -> config.forcedString(section + "variable." + subRoot));
                 }
             }
             return new Variable(root, subRoots);
