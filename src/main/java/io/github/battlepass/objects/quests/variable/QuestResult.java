@@ -25,4 +25,6 @@ public interface QuestResult {
     String getEffectiveRoot();
 
     Map<String, String> getSubRoots();
+
+    String toString();
 }

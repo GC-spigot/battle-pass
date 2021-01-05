@@ -40,7 +40,7 @@ public class QuestPipeline {
             this.logger.log(LogContainer.of("(PIPELINE) Player %battlepass-player% is blocked from the battlepass so dropping them.", player));
             return;
         }
-        this.logger.log(LogContainer.of("(PIPELINE) Quest type " + name + " for player %battlepass-player% has entered the pipeline. Root: " + questResult.getEffectiveRoot(), player));
+        this.logger.log(LogContainer.of("(PIPELINE) Type " + name + " for %battlepass-player% entered. " + questResult, player));
         this.userCache.get(player.getUniqueId()).thenAccept(maybeUser -> maybeUser.ifPresent(user -> {
             this.questValidationStep.processCompletion(player, user, name, progress, questResult, this.questCache.getAllQuests(), overrideUpdate);
         })).exceptionally(ex -> {

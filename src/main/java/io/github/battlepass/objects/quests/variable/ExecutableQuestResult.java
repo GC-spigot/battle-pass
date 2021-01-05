@@ -144,4 +144,19 @@ public class ExecutableQuestResult implements QuestResult {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        if (this.material == null) {
+            return "ExecutableQuestResult{" +
+                    "root='" + this.root + '\'' +
+                    ", subRoots=" + this.subRoots +
+                    '}';
+        }
+
+        return "ExecutableQuestResult{" +
+                "root='" + this.material + ":" + this.data + '\'' +
+                ", subRoots=" + this.subRoots +
+                '}';
+    }
 }

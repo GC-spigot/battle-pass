@@ -160,13 +160,11 @@ public class QuestValidationStep {
 
     private boolean isPreviousWeekBlocked(User user, int week) {
         int previousWeek = week - 1;
-        if (previousWeek > 1) {
-            while (previousWeek > 0) {
-                if (!this.controller.isWeekDone(user, previousWeek)) {
-                    return true;
-                }
-                previousWeek--;
+        while (previousWeek > 0) {
+            if (!this.controller.isWeekDone(user, previousWeek)) {
+                return true;
             }
+            previousWeek--;
         }
         return false;
     }
