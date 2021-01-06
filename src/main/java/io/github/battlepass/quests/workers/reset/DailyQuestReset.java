@@ -1,6 +1,6 @@
 package io.github.battlepass.quests.workers.reset;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.api.events.server.DailyQuestsRefreshEvent;
@@ -40,6 +40,8 @@ public class DailyQuestReset {
     protected final UserCache userCache;
     protected Set<Quest> currentQuests;
     protected Set<Quest> permanentQuests;
+    // All quests with permanent removed
+    protected List<Quest> availableQuests;
 
     public DailyQuestReset(BattlePlugin plugin, Set<Quest> currentQuests) {
         DailyQuestValidator validator = plugin.getDailyQuestValidator();
@@ -57,6 +59,9 @@ public class DailyQuestReset {
                 .map(id -> this.questCache.getQuest(Category.DAILY.id(), id))
                 .filter(validator::checkQuest)
                 .collect(Collectors.toSet());
+        this.availableQuests = this.questCache.getQuests(Category.DAILY.id()).values().stream()
+                .filter(quest -> !this.permanentQuests.contains(quest))
+                .collect(Collectors.toList());
     }
 
     public Set<Quest> getCurrentQuests() {
@@ -90,12 +95,11 @@ public class DailyQuestReset {
             return;
         }
         this.userCache.asyncModifyAll(user -> user.getQuestStore().asMap().put(Category.DAILY.id(), new ConcurrentHashMap<>()));
-        this.currentQuests = this.permanentQuests;
-        int max = Math.min(this.questCache.getQuests(Category.DAILY.id()).size(), this.amount) - this.permanentQuests.size();
+        this.currentQuests = Sets.newHashSet(this.permanentQuests);
+        int max = Math.min(this.availableQuests.size(), this.amount - this.permanentQuests.size());
         int iterations = 0;
-        List<Quest> allQuests = Lists.newArrayList(this.questCache.getQuests(Category.DAILY.id()).values());
-        Collections.shuffle(allQuests);
-        for (Quest quest : allQuests) {
+        Collections.shuffle(this.availableQuests);
+        for (Quest quest : this.availableQuests) {
             if (iterations >= max) {
                 break;
             }
