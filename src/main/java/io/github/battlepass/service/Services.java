@@ -6,6 +6,7 @@ import me.hyfe.simplespigot.text.Text;
 import me.hyfe.simplespigot.version.ServerVersion;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -84,7 +85,8 @@ public class Services {
         }
         int emptySlots = 0;
         for (int i = 0; i < 36; i++) {
-            if (player.getInventory().getItem(i) == null) {
+            ItemStack item = player.getInventory().getItem(i);
+            if (item == null || item.getType().equals(Material.AIR)) {
                 emptySlots++;
             }
         }

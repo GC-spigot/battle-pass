@@ -46,7 +46,8 @@ public class CraftQuest extends QuestExecutor {
             if (checkItem.getMaxStackSize() == 1) {
                 int emptySlots = 0;
                 for (int i = 0; i < 36; i++) {
-                    if (player.getInventory().getItem(i) == null) {
+                    ItemStack item = player.getInventory().getItem(i);
+                    if (item == null || item.getType().equals(Material.AIR)) {
                         emptySlots++;
                     }
                 }
