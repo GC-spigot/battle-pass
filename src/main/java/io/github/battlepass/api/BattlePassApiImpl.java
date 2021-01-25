@@ -141,6 +141,9 @@ public class BattlePassApiImpl implements BattlePassApi {
 
     @Override
     public int getRequiredPoints(int tier, String passId) {
+        if (this.useImprovedTierPoints) {
+            tier += 1;
+        }
         PassType passType = this.passLoader.getPassTypes().get(passId);
         Tier tierObject = passType.getTiers().get(tier);
         return tierObject == null ? passType.getDefaultPointsRequired() : tierObject.getRequiredPoints();
@@ -156,11 +159,12 @@ public class BattlePassApiImpl implements BattlePassApi {
         user.updatePoints(current -> current.add(BigInteger.valueOf(points)));
         this.updateUserTier(user);
     }
+    
     @Override
     public void updateUserTier(User user) {
         int maxTier = this.passLoader.getMaxTier();
         for (int tier = user.getTier() + 1; tier <= maxTier; tier++) {
-            int required = this.getRequiredPoints(this.useImprovedTierPoints ? user.getTier() + 1 : user.getTier(), user.getPassId());
+            int required = this.getRequiredPoints(user.getTier(), user.getPassId());
             if (user.getPoints().compareTo(BigInteger.valueOf(required)) >= 0) {
                 user.updatePoints(current -> current.subtract(BigInteger.valueOf(required)));
                 Bukkit.getPluginManager().callEvent(new UserTierUpEvent(user, tier));
