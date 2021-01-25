@@ -9,3 +9,4 @@
 .gradle
 
 *.iml
+spigot-build.json
