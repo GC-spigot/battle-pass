@@ -19,7 +19,7 @@ public class StrikePracticeQuests extends ExternalQuestExecutor {
             return;
         }
         Player player = (Player) event.getHost();
-        String eventName = event.getEventName();
+        String eventName = event.getPvPEventName().toLowerCase();
 
         this.execute("host_events", player, result -> result.root(eventName));
     }
