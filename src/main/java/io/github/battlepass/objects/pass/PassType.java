@@ -8,6 +8,7 @@ import io.github.battlepass.objects.user.User;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.item.SpigotItem;
 import me.hyfe.simplespigot.text.Text;
+import me.hyfe.simplespigot.text.replacer.Replace;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -88,15 +89,17 @@ public class PassType {
     public ItemStack tierToItem(RewardCache rewardCache, User user, String passId, Tier tier, boolean hasTier) {
         boolean hasPass = user.hasPassId(passId) && (passId.equals("premium") || user.getPassId().equals("free") || !this.config.bool("dont-give-premium-free-rewards")); // Second part is to allow for premium rewards only
         boolean hasClaimed = user.getPendingTiers(passId) != null && !user.getPendingTiers(passId).contains(tier.getTier());
+        Replace replace = replacer -> replacer.set("tier", tier.getTier())
+                .set("points", user.getPoints())
+                .set("required_points", tier.getRequiredPoints());
         String itemKey;
         ItemStack itemStack;
         if (this.config.has("items.".concat("doesnt-have-pass-item"))) {
             itemKey = hasPass ? (hasTier ? (hasClaimed ? "claimed-tier-item" : "unlocked-tier-item") : "locked-tier-item") : "doesnt-have-pass-item";
-            itemStack = SpigotItem.toItem(this.config, "items.".concat(itemKey), replacer -> replacer.set("tier", tier.getTier()));
         } else {
             itemKey = hasTier ? (hasClaimed ? "claimed-tier-item" : "unlocked-tier-item") : "locked-tier-item";
-            itemStack = SpigotItem.toItem(this.config, "items.".concat(itemKey), replacer -> replacer.set("tier", tier.getTier()));
         }
+        itemStack = SpigotItem.toItem(this.config, "items.".concat(itemKey), replace);
         ItemStack tierItem = tier.getItem(itemKey);
         if (tierItem != null && !tierItem.getType().equals(Material.DIRT)) {
             itemStack = tierItem;

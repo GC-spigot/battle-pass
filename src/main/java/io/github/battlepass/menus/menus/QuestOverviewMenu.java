@@ -1,7 +1,7 @@
 package io.github.battlepass.menus.menus;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApi;
+import io.github.battlepass.api.BattlePassApiImpl;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.lang.Lang;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements UserDependent {
-    private final BattlePassApi api;
+    private final BattlePassApiImpl api;
     private final MenuFactory menuFactory;
     private final QuestCache questCache;
     private final QuestController questController;
@@ -50,10 +50,10 @@ public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements Us
     @Override
     public MenuItem pageableItem(Integer weekInt) {
         Config settings = this.plugin.getConfig("settings");
-        boolean isWeekFuture = weekInt > this.api.currentWeek();
+        boolean isWeekFuture = weekInt > this.api.getCurrentWeek();
         boolean isPreviousWeekBlocked = settings.bool("current-season.unlocks.require-previous-completion") && this.config.has("static-items.requires-previous-completion-item") && !this.questController.isWeekDone(this.user, weekInt - 1);
         boolean userBypasses = this.user.bypassesLockedWeeks();
-        boolean locked = !userBypasses && (isWeekFuture || isPreviousWeekBlocked || this.api.currentWeek() < 1);
+        boolean locked = !userBypasses && (isWeekFuture || isPreviousWeekBlocked || this.api.getCurrentWeek() < 1);
         return MenuItem.builderOf(SpigotItem.toItem(
                 this.config, "static-items." + (locked ? isWeekFuture ? "locked-week" : "requires-previous-completion" : "week") + "-item", replacer -> replacer
                         .set("week", weekInt)

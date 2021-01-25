@@ -2,7 +2,7 @@ package io.github.battlepass.quests.workers.pipeline.steps;
 
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApi;
+import io.github.battlepass.api.BattlePassApiImpl;
 import io.github.battlepass.api.events.user.UserQuestProgressionEvent;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.enums.Category;
@@ -27,7 +27,7 @@ public class QuestValidationStep {
     private final AntiAbuseProcessor antiAbuseProcessor;
     private final QuestCompletionStep completionStep;
     private final BattlePlugin plugin;
-    private final BattlePassApi api;
+    private final BattlePassApiImpl api;
     private final DebugLogger debugLogger;
     private final QuestController controller;
     private final Set<String> whitelistedWorlds;
@@ -112,7 +112,7 @@ public class QuestValidationStep {
         ) return false;
         int week = Category.stripWeek(quest.getCategoryId());
         boolean isDaily = week == 0;
-        if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.currentWeek() || (this.lockPreviousWeeks && week < this.api.currentWeek()))) {
+        if (!isDaily && !user.bypassesLockedWeeks() && (week > this.api.getCurrentWeek() || (this.lockPreviousWeeks && week < this.api.getCurrentWeek()))) {
             return false;
         }
         return !this.requirePreviousCompletion || isDaily || user.bypassesLockedWeeks() || !this.isPreviousWeekBlocked(user, week);

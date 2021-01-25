@@ -9,6 +9,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -20,7 +21,7 @@ import java.math.RoundingMode;
 @UtilityClass
 public class Services {
 
-    public static void sendActionBar(Player player, String message) {
+    public static void sendActionBar(@NotNull Player player, @NotNull String message) {
         String serverVersion = ServerVersion.getVersion().toString().replace("MC", "v");
         if (!serverVersion.startsWith("v1_9_R") && !serverVersion.startsWith("v1_8_R")) {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message));
@@ -52,15 +53,15 @@ public class Services {
         }
     }
 
-    public static String getPercentageString(BigInteger progress, BigInteger requiredProgress) {
+    public static String getPercentageString(@NotNull BigInteger progress, @NotNull BigInteger requiredProgress) {
         return getPercentage(progress, requiredProgress).toString();
     }
 
-    public static BigDecimal getPercentage(BigInteger progress, BigInteger requiredProgress) {
+    public static BigDecimal getPercentage(@NotNull BigInteger progress, @NotNull BigInteger requiredProgress) {
         return new BigDecimal(progress).divide(new BigDecimal(requiredProgress), MathContext.DECIMAL32).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_EVEN);
     }
 
-    public static String getProgressBar(BigInteger progress, BigInteger requiredProgress, Lang lang) {
+    public static String getProgressBar(@NotNull BigInteger progress, @NotNull BigInteger requiredProgress, @NotNull Lang lang) {
         float progressFloat = new BigDecimal(progress).divide(new BigDecimal(requiredProgress), MathContext.DECIMAL32).setScale(2, RoundingMode.HALF_EVEN).floatValue();
         float complete = 30 * progressFloat;
         float incomplete = 30 - complete;
@@ -75,11 +76,11 @@ public class Services {
         return progressBar;
     }
 
-    public static String getItemAsConfigString(ItemStack itemStack) {
+    public static String getItemAsConfigString(@NotNull ItemStack itemStack) {
         return itemStack.getType().toString().toLowerCase() + ":" + itemStack.getData().getData();
     }
 
-    public static int getEmptySlotCountInInventory(Player player) {
+    public static int getEmptySlotCountInInventory(@NotNull Player player) {
         if (player.getInventory().firstEmpty() == -1) {
             return 0;
         }

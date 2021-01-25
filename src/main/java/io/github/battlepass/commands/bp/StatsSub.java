@@ -1,7 +1,7 @@
 package io.github.battlepass.commands.bp;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApi;
+import io.github.battlepass.api.BattlePassApiImpl;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.loader.PassLoader;
@@ -13,7 +13,7 @@ import java.math.BigInteger;
 public class StatsSub extends BpSubCommand<Player> {
     private final UserCache userCache;
     private final PassLoader passLoader;
-    private final BattlePassApi api;
+    private final BattlePassApiImpl api;
 
     public StatsSub(BattlePlugin plugin) {
         super(plugin);

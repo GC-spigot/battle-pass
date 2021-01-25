@@ -2,7 +2,7 @@ package io.github.battlepass.commands.bpadmin.setpass;
 
 import com.google.common.collect.Lists;
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApi;
+import io.github.battlepass.api.BattlePassApiImpl;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.objects.pass.PassType;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SetPassSub extends BpSubCommand<CommandSender> {
-    private final BattlePassApi api;
+    private final BattlePassApiImpl api;
     private final PassLoader passLoader;
 
     public SetPassSub(BattlePlugin plugin) {

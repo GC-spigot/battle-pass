@@ -1,7 +1,7 @@
 package io.github.battlepass.commands.bpadmin;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApi;
+import io.github.battlepass.api.BattlePassApiImpl;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.objects.user.User;
 import org.bukkit.Bukkit;
@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SetPointsSub extends BpSubCommand<CommandSender> {
-    private final BattlePassApi api;
+    private final BattlePassApiImpl api;
 
     public SetPointsSub(BattlePlugin plugin) {
         super(plugin, true);

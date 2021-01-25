@@ -5,7 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.battlepass.actions.Action;
-import io.github.battlepass.api.BattlePassApi;
+import io.github.battlepass.api.BattlePassApiImpl;
 import io.github.battlepass.api.events.server.PluginReloadEvent;
 import io.github.battlepass.bstats.BStats;
 import io.github.battlepass.cache.QuestCache;
@@ -59,11 +59,11 @@ import java.util.logging.Logger;
 
 public final class BattlePlugin extends SpigotPlugin {
     private static Logger logger;
-    private static BattlePassApi api;
+    private static BattlePassApiImpl api;
     private DebugLogger debugLogger;
     private DailyQuestValidator dailyQuestValidator;
     private QuestValidator questValidator;
-    private BattlePassApi localApi;
+    private BattlePassApiImpl localApi;
     private PassLoader passLoader;
     private UserCache userCache;
     private QuestCache questCache;
@@ -118,11 +118,11 @@ public final class BattlePlugin extends SpigotPlugin {
         return logger;
     }
 
-    public static BattlePassApi getApi() {
+    public static BattlePassApiImpl getApi() {
         return api;
     }
 
-    public BattlePassApi getLocalApi() {
+    public BattlePassApiImpl getLocalApi() {
         return this.localApi;
     }
 
@@ -269,7 +269,7 @@ public final class BattlePlugin extends SpigotPlugin {
         this.passLoader.load();
         this.userCache.loadOnline();
 
-        this.localApi = new BattlePassApi(this);
+        this.localApi = new BattlePassApiImpl(this);
         api = this.localApi;
 
         this.questPipeline = new QuestPipeline(this);

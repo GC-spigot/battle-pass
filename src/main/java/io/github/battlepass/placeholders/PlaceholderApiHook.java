@@ -2,7 +2,7 @@ package io.github.battlepass.placeholders;
 
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApi;
+import io.github.battlepass.api.BattlePassApiImpl;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.controller.UserController;
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PlaceholderApiHook extends PlaceholderExpansion {
     private Lang lang;
-    private BattlePassApi api;
+    private BattlePassApiImpl api;
     private UserCache userCache;
     private PassLoader passLoader;
     private QuestCache questCache;
@@ -46,11 +46,11 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
             case "time_to_daily_reset":
                 return this.dailyQuestReset.asString();
             case "week":
-                return String.valueOf(this.api.currentDisplayWeek());
+                return String.valueOf(this.api.getCurrentDisplayWeek());
             case "time_to_next_week":
                 return this.api.hasSeasonEnded() ?
                         "00:00" :
-                        Simple.time().format(TimeUnit.SECONDS, ChronoUnit.SECONDS.between(ZonedDateTime.now().withZoneSameInstant(this.api.getZone()), this.seasonStartDate.plusWeeks(this.api.currentWeek())));
+                        Simple.time().format(TimeUnit.SECONDS, ChronoUnit.SECONDS.between(ZonedDateTime.now().withZoneSameInstant(this.api.getZone()), this.seasonStartDate.plusWeeks(this.api.getCurrentWeek())));
             case "time_to_season_end":
                 String finishedSection = "season-finished-message";
                 return this.api.hasSeasonEnded() ?
