@@ -159,7 +159,7 @@ public class BattlePassApiImpl implements BattlePassApi {
         user.updatePoints(current -> current.add(BigInteger.valueOf(points)));
         this.updateUserTier(user);
     }
-    
+
     @Override
     public void updateUserTier(User user) {
         int maxTier = this.passLoader.getMaxTier();
