@@ -3,7 +3,7 @@ package io.github.battlepass.commands.bpadmin.setpass;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApiImpl;
+import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.loader.PassLoader;
@@ -18,7 +18,7 @@ import java.util.UUID;
 public class SetPassOnlineSub extends BpSubCommand<CommandSender> {
     private final UserCache userCache;
     private final PassLoader passLoader;
-    private final BattlePassApiImpl api;
+    private final BattlePassApi api;
 
     public SetPassOnlineSub(BattlePlugin plugin) {
         super(plugin);

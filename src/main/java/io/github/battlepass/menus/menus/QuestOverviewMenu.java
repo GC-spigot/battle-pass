@@ -1,7 +1,7 @@
 package io.github.battlepass.menus.menus;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApiImpl;
+import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.lang.Lang;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class QuestOverviewMenu extends PageableConfigMenu<Integer> implements UserDependent {
-    private final BattlePassApiImpl api;
+    private final BattlePassApi api;
     private final MenuFactory menuFactory;
     private final QuestCache questCache;
     private final QuestController questController;

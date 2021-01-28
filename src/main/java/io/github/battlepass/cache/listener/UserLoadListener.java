@@ -1,14 +1,14 @@
 package io.github.battlepass.cache.listener;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApiImpl;
+import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.api.events.user.UserLoadEvent;
 import io.github.battlepass.objects.user.User;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class UserLoadListener implements Listener {
-    private final BattlePassApiImpl api;
+    private final BattlePassApi api;
 
     public UserLoadListener(BattlePlugin plugin) {
         this.api = plugin.getLocalApi();

@@ -2,7 +2,12 @@ package io.github.battlepass.quests.quests.external;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
-import me.angeschossen.lands.api.events.*;
+import me.angeschossen.lands.api.events.ChunkPostClaimEvent;
+import me.angeschossen.lands.api.events.LandCreateEvent;
+import me.angeschossen.lands.api.events.LandDeleteEvent;
+import me.angeschossen.lands.api.events.LandInvitePlayerEvent;
+import me.angeschossen.lands.api.events.LandTrustPlayerEvent;
+import me.angeschossen.lands.api.events.LandUntrustPlayerEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

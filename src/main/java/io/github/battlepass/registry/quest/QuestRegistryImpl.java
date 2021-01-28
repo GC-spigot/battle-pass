@@ -1,15 +1,70 @@
-package io.github.battlepass.registry;
+package io.github.battlepass.registry.quest;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.QuestExecutor;
-import io.github.battlepass.quests.quests.external.*;
+import io.github.battlepass.quests.quests.external.ASkyblockQuests;
+import io.github.battlepass.quests.quests.external.AdvancedEnchantmentsQuests;
+import io.github.battlepass.quests.quests.external.AuctionHouseKludgeQuests;
+import io.github.battlepass.quests.quests.external.AutoSellQuests;
+import io.github.battlepass.quests.quests.external.BedWars1058Quests;
+import io.github.battlepass.quests.quests.external.BenzimmerKothQuests;
+import io.github.battlepass.quests.quests.external.BuildBattleTigerQuests;
+import io.github.battlepass.quests.quests.external.ChatReactionQuests;
+import io.github.battlepass.quests.quests.external.CitizensQuests;
+import io.github.battlepass.quests.quests.external.ClansQuests;
+import io.github.battlepass.quests.quests.external.ClueScrollsQuests;
+import io.github.battlepass.quests.quests.external.CrateReloadedQuests;
+import io.github.battlepass.quests.quests.external.CratesPlusQuests;
+import io.github.battlepass.quests.quests.external.CrazyCratesQuests;
+import io.github.battlepass.quests.quests.external.CrazyEnvoyQuests;
+import io.github.battlepass.quests.quests.external.DiscordMinecraftQuests;
+import io.github.battlepass.quests.quests.external.JobsQuests;
+import io.github.battlepass.quests.quests.external.LandsQuests;
+import io.github.battlepass.quests.quests.external.LobbyPresentsPoompkQuests;
+import io.github.battlepass.quests.quests.external.MoneyHuntersQuests;
+import io.github.battlepass.quests.quests.external.MythicMobsQuests;
+import io.github.battlepass.quests.quests.external.PlaceholderApiQuests;
+import io.github.battlepass.quests.quests.external.PlotSquaredQuests;
+import io.github.battlepass.quests.quests.external.ProCosmeticsQuests;
+import io.github.battlepass.quests.quests.external.ShopkeepersQuests;
+import io.github.battlepass.quests.quests.external.SkillApiQuests;
+import io.github.battlepass.quests.quests.external.StrikePracticeQuests;
+import io.github.battlepass.quests.quests.external.SubsideKothQuests;
+import io.github.battlepass.quests.quests.external.SuperiorSkyblockQuests;
+import io.github.battlepass.quests.quests.external.TheLabQuests;
+import io.github.battlepass.quests.quests.external.TokenEnchantQuests;
+import io.github.battlepass.quests.quests.external.USkyBlockQuests;
+import io.github.battlepass.quests.quests.external.UltraSkyWarsQuests;
+import io.github.battlepass.quests.quests.external.VotifierQuests;
 import io.github.battlepass.quests.quests.external.chestshop.ChestShopQuests;
 import io.github.battlepass.quests.quests.external.chestshop.LegacyChestShopQuests;
 import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
-import io.github.battlepass.quests.quests.internal.*;
-import me.hyfe.simplespigot.registry.Registry;
+import io.github.battlepass.quests.quests.internal.BlockBreakQuest;
+import io.github.battlepass.quests.quests.internal.BlockPlaceQuest;
+import io.github.battlepass.quests.quests.internal.ChatQuest;
+import io.github.battlepass.quests.quests.internal.ClickQuest;
+import io.github.battlepass.quests.quests.internal.ConsumeQuest;
+import io.github.battlepass.quests.quests.internal.CraftQuest;
+import io.github.battlepass.quests.quests.internal.DamageQuest;
+import io.github.battlepass.quests.quests.internal.EnchantQuests;
+import io.github.battlepass.quests.quests.internal.ExecuteCommandQuest;
+import io.github.battlepass.quests.quests.internal.FishingQuest;
+import io.github.battlepass.quests.quests.internal.GainExpQuest;
+import io.github.battlepass.quests.quests.internal.ItemBreakQuest;
+import io.github.battlepass.quests.quests.internal.KillMobQuest;
+import io.github.battlepass.quests.quests.internal.KillPlayerQuest;
+import io.github.battlepass.quests.quests.internal.LoginQuest;
+import io.github.battlepass.quests.quests.internal.MilkQuest;
+import io.github.battlepass.quests.quests.internal.MovementQuests;
+import io.github.battlepass.quests.quests.internal.PlayTimeQuest;
+import io.github.battlepass.quests.quests.internal.ProjectileQuest;
+import io.github.battlepass.quests.quests.internal.RegenerateQuest;
+import io.github.battlepass.quests.quests.internal.RideMobQuest;
+import io.github.battlepass.quests.quests.internal.ShearSheepQuest;
+import io.github.battlepass.quests.quests.internal.SmeltQuest;
+import io.github.battlepass.quests.quests.internal.TameQuest;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -21,14 +76,14 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
-public class QuestRegistry implements Registry {
+public class QuestRegistryImpl implements QuestRegistry {
     private final BattlePlugin plugin;
     private final PluginManager manager;
     private final Set<String> disabledHooks = Sets.newHashSet();
     private final Set<String> registeredHooks = Sets.newHashSet();
     private final Map<String, ImmutablePair<AtomicInteger, BukkitTask>> attempts = Maps.newHashMap();
 
-    public QuestRegistry(BattlePlugin plugin) {
+    public QuestRegistryImpl(BattlePlugin plugin) {
         this.plugin = plugin;
         this.manager = Bukkit.getPluginManager();
 
@@ -106,30 +161,25 @@ public class QuestRegistry implements Registry {
         this.placeholderAPI(this.plugin.getQuestCache().getPlaceholderTypes());
     }
 
+    @Override
     public Set<String> getRegisteredHooks() {
         return this.registeredHooks;
     }
 
-    public boolean isHookDisabled(String plugin) {
-        return this.disabledHooks.contains(plugin.toLowerCase());
-    }
-
-    @FunctionalInterface
-    public interface Instantiator<T extends QuestExecutor> {
-        T init(BattlePlugin plugin);
+    @Override
+    public Set<String> getDisabledHooks() {
+        return this.disabledHooks;
     }
 
     @SafeVarargs
+    @Override
     public final void quest(Instantiator<QuestExecutor>... instantiators) {
         for (Instantiator<?> instantiator : instantiators) {
             Bukkit.getPluginManager().registerEvents(instantiator.init(this.plugin), this.plugin);
         }
     }
 
-    public void hook(String name, Instantiator<ExternalQuestExecutor> instantiator) {
-        this.hook(name, instantiator, "");
-    }
-
+    @Override
     public boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author) {
         if (this.isHookDisabled(name)) {
             return false;
@@ -151,10 +201,7 @@ public class QuestRegistry implements Registry {
         return false;
     }
 
-    public void hook(String name, Instantiator<ExternalQuestExecutor> instantiator, Predicate<Double> versionPredicate) {
-        this.hook(name, instantiator, "", versionPredicate);
-    }
-
+    @Override
     public boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author, Predicate<Double> versionPredicate) {
         if (this.isHookDisabled(name)) {
             return false;

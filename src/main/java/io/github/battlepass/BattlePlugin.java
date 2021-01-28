@@ -5,6 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.battlepass.actions.Action;
+import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.api.BattlePassApiImpl;
 import io.github.battlepass.api.events.server.PluginReloadEvent;
 import io.github.battlepass.bstats.BStats;
@@ -31,7 +32,8 @@ import io.github.battlepass.placeholders.PlaceholderApiHook;
 import io.github.battlepass.quests.workers.pipeline.QuestPipeline;
 import io.github.battlepass.quests.workers.reset.DailyQuestReset;
 import io.github.battlepass.registry.ArgumentRegistry;
-import io.github.battlepass.registry.QuestRegistry;
+import io.github.battlepass.registry.quest.QuestRegistry;
+import io.github.battlepass.registry.quest.QuestRegistryImpl;
 import io.github.battlepass.storage.DailyQuestStorage;
 import io.github.battlepass.storage.UserStorage;
 import io.github.battlepass.v2.V2Detector;
@@ -59,11 +61,11 @@ import java.util.logging.Logger;
 
 public final class BattlePlugin extends SpigotPlugin {
     private static Logger logger;
-    private static BattlePassApiImpl api;
+    private static BattlePassApi api;
     private DebugLogger debugLogger;
     private DailyQuestValidator dailyQuestValidator;
     private QuestValidator questValidator;
-    private BattlePassApiImpl localApi;
+    private BattlePassApi localApi;
     private PassLoader passLoader;
     private UserCache userCache;
     private QuestCache questCache;
@@ -118,11 +120,11 @@ public final class BattlePlugin extends SpigotPlugin {
         return logger;
     }
 
-    public static BattlePassApiImpl getApi() {
+    public static BattlePassApi getApi() {
         return api;
     }
 
-    public BattlePassApiImpl getLocalApi() {
+    public BattlePassApi getLocalApi() {
         return this.localApi;
     }
 
@@ -260,7 +262,7 @@ public final class BattlePlugin extends SpigotPlugin {
         this.userController = new UserController(this);
         this.userCache = new UserCache(this);
         this.menuFactory = new MenuFactory(this);
-        this.questRegistry = new QuestRegistry(this);
+        this.questRegistry = new QuestRegistryImpl(this);
 
         this.questCache.cache();
         this.setSeasonDate();

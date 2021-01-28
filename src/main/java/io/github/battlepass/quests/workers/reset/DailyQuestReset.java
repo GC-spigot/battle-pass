@@ -2,7 +2,7 @@ package io.github.battlepass.quests.workers.reset;
 
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApiImpl;
+import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.api.events.server.DailyQuestsRefreshEvent;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.UserCache;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 public class DailyQuestReset {
     private final BattlePlugin plugin;
-    private final BattlePassApiImpl api;
+    private final BattlePassApi api;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final int amount;
     private final ZoneId timeZone;

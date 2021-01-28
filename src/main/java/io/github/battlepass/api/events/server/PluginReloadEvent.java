@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * Due to the nature of reloading, you must re hook into the plugin in most cases
  * if it is reloaded.
  *
- * Classes such as the {@link io.github.battlepass.cache.UserCache}, {@link io.github.battlepass.registry.QuestRegistry} and more
+ * Classes such as the {@link io.github.battlepass.cache.UserCache}, {@link io.github.battlepass.registry.quest.QuestRegistry} and more
  * are recreated when the plugin is reloaded. If you have them referenced
  * as values they will no longer work.
  *

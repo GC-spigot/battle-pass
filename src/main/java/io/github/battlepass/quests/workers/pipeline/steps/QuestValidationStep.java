@@ -2,7 +2,7 @@ package io.github.battlepass.quests.workers.pipeline.steps;
 
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApiImpl;
+import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.api.events.user.UserQuestProgressionEvent;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.enums.Category;
@@ -27,7 +27,7 @@ public class QuestValidationStep {
     private final AntiAbuseProcessor antiAbuseProcessor;
     private final QuestCompletionStep completionStep;
     private final BattlePlugin plugin;
-    private final BattlePassApiImpl api;
+    private final BattlePassApi api;
     private final DebugLogger debugLogger;
     private final QuestController controller;
     private final Set<String> whitelistedWorlds;

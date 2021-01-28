@@ -3,8 +3,10 @@ package io.github.battlepass.api;
 import io.github.battlepass.objects.pass.Tier;
 import io.github.battlepass.objects.reward.Reward;
 import io.github.battlepass.objects.user.User;
-import io.github.battlepass.registry.QuestRegistry;
+import io.github.battlepass.registry.quest.QuestRegistry;
+import io.github.battlepass.registry.quest.QuestRegistryImpl;
 import me.hyfe.simplespigot.annotations.NotNull;
+import me.hyfe.simplespigot.annotations.Nullable;
 
 import java.time.ZoneId;
 import java.util.Optional;
@@ -14,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 public interface BattlePassApi {
 
     /**
-     * @return the {@link QuestRegistry} which should be used to register internal & external quests.
+     * @return the {@link QuestRegistryImpl} which should be used to register internal & external quests.
      */
     @NotNull
     QuestRegistry getQuestRegistry();
@@ -101,14 +103,17 @@ public interface BattlePassApi {
      *
      * @param user   The {@link User} to set the pass for
      * @param passId The pass ID - free or premium
+     * @throws io.github.battlepass.exceptions.PassNotFoundException if the ID is not 'free' or 'premium'
      */
     void setPassId(@NotNull User user, @NotNull String passId);
 
     /**
      * @param tier   The tier number to get
      * @param passId The passId to get the tier for.
-     * @return The {@link Tier} model for the specified tier and passId
+     * @return The {@link Tier} model for the specified tier and passId. Returns null if there is no specific tier specified.
+     * @throws NullPointerException if the pass ID could not be found
      */
+    @Nullable
     Tier getTier(@NotNull int tier, @NotNull String passId);
 
     /**
@@ -117,6 +122,7 @@ public interface BattlePassApi {
      * @param tier   The tier number to get
      * @param passId The passId to get the amount of points for
      * @return The required points for the specified tier
+     * @throws NullPointerException if the pass ID could not be found
      */
     int getRequiredPoints(@NotNull int tier, @NotNull String passId);
 

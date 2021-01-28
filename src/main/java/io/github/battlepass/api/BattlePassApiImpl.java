@@ -8,13 +8,14 @@ import io.github.battlepass.api.events.user.UserTierUpEvent;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.RewardCache;
 import io.github.battlepass.cache.UserCache;
+import io.github.battlepass.exceptions.PassNotFoundException;
 import io.github.battlepass.lang.Lang;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.objects.pass.PassType;
 import io.github.battlepass.objects.pass.Tier;
 import io.github.battlepass.objects.reward.Reward;
 import io.github.battlepass.objects.user.User;
-import io.github.battlepass.registry.QuestRegistry;
+import io.github.battlepass.registry.quest.QuestRegistry;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.text.replacer.Replacer;
 import org.bukkit.Bukkit;
@@ -111,10 +112,13 @@ public class BattlePassApiImpl implements BattlePassApi {
     }
 
     @Override
-    public void setPassId(User user, String passId) {
+    public void setPassId(User user, String passId) throws PassNotFoundException {
         String currentPassId = user.getPassId();
         if (currentPassId.equals(passId)) {
             return;
+        }
+        if (!passId.equals("free") && !passId.equals("premium")) {
+            throw new PassNotFoundException(passId);
         }
         UserPassChangeEvent event = new UserPassChangeEvent(user, passId);
         this.plugin.runSync(() -> Bukkit.getPluginManager().callEvent(event));
@@ -135,7 +139,10 @@ public class BattlePassApiImpl implements BattlePassApi {
     }
 
     @Override
-    public Tier getTier(int tier, String passId) {
+    public Tier getTier(int tier, String passId) throws PassNotFoundException {
+        if (!passId.equals("free") && !passId.equals("premium")) {
+            throw new PassNotFoundException(passId);
+        }
         return this.passLoader.getPassTypes().get(passId).getTiers().get(tier);
     }
 
@@ -145,6 +152,9 @@ public class BattlePassApiImpl implements BattlePassApi {
             tier += 1;
         }
         PassType passType = this.passLoader.getPassTypes().get(passId);
+        if (passType == null) {
+            throw new PassNotFoundException(passId);
+        }
         Tier tierObject = passType.getTiers().get(tier);
         return tierObject == null ? passType.getDefaultPointsRequired() : tierObject.getRequiredPoints();
     }

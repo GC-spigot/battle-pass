@@ -2,7 +2,7 @@ package io.github.battlepass.placeholders;
 
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApiImpl;
+import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.controller.UserController;
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PlaceholderApiHook extends PlaceholderExpansion {
     private Lang lang;
-    private BattlePassApiImpl api;
+    private BattlePassApi api;
     private UserCache userCache;
     private PassLoader passLoader;
     private QuestCache questCache;

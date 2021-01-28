@@ -1,7 +1,7 @@
 package io.github.battlepass.menus.menus;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApiImpl;
+import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.menus.UserDependent;
 import io.github.battlepass.menus.service.extensions.ConfigMenu;
@@ -11,7 +11,7 @@ import me.hyfe.simplespigot.config.Config;
 import org.bukkit.entity.Player;
 
 public class PortalMenu extends ConfigMenu implements UserDependent {
-    private final BattlePassApiImpl api;
+    private final BattlePassApi api;
     private final PassLoader passLoader;
     private final DailyQuestReset dailyQuestReset;
     private final User user;

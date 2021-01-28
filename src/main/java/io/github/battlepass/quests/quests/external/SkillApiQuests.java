@@ -1,7 +1,12 @@
 package io.github.battlepass.quests.quests.external;
 
 import com.sucy.skill.api.enums.ManaCost;
-import com.sucy.skill.api.event.*;
+import com.sucy.skill.api.event.PlayerClassChangeEvent;
+import com.sucy.skill.api.event.PlayerLevelUpEvent;
+import com.sucy.skill.api.event.PlayerManaLossEvent;
+import com.sucy.skill.api.event.PlayerSkillUnlockEvent;
+import com.sucy.skill.api.event.PlayerSkillUpgradeEvent;
+import com.sucy.skill.api.event.TrueDamageEvent;
 import com.sucy.skill.api.skills.Skill;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;

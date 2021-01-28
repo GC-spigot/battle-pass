@@ -1,6 +1,10 @@
 package io.github.battlepass.quests.quests.external;
 
-import ga.strikepractice.events.*;
+import ga.strikepractice.events.BotDuelEndEvent;
+import ga.strikepractice.events.BotDuelStartEvent;
+import ga.strikepractice.events.DuelEndEvent;
+import ga.strikepractice.events.DuelStartEvent;
+import ga.strikepractice.events.PlayerHostEvent;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
 import org.bukkit.Bukkit;

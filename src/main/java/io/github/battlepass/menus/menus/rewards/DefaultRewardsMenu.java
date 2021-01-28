@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.api.BattlePassApiImpl;
+import io.github.battlepass.api.BattlePassApi;
 import io.github.battlepass.cache.RewardCache;
 import io.github.battlepass.loader.PassLoader;
 import io.github.battlepass.menus.PageMethods;
@@ -20,10 +20,14 @@ import me.hyfe.simplespigot.menu.item.MenuItem;
 import me.hyfe.simplespigot.menu.service.MenuService;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserDependent {
-    private final BattlePassApiImpl api;
+    private final BattlePassApi api;
     private final PassLoader passLoader;
     private final RewardCache rewardCache;
     private final DailyQuestReset dailyQuestReset;

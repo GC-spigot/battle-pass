@@ -1,6 +1,10 @@
 package io.github.battlepass.quests.quests.external;
 
-import com.github.intellectualsites.plotsquared.bukkit.events.*;
+import com.github.intellectualsites.plotsquared.bukkit.events.PlayerClaimPlotEvent;
+import com.github.intellectualsites.plotsquared.bukkit.events.PlayerEnterPlotEvent;
+import com.github.intellectualsites.plotsquared.bukkit.events.PlayerPlotTrustedEvent;
+import com.github.intellectualsites.plotsquared.bukkit.events.PlayerTeleportToPlotEvent;
+import com.github.intellectualsites.plotsquared.bukkit.events.PlotRateEvent;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
