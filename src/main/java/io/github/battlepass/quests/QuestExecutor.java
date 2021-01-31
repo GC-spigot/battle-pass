@@ -15,7 +15,7 @@ import java.util.function.UnaryOperator;
 public class QuestExecutor implements Listener {
     private final QuestPipeline questPipeline;
 
-    public QuestExecutor(BattlePlugin plugin) {
+    protected QuestExecutor(BattlePlugin plugin) {
         this.questPipeline = plugin.getQuestPipeline();
     }
 
