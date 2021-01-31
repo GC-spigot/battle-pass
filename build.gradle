@@ -57,6 +57,6 @@ processResources {
 
 shadowJar {
     archiveFileName = project.name + "-" + this.version + ".jar"
-    relocate 'me.hyfe.simplespigot', "io.github.battlepass.simple-spigot"
+    relocate 'me.hyfe.simplespigot', "io.github.battlepass.simplespigot"
     relocate 'org.bstats', "io.github.battlepass.bstats"
 }
