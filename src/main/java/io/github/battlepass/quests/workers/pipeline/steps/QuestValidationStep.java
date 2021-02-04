@@ -74,9 +74,6 @@ public class QuestValidationStep {
                 this.debugLogger.log(LogContainer.of("(PIPELINE) Didn't progress for %battlepass-player% and quests of this type are disabled on season end."));
                 continue;
             }
-            if (this.isWorldQuestBlocked(quest, playerWorld)) {
-                continue;
-            }
             this.questLock.lock();
             try {
                 this.proceed(player, user, quest, progress, questResult, overrideUpdate);
@@ -119,15 +116,14 @@ public class QuestValidationStep {
     }
 
     public boolean isQuestValid(Player player, User user, Quest quest, BigInteger progress, boolean overrideUpdate) {
-        String playerWorld = player.getWorld().getName();
         if (!this.isQuestPrimarilyValid(user, quest, progress, overrideUpdate)) {
             return false;
         }
+        String playerWorld = player.getWorld().getName();
         if (this.isWorldQuestBlocked(quest, playerWorld)) {
             return false;
         }
-        Set<String> questWhitelistedWorlds = quest.getWhitelistedWorlds();
-        return (questWhitelistedWorlds.isEmpty() || questWhitelistedWorlds.contains(playerWorld)) && !quest.getBlacklistedWorlds().contains(playerWorld);
+        return true;
     }
 
     private boolean areServerQuestsBlocked() {
