@@ -49,6 +49,7 @@ dependencies {
     compileOnly 'com.github.Angeschossen:LandsAPI:4.5.2.0'
     compileOnly 'io.lumine.xikage:MythicMobs:4.9.1'
     compileOnly 'org.mineacademy.plugin:Boss-API:3.8.0'
+    compileOnly 'com.github.brcdev-minecraft:shopgui-api:2.1.1'
 }
 
 processResources {
