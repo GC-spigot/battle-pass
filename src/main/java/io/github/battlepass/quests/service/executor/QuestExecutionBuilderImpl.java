@@ -27,14 +27,28 @@ public class QuestExecutionBuilderImpl implements QuestExecutionBuilder {
     }
 
     @Override
-    public void execute() {
-        QuestExecution execution = new QuestExecution(this.player, this.questType, this.progress, this.overrideUpdate, this.questResult);
-        // this.pipeline.handle(execution);
-        // TODO
+    public void buildAndExecute() {
+        QuestExecution execution = this.build();
+        this.pipeline.handle(execution);
+    }
+
+    @Override
+    public QuestExecution build() {
+        String baseMessage = "QuestExecution Build -> %s must be set.";
+        if (this.player == null)
+            throw new IllegalStateException(String.format(baseMessage, "Player"));
+        if (this.questType == null || this.questType.isEmpty())
+            throw new IllegalStateException(String.format(baseMessage, "Quest type"));
+        if (this.progress == null)
+            throw new IllegalStateException(String.format(baseMessage, "Progress"));
+        if (this.questResult == null)
+            this.questResult = new ExecutableQuestResult().root("none");
+        return new QuestExecution(this.player, this.questType, this.progress, this.overrideUpdate, this.questResult);
     }
 
     @Override
     public QuestExecutionBuilder player(Player player) {
+        CheckHelper.notNull(player, "Quest execution player");
         this.player = player;
         return this;
     }

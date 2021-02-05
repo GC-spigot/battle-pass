@@ -1,5 +1,6 @@
 package io.github.battlepass.logger.containers;
 
+import io.github.battlepass.quests.service.executor.QuestExecution;
 import org.bukkit.entity.Player;
 
 public abstract class LogContainer implements Comparable<LogContainer> {
@@ -11,6 +12,10 @@ public abstract class LogContainer implements Comparable<LogContainer> {
 
     public static LogContainer of(String message, Player player) {
         return new BasicPlayerContainer(message, player);
+    }
+
+    public static LogContainer of(QuestExecution questExecution) {
+        return new QuestExecutionContainer(questExecution);
     }
 
     public LogContainer() {

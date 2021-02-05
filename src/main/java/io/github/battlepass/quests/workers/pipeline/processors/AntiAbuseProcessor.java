@@ -7,6 +7,7 @@ import io.github.battlepass.logger.containers.LogContainer;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.objects.user.User;
+import io.github.battlepass.quests.service.executor.QuestExecution;
 import org.bukkit.entity.Player;
 
 import java.math.BigInteger;
@@ -21,19 +22,22 @@ public class AntiAbuseProcessor {
         this.debugLogger = plugin.getDebugLogger();
     }
 
-    public void applyMeasures(Player player, User user, Collection<Quest> quests, String currentType, BigInteger progress, QuestResult questResult) {
+    public void applyMeasures(QuestExecution questExecution, Collection<Quest> quests) {
+        String questType = questExecution.getQuestType();
+        Player player = questExecution.getPlayer();
+        User user = questExecution.getUser();
         for (Quest quest : quests) {
             if (!quest.isAntiAbuse()
                     || this.controller.isQuestDone(user, quest)
-                    || (!currentType.equals("block-break") && !currentType.equals("block-place"))
-                    || currentType.equalsIgnoreCase(quest.getType())
-                    || !questResult.isEligible(player, quest.getVariable())) {
+                    || (!questType.equals("block-break") && !questType.equals("block-place"))
+                    || questType.equalsIgnoreCase(quest.getType())
+                    || !questExecution.getQuestResult().isEligible(player, quest.getVariable())) {
                 return;
             }
             this.debugLogger.log(LogContainer.of("Anti abuse measures applied for player %battlepass-player% on quest " + quest.getCategoryId() + ":" + quest.getId(), player));
             BigInteger currentProgress = this.controller.getQuestProgress(user, quest);
             if (currentProgress.compareTo(BigInteger.ZERO) > 0) {
-                this.controller.setQuestProgress(user, quest, currentProgress.subtract(progress).max(BigInteger.ZERO).min(quest.getRequiredProgress()));
+                this.controller.setQuestProgress(user, quest, currentProgress.subtract(questExecution.getProgress()).max(BigInteger.ZERO).min(quest.getRequiredProgress()));
             }
         }
     }

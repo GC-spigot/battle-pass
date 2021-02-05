@@ -1,6 +1,7 @@
 package io.github.battlepass.quests.service.executor;
 
 import io.github.battlepass.objects.quests.variable.ExecutableQuestResult;
+import io.github.battlepass.objects.user.User;
 import org.bukkit.entity.Player;
 
 import java.math.BigInteger;
@@ -11,6 +12,7 @@ public class QuestExecution {
     private final BigInteger progress;
     private final boolean overrideUpdate;
     private final ExecutableQuestResult questResult;
+    private User user;
 
     public QuestExecution(Player player, String questType, BigInteger progress, boolean overrideUpdate, ExecutableQuestResult questResult) {
         this.player = player;
@@ -32,11 +34,28 @@ public class QuestExecution {
         return this.progress;
     }
 
-    public boolean isOverrideUpdate() {
+    public boolean shouldOverrideUpdate() {
         return this.overrideUpdate;
     }
 
     public ExecutableQuestResult getQuestResult() {
         return this.questResult;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "player=" + this.player.getName() +
+                ", questType='" + this.questType + '\'' +
+                ", progress=" + this.progress.toString() +
+                ", overrideUpdate=" + this.overrideUpdate +
+                ", questResult=" + this.questResult.toString();
     }
 }

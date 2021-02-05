@@ -148,13 +148,13 @@ public class ExecutableQuestResult implements QuestResult {
     @Override
     public String toString() {
         if (this.material == null) {
-            return "ExecutableQuestResult{" +
+            return "QuestResult{" +
                     "root='" + this.root + '\'' +
                     ", subRoots=" + this.subRoots +
                     '}';
         }
 
-        return "ExecutableQuestResult{" +
+        return "QuestResult{" +
                 "root='" + this.material + ":" + this.data + '\'' +
                 ", subRoots=" + this.subRoots +
                 '}';

@@ -1,15 +1,11 @@
 package io.github.battlepass.quests;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.objects.quests.variable.ExecutableQuestResult;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.service.base.QuestContainer;
 import io.github.battlepass.quests.service.executor.QuestExecutionBuilder;
-import io.github.battlepass.quests.workers.pipeline.QuestPipeline;
 import me.hyfe.simplespigot.text.replacer.Replace;
-import me.hyfe.simplespigot.text.replacer.Replacer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 
 import java.math.BigInteger;
 import java.util.function.UnaryOperator;
@@ -53,7 +49,7 @@ public class QuestExecutor extends QuestContainer {
                 .questResult(result);
         if (overrideUpdate)
             executionBuilder.overrideUpdate();
-        executionBuilder.execute();
+        executionBuilder.buildAndExecute();
     }
 
     @Deprecated

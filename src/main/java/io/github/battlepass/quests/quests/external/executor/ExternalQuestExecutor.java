@@ -2,7 +2,6 @@ package io.github.battlepass.quests.quests.external.executor;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.objects.quests.variable.QuestResult;
-import io.github.battlepass.quests.QuestExecutor;
 import io.github.battlepass.quests.service.base.ExternalQuestContainer;
 import io.github.battlepass.quests.service.executor.QuestExecutionBuilder;
 import me.hyfe.simplespigot.text.replacer.Replace;
@@ -51,7 +50,7 @@ public class ExternalQuestExecutor extends ExternalQuestContainer {
                 .questResult(result);
         if (overrideUpdate)
             executionBuilder.overrideUpdate();
-        executionBuilder.execute();
+        executionBuilder.buildAndExecute();
     }
 
     @Deprecated

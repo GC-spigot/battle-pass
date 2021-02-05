@@ -12,6 +12,7 @@ import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.objects.quests.variable.Variable;
 import io.github.battlepass.objects.user.User;
+import io.github.battlepass.quests.service.executor.QuestExecution;
 import io.github.battlepass.quests.workers.pipeline.processors.AntiAbuseProcessor;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.service.Locks;
@@ -56,8 +57,8 @@ public class QuestValidationStep {
         this.debugLogger = plugin.getDebugLogger();
     }
 
-    public void processCompletion(Player player, User user, String name, BigInteger progress, QuestResult questResult, Collection<Quest> quests, boolean overrideUpdate) {
-        String playerWorld = player.getWorld().getName();
+    public void processCompletion(QuestExecution questExecution, Collection<Quest> quests) {
+        String playerWorld = questExecution.getPlayer().getWorld().getName();
         if (this.areServerQuestsBlocked()) {
             this.debugLogger.log(LogContainer.of("(PIPELINE) Didn't progress for %battlepass-player% as season has ended and dailies & normals are disabled."));
             return;
@@ -65,9 +66,9 @@ public class QuestValidationStep {
         if (this.isWorldServerBlocked(playerWorld)) {
             return;
         }
-        this.antiAbuseProcessor.applyMeasures(player, user, quests, name, progress, questResult);
+        this.antiAbuseProcessor.applyMeasures(questExecution, quests);
         for (Quest quest : quests) {
-            if (!name.equalsIgnoreCase(quest.getType())) {
+            if (!questExecution.getQuestType().equalsIgnoreCase(quest.getType())) {
                 continue;
             }
             if (this.isQuestSeasonEndBlocked(quest)) {
@@ -76,25 +77,26 @@ public class QuestValidationStep {
             }
             this.questLock.lock();
             try {
-                this.proceed(player, user, quest, progress, questResult, overrideUpdate);
+                this.proceed(questExecution, quest);
             } finally {
                 this.questLock.unlock();
             }
         }
     }
 
-    public boolean proceed(Player player, User user, Quest quest, BigInteger progress, QuestResult questResult, boolean overrideUpdate) {
-        BigInteger originalProgress = this.controller.getQuestProgress(user, quest);
-        if (!this.isQuestValid(player, user, quest, progress, overrideUpdate)) {
+    public boolean proceed(QuestExecution questExecution, Quest quest) {
+        BigInteger originalProgress = this.controller.getQuestProgress(questExecution.getUser(), quest);
+        if (!this.isQuestValid(questExecution, quest)) {
             return false;
         }
         Variable subVariable = quest.getVariable();
-        if (questResult == null || questResult.isEligible(player, subVariable)) {
-            UserQuestProgressionEvent event = new UserQuestProgressionEvent(user, quest, progress);
+        QuestResult questResult = questExecution.getQuestResult();
+        if (questResult == null || questResult.isEligible(questExecution.getPlayer(), subVariable)) {
+            UserQuestProgressionEvent event = new UserQuestProgressionEvent(questExecution, quest);
             this.plugin.runSync(() -> {
                 Bukkit.getPluginManager().callEvent(event);
             });
-            event.ifNotCancelled(eventConsumer -> this.completionStep.process(player, user, quest, originalProgress, eventConsumer.getAddedProgress(), overrideUpdate));
+            event.ifNotCancelled(eventConsumer -> this.completionStep.process(questExecution, quest, originalProgress, eventConsumer.getAddedProgress()));
             return true;
         }
         return false;
@@ -115,11 +117,11 @@ public class QuestValidationStep {
         return !this.requirePreviousCompletion || isDaily || user.bypassesLockedWeeks() || !this.isPreviousWeekBlocked(user, week);
     }
 
-    public boolean isQuestValid(Player player, User user, Quest quest, BigInteger progress, boolean overrideUpdate) {
-        if (!this.isQuestPrimarilyValid(user, quest, progress, overrideUpdate)) {
+    public boolean isQuestValid(QuestExecution questExecution, Quest quest) {
+        if (!this.isQuestPrimarilyValid(questExecution.getUser(), quest, questExecution.getProgress(), questExecution.shouldOverrideUpdate())) {
             return false;
         }
-        String playerWorld = player.getWorld().getName();
+        String playerWorld = questExecution.getPlayer().getWorld().getName();
         if (this.isWorldQuestBlocked(quest, playerWorld)) {
             return false;
         }

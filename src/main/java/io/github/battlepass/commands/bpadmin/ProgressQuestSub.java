@@ -7,6 +7,7 @@ import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.enums.Category;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
+import io.github.battlepass.quests.service.executor.QuestExecution;
 import io.github.battlepass.quests.workers.pipeline.steps.QuestCompletionStep;
 import io.github.battlepass.quests.workers.pipeline.steps.QuestValidationStep;
 import org.bukkit.Bukkit;
@@ -68,7 +69,9 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
             return;
         }
         if (this.questValidationStep.isQuestPrimarilyValid(user, quest, amount, false)) {
-            this.questCompletionStep.process(player, user, quest, this.controller.getQuestProgress(user, quest), amount, false);
+            QuestExecution questExecution = new QuestExecution(player, null, amount, false, null);
+            questExecution.setUser(user);
+            this.questCompletionStep.process(questExecution, quest, this.controller.getQuestProgress(user, quest), amount);
             this.lang.local("successful-quest-progress", quest.getName()).to(sender);
         } else {
             this.lang.local("failed-quest-progress", quest.getName()).to(sender);

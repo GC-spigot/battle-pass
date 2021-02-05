@@ -15,7 +15,10 @@ import java.util.function.UnaryOperator;
 
 public interface QuestExecutionBuilder {
 
-    void execute();
+    void buildAndExecute() throws IllegalStateException;
+
+    @NotNull
+    QuestExecution build() throws IllegalStateException;
 
     @CheckReturnValue
     @NotNull

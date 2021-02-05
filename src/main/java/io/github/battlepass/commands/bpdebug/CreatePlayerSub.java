@@ -4,6 +4,7 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.logger.DebugLogger;
 import io.github.battlepass.logger.containers.BasicPlayerContainer;
+import io.github.battlepass.logger.containers.QuestExecutionContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,8 +28,14 @@ public class CreatePlayerSub extends BpSubCommand<CommandSender> {
 
     @Override
     public void onExecute(CommandSender sender, String[] args) {
+        String playerName = this.parseArgument(args, 1);
         String fileName = this.logger.dump(container -> {
-            return container instanceof BasicPlayerContainer && ((BasicPlayerContainer) container).getPlayerName().equalsIgnoreCase(this.parseArgument(args, 1));
+            if (container instanceof BasicPlayerContainer) {
+                return ((BasicPlayerContainer) container).getPlayerName().equalsIgnoreCase(playerName);
+            } else if (container instanceof QuestExecutionContainer) {
+                return ((QuestExecutionContainer) container).getPlayer().equals(Bukkit.getPlayer(playerName));
+            }
+            return false;
         });
         this.lang.local("debug-dumped", fileName).to(sender);
     }
