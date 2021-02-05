@@ -1,10 +1,9 @@
 package io.github.battlepass.quests.service.executor;
 
 import io.github.battlepass.objects.quests.variable.QuestResult;
-import io.github.battlepass.quests.QuestExecutor;
 import io.github.battlepass.quests.service.base.ExternalQuestContainer;
 import io.github.battlepass.quests.service.base.QuestContainer;
-import io.github.battlepass.service.Checks;
+import io.github.battlepass.service.CheckHelper;
 import me.hyfe.simplespigot.annotations.NotNull;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -70,7 +69,7 @@ public interface QuestExecutionBuilder {
     @CheckReturnValue
     @NotNull
     default QuestExecutionBuilder progress(@NotNull int progress) {
-        Checks.notNull(progress, "Quest execution progress");
+        CheckHelper.notNull(progress, "Quest execution progress");
         return this.progress(BigInteger.valueOf(progress));
     }
 

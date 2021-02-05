@@ -1,8 +1,10 @@
 package io.github.battlepass.service;
 
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Contract;
 
-public class Checks {
+@UtilityClass
+public class CheckHelper {
 
     @Contract("null, _ -> fail")
     public static void notNull(Object arg, String identifier) {

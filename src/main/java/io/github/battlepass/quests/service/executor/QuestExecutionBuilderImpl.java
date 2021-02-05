@@ -3,7 +3,7 @@ package io.github.battlepass.quests.service.executor;
 import io.github.battlepass.objects.quests.variable.ExecutableQuestResult;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.workers.pipeline.QuestPipeline;
-import io.github.battlepass.service.Checks;
+import io.github.battlepass.service.CheckHelper;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -56,7 +56,7 @@ public class QuestExecutionBuilderImpl implements QuestExecutionBuilder {
 
     @Override
     public QuestExecutionBuilder root(Block rootBlock) {
-        Checks.notNull(rootBlock, "Quest execution blocks");
+        CheckHelper.notNull(rootBlock, "Quest execution blocks");
         if (this.questResult == null)
             this.questResult = new ExecutableQuestResult();
         this.questResult.root(rootBlock);
@@ -65,7 +65,7 @@ public class QuestExecutionBuilderImpl implements QuestExecutionBuilder {
 
     @Override
     public QuestExecutionBuilder root(ItemStack rootItem) {
-        Checks.notNull(rootItem, "Quest execution items");
+        CheckHelper.notNull(rootItem, "Quest execution items");
         if (this.questResult == null)
             this.questResult = new ExecutableQuestResult();
         this.questResult.root(rootItem);
@@ -82,7 +82,7 @@ public class QuestExecutionBuilderImpl implements QuestExecutionBuilder {
 
     @Override
     public QuestExecutionBuilder subRoot(ItemStack itemStack) {
-        Checks.notNull(itemStack, "Quest execution sub root items");
+        CheckHelper.notNull(itemStack, "Quest execution sub root items");
         return this.subRoot("item", itemStack.getType().toString());
     }
 
@@ -93,7 +93,7 @@ public class QuestExecutionBuilderImpl implements QuestExecutionBuilder {
 
     @Override
     public QuestExecutionBuilder progress(BigInteger progress) {
-        Checks.notNull(progress, "Quest execution progress");
+        CheckHelper.notNull(progress, "Quest execution progress");
         this.progress = progress;
         return this;
     }
