@@ -40,7 +40,9 @@ public class UserQuestProgressionEvent extends Event implements Cancellable {
     }
 
     public void ifNotCancelled(Consumer<UserQuestProgressionEvent> event) {
-        event.accept(this);
+        if (!this.isCancelled) {
+            event.accept(this);
+        }
     }
 
     @Override

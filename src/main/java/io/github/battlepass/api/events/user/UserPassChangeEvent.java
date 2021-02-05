@@ -38,7 +38,9 @@ public class UserPassChangeEvent extends Event implements Cancellable {
     }
 
     public void ifNotCancelled(Consumer<UserPassChangeEvent> event) {
-        event.accept(this);
+        if (!this.isCancelled) {
+            event.accept(this);
+        }
     }
 
     @Override
