@@ -31,18 +31,8 @@ public class UserQuestProgressionEvent extends Event implements Cancellable {
         return this.quest;
     }
 
-    @Deprecated
-    public int getProgression() {
-        return this.addedProgress.intValue();
-    }
-
     public BigInteger getAddedProgress() {
         return this.addedProgress;
-    }
-
-    @Deprecated
-    public void setProgression(int progress) {
-        this.addedProgress = BigInteger.valueOf(progress);
     }
 
     public void setAddedProgress(BigInteger addedProgress) {
