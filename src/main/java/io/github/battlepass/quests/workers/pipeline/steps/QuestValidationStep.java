@@ -17,7 +17,6 @@ import io.github.battlepass.quests.workers.pipeline.processors.AntiAbuseProcesso
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.service.Locks;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.math.BigInteger;
 import java.util.Collection;

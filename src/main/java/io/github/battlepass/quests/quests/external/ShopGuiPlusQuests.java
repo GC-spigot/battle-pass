@@ -3,10 +3,6 @@ package io.github.battlepass.quests.quests.external;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
 import net.brcdev.shopgui.event.ShopPostTransactionEvent;
-import net.brcdev.shopgui.shop.ShopItem;
-import net.brcdev.shopgui.shop.ShopManager;
-import net.brcdev.shopgui.shop.ShopTransactionResult;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 public class ShopGuiPlusQuests extends ExternalQuestExecutor {

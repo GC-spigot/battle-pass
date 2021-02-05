@@ -13,7 +13,6 @@ import me.hyfe.simplespigot.text.replacer.Replacer;
 import org.bukkit.entity.Player;
 
 import java.math.BigInteger;
-import java.util.Collection;
 
 public class QuestPipeline {
     private final QuestValidationStep questValidationStep;

@@ -8,7 +8,6 @@ import io.github.battlepass.enums.Category;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.quests.service.executor.QuestExecution;
-import io.github.battlepass.quests.service.executor.QuestExecutionBuilder;
 import io.github.battlepass.quests.workers.pipeline.steps.QuestCompletionStep;
 import io.github.battlepass.quests.workers.pipeline.steps.QuestValidationStep;
 import org.bukkit.Bukkit;

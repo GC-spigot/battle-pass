@@ -1,7 +1,5 @@
 package io.github.battlepass.registry.quest;
 
-import io.github.battlepass.quests.QuestExecutor;
-import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
 import io.github.battlepass.quests.service.base.ExternalQuestContainer;
 import io.github.battlepass.quests.service.base.QuestContainer;
 import me.hyfe.simplespigot.annotations.NotNull;

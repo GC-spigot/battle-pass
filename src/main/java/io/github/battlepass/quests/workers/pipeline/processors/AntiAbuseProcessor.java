@@ -5,7 +5,6 @@ import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.logger.DebugLogger;
 import io.github.battlepass.logger.containers.LogContainer;
 import io.github.battlepass.objects.quests.Quest;
-import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.quests.service.executor.QuestExecution;
 import org.bukkit.entity.Player;
