@@ -16,11 +16,6 @@ import java.util.function.UnaryOperator;
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public interface QuestExecutionBuilder {
 
-    void buildAndExecute() throws IllegalStateException;
-
-    @NotNull
-    QuestExecution build() throws IllegalStateException;
-
     @CheckReturnValue
     @NotNull
     static QuestExecutionBuilder of(@NotNull QuestContainer container, @NotNull String questType) {
@@ -32,6 +27,11 @@ public interface QuestExecutionBuilder {
         }
         return new QuestExecutionBuilderImpl(container.getQuestPipeline(), buildType);
     }
+
+    void buildAndExecute() throws IllegalStateException;
+
+    @NotNull
+    QuestExecution build() throws IllegalStateException;
 
     @CheckReturnValue
     @NotNull

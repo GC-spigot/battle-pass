@@ -17,6 +17,7 @@ import io.github.battlepass.quests.workers.pipeline.processors.AntiAbuseProcesso
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.service.Locks;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.math.BigInteger;
 import java.util.Collection;
@@ -57,7 +58,8 @@ public class QuestValidationStep {
     }
 
     public void processCompletion(QuestExecution questExecution, Collection<Quest> quests) {
-        String playerWorld = questExecution.getPlayer().getWorld().getName();
+        Player player = questExecution.getPlayer();
+        String playerWorld = player.getWorld().getName();
         if (this.areServerQuestsBlocked()) {
             this.debugLogger.log(LogContainer.of("(PIPELINE) Didn't progress for %battlepass-player% as season has ended and dailies & normals are disabled."));
             return;
@@ -120,11 +122,9 @@ public class QuestValidationStep {
         if (!this.isQuestPrimarilyValid(questExecution.getUser(), quest, questExecution.getProgress(), questExecution.shouldOverrideUpdate())) {
             return false;
         }
-        String playerWorld = questExecution.getPlayer().getWorld().getName();
-        if (this.isWorldQuestBlocked(quest, playerWorld)) {
-            return false;
-        }
-        return true;
+        Player player = questExecution.getPlayer();
+        String playerWorld = player.getWorld().getName();
+        return !this.isWorldQuestBlocked(quest, playerWorld);
     }
 
     private boolean areServerQuestsBlocked() {

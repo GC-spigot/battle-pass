@@ -19,5 +19,4 @@ public class QuestContainer implements Listener {
     public QuestPipeline getQuestPipeline() {
         return this.questPipeline;
     }
-
 }
