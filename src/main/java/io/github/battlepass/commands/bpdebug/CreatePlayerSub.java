@@ -33,7 +33,7 @@ public class CreatePlayerSub extends BpSubCommand<CommandSender> {
         String fileName = this.logger.dump(container -> {
             if (container instanceof BasicPlayerContainer) {
                 return ((BasicPlayerContainer) container).getPlayerName().equalsIgnoreCase(playerName);
-            } else if (container instanceof QuestExecutionContainer) {
+            } else if (container instanceof QuestExecutionContainer && player != null) {
                 return ((QuestExecutionContainer) container).getPlayer().equals(player);
             }
             return false;
