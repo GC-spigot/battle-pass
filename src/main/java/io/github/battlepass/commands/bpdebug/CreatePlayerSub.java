@@ -29,11 +29,12 @@ public class CreatePlayerSub extends BpSubCommand<CommandSender> {
     @Override
     public void onExecute(CommandSender sender, String[] args) {
         String playerName = this.parseArgument(args, 1);
+        Player player = Bukkit.getPlayer(playerName);
         String fileName = this.logger.dump(container -> {
             if (container instanceof BasicPlayerContainer) {
                 return ((BasicPlayerContainer) container).getPlayerName().equalsIgnoreCase(playerName);
             } else if (container instanceof QuestExecutionContainer) {
-                return ((QuestExecutionContainer) container).getPlayer().equals(Bukkit.getPlayer(playerName));
+                return ((QuestExecutionContainer) container).getPlayer().equals(player);
             }
             return false;
         });
