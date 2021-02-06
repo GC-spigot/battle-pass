@@ -13,6 +13,7 @@ import javax.annotation.CheckReturnValue;
 import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public interface QuestExecutionBuilder {
 
     void buildAndExecute() throws IllegalStateException;
