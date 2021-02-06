@@ -22,7 +22,7 @@ public interface BattlePassApi {
     QuestRegistry getQuestRegistry();
 
     /**
-     * This will only get a user from the cache.
+     * This will only get a user from the cache (they must be online and in the cache).
      *
      * @param uuid The UUID of the user to get
      * @return A {@link CompletableFuture} containing an optional User. The user will not be present if they are not loaded in the cache.
@@ -31,7 +31,7 @@ public interface BattlePassApi {
     CompletableFuture<Optional<User>> getUser(UUID uuid);
 
     /**
-     * This will get, load or create a user.
+     * This will get, load or create a user. Use this method if you may also be getting an offline user.
      *
      * @return A {@link CompletableFuture} containing the user. This user will only be null in erroneous circumstances.
      * @since 3.13
