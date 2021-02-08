@@ -2,6 +2,7 @@ package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.Bukkit;
@@ -9,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class KillPlayerQuest extends QuestExecutor {
+public class KillPlayerQuest extends QuestContainer {
 
     public KillPlayerQuest(BattlePlugin plugin) {
         super(plugin);
@@ -26,6 +27,10 @@ public class KillPlayerQuest extends QuestExecutor {
                 return;
             }
         }
-        this.execute("kill-player", killer, result -> result.root(victim.getName()), replacer -> replacer.set("victim", victim.getName()));
+        this.executionBuilder("kill-player")
+                .player(killer)
+                .root(victim.getName())
+                .progressSingle()
+                .buildAndExecute();
     }
 }

@@ -1,15 +1,15 @@
 package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class LoginQuest extends QuestExecutor {
+public class LoginQuest extends QuestContainer {
     private final BattlePlugin plugin;
 
     public LoginQuest(BattlePlugin plugin) {
@@ -24,6 +24,11 @@ public class LoginQuest extends QuestExecutor {
             return;
         }
 
-        Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.execute("login", player, QuestResult::none), 40);
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> this
+                        .executionBuilder("login")
+                        .player(player)
+                        .progressSingle()
+                        .buildAndExecute()
+                , 40);
     }
 }

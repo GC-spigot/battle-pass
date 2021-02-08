@@ -3,6 +3,7 @@ package io.github.battlepass.quests.quests.internal;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -10,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class DamageQuest extends QuestExecutor {
+public class DamageQuest extends QuestContainer {
 
     public DamageQuest(BattlePlugin plugin) {
         super(plugin);
@@ -28,6 +29,9 @@ public class DamageQuest extends QuestExecutor {
         if (Bukkit.getPluginManager().isPluginEnabled("Citizens") && CitizensAPI.getNPCRegistry().isNPC(player)) {
             return;
         }
-        this.execute("damage-player", player, damage, QuestResult::none, replacer -> replacer.set("damage", damage));
+        this.executionBuilder("damage-player")
+                .player(player)
+                .progress(damage)
+                .buildAndExecute();
     }
 }

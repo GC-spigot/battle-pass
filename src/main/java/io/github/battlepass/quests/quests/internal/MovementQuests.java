@@ -3,13 +3,14 @@ package io.github.battlepass.quests.quests.internal;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import me.hyfe.simplespigot.version.ServerVersion;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class MovementQuests extends QuestExecutor {
+public class MovementQuests extends QuestContainer {
 
     public MovementQuests(BattlePlugin plugin) {
         super(plugin);
@@ -22,20 +23,38 @@ public class MovementQuests extends QuestExecutor {
             return;
         }
         Material blockAtLocation = player.getLocation().getBlock().getType();
-        this.execute("move", player, QuestResult::none);
+        this.executionBuilder("move")
+                .player(player)
+                .progressSingle()
+                .buildAndExecute();
         if (blockAtLocation.toString().toLowerCase().contains("water")) {
-            this.execute("swim", player, QuestResult::none);
+            this.executionBuilder("swim")
+                    .player(player)
+                    .progressSingle()
+                    .buildAndExecute();
             return;
         }
         if (ServerVersion.isOver_V1_12() && player.isGliding()) {
-            this.execute("glide", player, QuestResult::none);
+            this.executionBuilder("glide")
+                    .player(player)
+                    .progressSingle()
+                    .buildAndExecute();
             return;
         }
         if (player.isFlying()) {
-            this.execute("fly", player, QuestResult::none);
+            this.executionBuilder("fly")
+                    .player(player)
+                    .progressSingle()
+                    .buildAndExecute();
             return;
         }
-        this.execute("ground-move", player, QuestResult::none);
-        this.execute(player.isSneaking() ? "sneak" : player.isSprinting() ? "sprint" : "walk", player, QuestResult::none);
+        this.executionBuilder("ground-move")
+                .player(player)
+                .progressSingle()
+                .buildAndExecute();
+        this.executionBuilder(player.isSneaking() ? "sneak" : player.isSprinting() ? "sprint" : "walk")
+                .player(player)
+                .progressSingle()
+                .buildAndExecute();
     }
 }

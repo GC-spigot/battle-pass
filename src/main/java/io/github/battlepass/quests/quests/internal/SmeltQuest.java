@@ -4,6 +4,7 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SmeltQuest extends QuestExecutor {
+public class SmeltQuest extends QuestContainer {
 
     public SmeltQuest(BattlePlugin plugin) {
         super(plugin);
@@ -44,11 +45,12 @@ public class SmeltQuest extends QuestExecutor {
         }
 
         int finalAmount = amount;
-        this.execute("smelt", player, amount, result -> result.root(currentItem), replacer -> {
-            replacer.set("item", currentItem.getType());
-            replacer.set("amount", String.valueOf(finalAmount));
-            return replacer;
-        });
+        this.executionBuilder("smelt")
+                .player(player)
+                .progress(amount)
+                .root(currentItem)
+                .progressSingle()
+                .buildAndExecute();
     }
 
     private int hasRoomForItem(Player player, ItemStack checkItem) {

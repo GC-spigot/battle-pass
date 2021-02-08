@@ -12,6 +12,7 @@ import java.util.function.UnaryOperator;
 
 public class QuestExecutor extends QuestContainer {
 
+    @Deprecated
     public QuestExecutor(BattlePlugin plugin) {
         super(plugin);
     }

@@ -2,11 +2,12 @@ package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-public class ExecuteCommandQuest extends QuestExecutor {
+public class ExecuteCommandQuest extends QuestContainer {
 
     public ExecuteCommandQuest(BattlePlugin plugin) {
         super(plugin);
@@ -17,8 +18,10 @@ public class ExecuteCommandQuest extends QuestExecutor {
         Player player = event.getPlayer();
         String command = event.getMessage();
 
-        this.execute("execute-command", player, result -> {
-            return result.root(command);
-        }, replacer -> replacer.set("command", command));
+        this.executionBuilder("execute-command")
+                .player(player)
+                .root(command)
+                .progressSingle()
+                .buildAndExecute();
     }
 }

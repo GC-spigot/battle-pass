@@ -2,13 +2,14 @@ package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import me.hyfe.simplespigot.plugin.SimplePlugin;
 import me.hyfe.simplespigot.text.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-public class ChatQuest extends QuestExecutor {
+public class ChatQuest extends QuestContainer {
     private final SimplePlugin plugin;
 
     public ChatQuest(BattlePlugin plugin) {
@@ -22,8 +23,16 @@ public class ChatQuest extends QuestExecutor {
             Player player = event.getPlayer();
             String message = event.getMessage().toLowerCase();
 
-            this.execute("chat-stripped", player, result -> result.root(Text.decolorize(message)), replacer -> replacer.set("message", message));
-            this.execute("chat", player, result -> result.root(message), replacer -> replacer.set("message", message));
+            this.executionBuilder("chat-stripped")
+                    .player(player)
+                    .root(Text.decolorize(message))
+                    .progressSingle()
+                    .buildAndExecute();
+            this.executionBuilder("chat")
+                    .player(player)
+                    .root(message)
+                    .progressSingle()
+                    .buildAndExecute();
         });
     }
 }

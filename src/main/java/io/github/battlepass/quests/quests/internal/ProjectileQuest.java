@@ -2,13 +2,14 @@ package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
-public class ProjectileQuest extends QuestExecutor {
+public class ProjectileQuest extends QuestContainer {
 
     public ProjectileQuest(BattlePlugin plugin) {
         super(plugin);
@@ -20,7 +21,11 @@ public class ProjectileQuest extends QuestExecutor {
         EntityType entityType = event.getEntityType();
 
         if (source instanceof Player) {
-            this.execute("throw-projectile", (Player) source, result -> result.root(entityType.toString()));
+            this.executionBuilder("throw-projectile")
+                    .player((Player) source)
+                    .root(entityType.toString())
+                    .progressSingle()
+                    .buildAndExecute();
         }
     }
 }
