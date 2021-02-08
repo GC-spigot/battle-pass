@@ -2,6 +2,7 @@ package io.github.battlepass.registry.quest;
 
 import io.github.battlepass.quests.QuestExecutor;
 import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
+import io.github.battlepass.registry.quest.object.PluginVersion;
 import me.hyfe.simplespigot.annotations.NotNull;
 import me.hyfe.simplespigot.registry.Registry;
 
@@ -65,13 +66,13 @@ public interface QuestRegistry extends Registry {
      *
      * @param versionPredicate A tester to check if the version is x. Whatever you want with it.
      */
-    boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author, Predicate<Double> versionPredicate);
+    boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author, Predicate<PluginVersion> versionPredicate);
 
 
     /**
      * Same as {@link QuestRegistry#hook(String, Instantiator, String, Predicate)} but without the author check.
      */
-    default void hook(String name, Instantiator<ExternalQuestExecutor> instantiator, Predicate<Double> versionPredicate) {
+    default void hook(String name, Instantiator<ExternalQuestExecutor> instantiator, Predicate<PluginVersion> versionPredicate) {
         this.hook(name, instantiator, "", versionPredicate);
     }
 }
