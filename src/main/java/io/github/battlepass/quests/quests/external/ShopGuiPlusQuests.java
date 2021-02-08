@@ -4,6 +4,10 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
 import net.brcdev.shopgui.event.ShopPostTransactionEvent;
+import net.brcdev.shopgui.shop.ShopItem;
+import net.brcdev.shopgui.shop.ShopManager;
+import net.brcdev.shopgui.shop.ShopTransactionResult;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 import java.util.function.UnaryOperator;
