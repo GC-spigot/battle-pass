@@ -20,6 +20,7 @@ public class MenuSub extends BpSubCommand<Player> {
     public void onExecute(Player player, String[] strings) {
         Menu menu = this.plugin.getMenuFactory().createMenu(this.menuName, player);
         if (menu == null) {
+            this.lang.external("disallowed-permission").to(player);
             return;
         }
         menu.show();

@@ -36,7 +36,9 @@ public class UserRewardReceiveEvent extends Event implements Cancellable {
     }
 
     public void ifNotCancelled(Consumer<UserRewardReceiveEvent> event) {
-        event.accept(this);
+        if (!this.isCancelled) {
+            event.accept(this);
+        }
     }
 
     @Override

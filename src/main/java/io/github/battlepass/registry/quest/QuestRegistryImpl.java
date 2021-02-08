@@ -27,6 +27,7 @@ import io.github.battlepass.quests.quests.external.MythicMobsQuests;
 import io.github.battlepass.quests.quests.external.PlaceholderApiQuests;
 import io.github.battlepass.quests.quests.external.PlotSquaredQuests;
 import io.github.battlepass.quests.quests.external.ProCosmeticsQuests;
+import io.github.battlepass.quests.quests.external.ShopGuiPlusQuests;
 import io.github.battlepass.quests.quests.external.ShopkeepersQuests;
 import io.github.battlepass.quests.quests.external.SkillApiQuests;
 import io.github.battlepass.quests.quests.external.StrikePracticeQuests;
@@ -65,6 +66,7 @@ import io.github.battlepass.quests.quests.internal.SmeltQuest;
 import io.github.battlepass.quests.quests.internal.TameQuest;
 import io.github.battlepass.quests.service.base.ExternalQuestContainer;
 import io.github.battlepass.quests.service.base.QuestContainer;
+import io.github.battlepass.registry.quest.object.PluginVersion;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -130,9 +132,10 @@ public class QuestRegistryImpl implements QuestRegistry {
         this.hook("KOTH", BenzimmerKothQuests::new, "benzimmer123");
         this.hook("BuildBattle", BuildBattleTigerQuests::new, "Tigerpanzer");
         this.hook("ChatReaction", ChatReactionQuests::new);
-        this.hook("ChestShop", ChestShopQuests::new, version -> version > 3.92);
-        this.hook("ChestShop", ChestShopQuests::new, "https://github.com/ChestShop-authors/ChestShop-3/contributors", version -> version > 3.92);
-        this.hook("ChestShop", LegacyChestShopQuests::new, "https://github.com/ChestShop-authors/ChestShop-3/contributors", version -> version <= 3.92);
+        this.hook("ChestShop", ChestShopQuests::new, "https://github.com/ChestShop-authors/ChestShop-3/contributors", version ->
+                version.getMajor() >= 3 && version.getMinor() > 9);
+        this.hook("ChestShop", LegacyChestShopQuests::new, "https://github.com/ChestShop-authors/ChestShop-3/contributors", version ->
+                version.getMajor() == 3 && version.getMinor() <= 9);
         this.hook("Citizens", CitizensQuests::new);
         this.hook("Clans", ClansQuests::new);
         this.hook("ClueScrolls", ClueScrollsQuests::new);
@@ -148,6 +151,7 @@ public class QuestRegistryImpl implements QuestRegistry {
         this.hook("MythicMobs", MythicMobsQuests::new);
         this.hook("PlotSquared", PlotSquaredQuests::new);
         this.hook("ProCosmetics", ProCosmeticsQuests::new);
+        this.hook("ShopGuiPlus", ShopGuiPlusQuests::new);
         this.hook("CrazyEnvoy", CrazyEnvoyQuests::new);
         this.hook("Shopkeepers", ShopkeepersQuests::new, "nisovin");
         this.hook("SkillAPI", SkillApiQuests::new);
@@ -202,15 +206,15 @@ public class QuestRegistryImpl implements QuestRegistry {
     }
 
     @Override
-    public boolean hook(String name, Instantiator<ExternalQuestContainer> instantiator, String author, Predicate<Double> versionPredicate) {
+    public boolean hook(String name, Instantiator<ExternalQuestContainer> instantiator, String author, Predicate<PluginVersion> versionPredicate) {
         if (this.isHookDisabled(name)) {
             return false;
         }
         Plugin plugin = this.manager.getPlugin(name);
         if (plugin != null && plugin.isEnabled()) {
             if (!this.isHookDisabled(name) && (author.isEmpty() || plugin.getDescription().getAuthors().contains(author))) {
-                double version = this.extractVersion(plugin);
-                BattlePlugin.logger().info("Using internal version as " + version + " for loading " + name + ".");
+                PluginVersion version = this.extractVersion(plugin);
+                BattlePlugin.logger().info("Using internal version as " + version.toString() + " for loading " + name + ".");
                 if (versionPredicate.test(version)) {
                     this.manager.registerEvents(instantiator.init(this.plugin), this.plugin);
                     BattlePlugin.logger().info("Hooked into ".concat(name));
@@ -260,19 +264,35 @@ public class QuestRegistryImpl implements QuestRegistry {
         this.attempts.put(name, ImmutablePair.of(new AtomicInteger(), bukkitTask));
     }
 
-    private double extractVersion(Plugin plugin) {
-        String version = plugin.getDescription().getVersion();
-        StringBuilder extractedVersion = new StringBuilder();
-        for (int i = 0; i < version.length(); i++) {
-            char character = version.charAt(i);
+    private PluginVersion extractVersion(Plugin plugin) {
+        String version = plugin.getDescription().getVersion().split(" ")[0]; // 3.2.6 Build 20 -> 3.2.6
+        String[] splitVersion = version.split("\\.");
+        int major = 0;
+        int minor = 0;
+        int bugfix = 0;
+        if (splitVersion.length == 3) {
+            major = this.entryToVersionNumber(splitVersion[0]);
+            minor = this.entryToVersionNumber(splitVersion[1]);
+            bugfix = this.entryToVersionNumber(splitVersion[2]);
+        } else if (splitVersion.length == 2) {
+            major = this.entryToVersionNumber(splitVersion[0]);
+            minor = this.entryToVersionNumber(splitVersion[1]);
+        } else if (splitVersion.length == 1) {
+            major = this.entryToVersionNumber(splitVersion[0]);
+        }
+        return new PluginVersion()
+                .setMajor(major)
+                .setMinor(minor)
+                .setBugfix(bugfix);
+    }
+
+    private int entryToVersionNumber(String section) {
+        StringBuilder sanitizedSection = new StringBuilder();
+        for (char character : section.toCharArray()) {
             if (Character.isDigit(character)) {
-                if (extractedVersion.length() == 0) {
-                    extractedVersion.append(character).append(".");
-                } else {
-                    extractedVersion.append(character);
-                }
+                sanitizedSection.append(character);
             }
         }
-        return extractedVersion.length() == 0 ? 0.0 : Double.parseDouble(extractedVersion.toString());
+        return Integer.parseInt(sanitizedSection.toString());
     }
 }
