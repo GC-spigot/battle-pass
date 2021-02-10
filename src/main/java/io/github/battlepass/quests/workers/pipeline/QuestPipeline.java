@@ -36,7 +36,7 @@ public class QuestPipeline {
             this.logger.log("(PIPELINE) Player null issue for quest type ".concat(name));
             return;
         }
-        if (this.banPermissionEnabled && player.hasPermission("battlepass.block") && !player.isOp()) {
+        if (this.banPermissionEnabled && player.hasPermission("battlepass.block") && !player.hasPermission("battlepass.admin")) {
             this.logger.log(LogContainer.of("(PIPELINE) Player %battlepass-player% is blocked from the battlepass so dropping them.", player));
             return;
         }

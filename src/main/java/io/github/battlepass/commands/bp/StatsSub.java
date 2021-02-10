@@ -28,7 +28,7 @@ public class StatsSub extends BpSubCommand<Player> {
 
     @Override
     public void onExecute(Player sender, String[] args) {
-        if (this.blockPermissionEnabled && sender.hasPermission("battlepass.block") && !sender.isOp()) {
+        if (this.blockPermissionEnabled && sender.hasPermission("battlepass.block") && !sender.hasPermission("battlepass.admin")) {
             this.lang.external("disallowed-permission").to(sender);
             return;
         }

@@ -55,7 +55,7 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
             return;
         }
-        if (this.banPermissionEnabled && player.hasPermission("battlepass.block") && !sender.isOp()) {
+        if (this.banPermissionEnabled && player.hasPermission("battlepass.block") && !player.hasPermission("battlepass.admin")) {
             this.lang.local("blocked-from-pass", sender.getName()).to(sender);
             return;
         }
