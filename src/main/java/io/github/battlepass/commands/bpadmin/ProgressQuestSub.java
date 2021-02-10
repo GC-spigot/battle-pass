@@ -22,6 +22,7 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
     private final QuestController controller;
     private final QuestValidationStep questValidationStep;
     private final QuestCompletionStep questCompletionStep;
+    private final boolean banPermissionEnabled;
 
     public ProgressQuestSub(BattlePlugin plugin) {
         super(plugin);
@@ -29,6 +30,7 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
         this.controller = plugin.getQuestController();
         this.questValidationStep = new QuestValidationStep(plugin);
         this.questCompletionStep = new QuestCompletionStep(plugin);
+        this.banPermissionEnabled = plugin.getConfig("settings").bool("enable-ban-permission");
 
         this.inheritPermission();
         this.addFlats("progress", "quest");
@@ -53,7 +55,7 @@ public class ProgressQuestSub extends BpSubCommand<CommandSender> {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
             return;
         }
-        if (player.hasPermission("battlepass.block") && this.plugin.getConfig("settings").bool("enable-ban-permission") && !sender.isOp()) {
+        if (this.banPermissionEnabled && player.hasPermission("battlepass.block") && !sender.isOp()) {
             this.lang.local("blocked-from-pass", sender.getName()).to(sender);
             return;
         }
