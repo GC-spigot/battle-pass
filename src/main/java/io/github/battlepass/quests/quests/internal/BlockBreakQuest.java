@@ -1,7 +1,7 @@
 package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import me.hyfe.simplespigot.version.ServerVersion;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,7 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 
-public class BlockBreakQuest extends QuestExecutor {
+public class BlockBreakQuest extends QuestContainer {
 
     public BlockBreakQuest(BattlePlugin plugin) {
         super(plugin);
@@ -24,6 +24,10 @@ public class BlockBreakQuest extends QuestExecutor {
         if (block.getType() == Material.FIRE || (
                 ServerVersion.getVersion().getVersionId() >= ServerVersion.MC1_16_R1.getVersionId() && block.getType() == Material.SOUL_FIRE)
         ) return;
-        super.execute("block-break", player, result -> result.root(block), replacer -> replacer.set("block", block.getType()));
+        this.executionBuilder("block-break")
+                .player(player)
+                .root(block)
+                .progressSingle()
+                .buildAndExecute();
     }
 }

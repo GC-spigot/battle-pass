@@ -1,7 +1,7 @@
 package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import me.hyfe.simplespigot.version.MultiMaterial;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ConsumeQuest extends QuestExecutor {
+public class ConsumeQuest extends QuestContainer {
 
     public ConsumeQuest(BattlePlugin plugin) {
         super(plugin);
@@ -21,7 +21,11 @@ public class ConsumeQuest extends QuestExecutor {
         Player player = event.getPlayer();
         ItemStack itemStack = event.getItem();
 
-        this.execute("consume", player, result -> result.root(itemStack), replacer -> replacer.set("item", itemStack.getType()));
+        this.executionBuilder("consume")
+                .player(player)
+                .root(itemStack)
+                .progressSingle()
+                .buildAndExecute();
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -32,6 +36,10 @@ public class ConsumeQuest extends QuestExecutor {
         if (block == null || !block.getType().equals(MultiMaterial.CAKE.getMaterial()) || player.getFoodLevel() >= 20) {
             return;
         }
-        this.execute("consume", player, result -> result.root(block), replacer -> replacer.set("item", block.getType()));
+        this.executionBuilder("consume")
+                .player(player)
+                .root(block)
+                .progressSingle()
+                .buildAndExecute();
     }
 }

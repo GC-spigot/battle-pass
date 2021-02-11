@@ -3,7 +3,7 @@ package io.github.battlepass.quests.quests.internal;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +12,7 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
-public class CraftQuest extends QuestExecutor {
+public class CraftQuest extends QuestContainer {
 
     public CraftQuest(BattlePlugin plugin) {
         super(plugin);
@@ -34,7 +34,10 @@ public class CraftQuest extends QuestExecutor {
             }
             amount = Math.min(roomResult, itemStack.getType().getMaxStackSize());
         }
-        this.execute("craft", player, amount, result -> result.root(itemStack), replacer -> replacer.set("item", itemStack.getType()));
+        this.executionBuilder("craft")
+                .player(player)
+                .progress(amount)
+                .root(itemStack).buildAndExecute();
     }
 
     private int roomCheck(Player player, ItemStack checkItem, Recipe recipe, CraftingInventory inventory) {

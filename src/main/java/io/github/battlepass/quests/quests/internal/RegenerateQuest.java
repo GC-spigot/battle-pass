@@ -1,12 +1,12 @@
 package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 
-public class RegenerateQuest extends QuestExecutor {
+public class RegenerateQuest extends QuestContainer {
 
     public RegenerateQuest(BattlePlugin plugin) {
         super(plugin);
@@ -22,6 +22,11 @@ public class RegenerateQuest extends QuestExecutor {
         EntityRegainHealthEvent.RegainReason regainReason = event.getRegainReason();
         int gainAmount = (int) Math.round(event.getAmount());
 
-        this.execute("regenerate", player, gainAmount, result -> result.root(regainReason.toString()), replacer -> replacer.set("reason", regainReason));
+        this.executionBuilder("regenerate")
+                .player(player)
+                .progress(gainAmount)
+                .root(regainReason.toString())
+                .progressSingle()
+                .buildAndExecute();
     }
 }

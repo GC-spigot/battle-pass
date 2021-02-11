@@ -4,7 +4,7 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.controller.QuestController;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
-import org.bukkit.entity.Player;
+import io.github.battlepass.quests.service.executor.QuestExecution;
 
 import java.math.BigInteger;
 
@@ -17,15 +17,16 @@ public class QuestCompletionStep {
         this.controller = plugin.getQuestController();
     }
 
-    public void process(Player player, User user, Quest quest, BigInteger originalProgress, BigInteger progressIncrement, boolean overrideUpdate) {
+    public void process(QuestExecution questExecution, Quest quest, BigInteger originalProgress, BigInteger progressIncrement) {
+        User user = questExecution.getUser();
         BigInteger updatedProgress;
-        if (overrideUpdate) {
+        if (questExecution.shouldOverrideUpdate()) {
             BigInteger newTotalProgress = progressIncrement.min(quest.getRequiredProgress());
             updatedProgress = newTotalProgress;
             this.controller.setQuestProgress(user, quest, newTotalProgress);
         } else {
             updatedProgress = this.controller.addQuestProgress(user, quest, progressIncrement);
         }
-        this.notificationStep.process(player, user, quest, originalProgress, updatedProgress);
+        this.notificationStep.process(questExecution.getPlayer(), user, quest, originalProgress, updatedProgress);
     }
 }

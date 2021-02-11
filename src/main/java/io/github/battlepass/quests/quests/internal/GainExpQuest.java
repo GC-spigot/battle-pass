@@ -1,13 +1,12 @@
 package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.objects.quests.variable.QuestResult;
-import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 
-public class GainExpQuest extends QuestExecutor {
+public class GainExpQuest extends QuestContainer {
 
     public GainExpQuest(BattlePlugin plugin) {
         super(plugin);
@@ -21,6 +20,10 @@ public class GainExpQuest extends QuestExecutor {
             return;
         }
 
-        this.execute("gain-experience", player, gainAmount, QuestResult::none, replacer -> replacer.set("amount", gainAmount));
+        this.executionBuilder("gain-experience")
+                .player(player)
+                .progress(gainAmount)
+                .progressSingle()
+                .buildAndExecute();
     }
 }

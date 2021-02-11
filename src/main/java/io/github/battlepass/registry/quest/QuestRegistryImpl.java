@@ -3,7 +3,6 @@ package io.github.battlepass.registry.quest;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.quests.QuestExecutor;
 import io.github.battlepass.quests.quests.external.ASkyblockQuests;
 import io.github.battlepass.quests.quests.external.AdvancedEnchantmentsQuests;
 import io.github.battlepass.quests.quests.external.AuctionHouseKludgeQuests;
@@ -41,7 +40,6 @@ import io.github.battlepass.quests.quests.external.UltraSkyWarsQuests;
 import io.github.battlepass.quests.quests.external.VotifierQuests;
 import io.github.battlepass.quests.quests.external.chestshop.ChestShopQuests;
 import io.github.battlepass.quests.quests.external.chestshop.LegacyChestShopQuests;
-import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
 import io.github.battlepass.quests.quests.internal.BlockBreakQuest;
 import io.github.battlepass.quests.quests.internal.BlockPlaceQuest;
 import io.github.battlepass.quests.quests.internal.ChatQuest;
@@ -66,6 +64,8 @@ import io.github.battlepass.quests.quests.internal.RideMobQuest;
 import io.github.battlepass.quests.quests.internal.ShearSheepQuest;
 import io.github.battlepass.quests.quests.internal.SmeltQuest;
 import io.github.battlepass.quests.quests.internal.TameQuest;
+import io.github.battlepass.quests.service.base.ExternalQuestContainer;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import io.github.battlepass.registry.quest.object.PluginVersion;
 import me.hyfe.simplespigot.tuple.ImmutablePair;
 import org.bukkit.Bukkit;
@@ -177,14 +177,14 @@ public class QuestRegistryImpl implements QuestRegistry {
 
     @SafeVarargs
     @Override
-    public final void quest(Instantiator<QuestExecutor>... instantiators) {
+    public final void quest(Instantiator<QuestContainer>... instantiators) {
         for (Instantiator<?> instantiator : instantiators) {
             Bukkit.getPluginManager().registerEvents(instantiator.init(this.plugin), this.plugin);
         }
     }
 
     @Override
-    public boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author) {
+    public boolean hook(String name, Instantiator<ExternalQuestContainer> instantiator, String author) {
         if (this.isHookDisabled(name)) {
             return false;
         }
@@ -206,7 +206,7 @@ public class QuestRegistryImpl implements QuestRegistry {
     }
 
     @Override
-    public boolean hook(String name, Instantiator<ExternalQuestExecutor> instantiator, String author, Predicate<PluginVersion> versionPredicate) {
+    public boolean hook(String name, Instantiator<ExternalQuestContainer> instantiator, String author, Predicate<PluginVersion> versionPredicate) {
         if (this.isHookDisabled(name)) {
             return false;
         }

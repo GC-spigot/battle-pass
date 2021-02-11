@@ -1,11 +1,11 @@
 package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.quests.QuestExecutor;
+import io.github.battlepass.quests.service.base.QuestContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class PlayTimeQuest extends QuestExecutor {
+public class PlayTimeQuest extends QuestContainer {
 
     public PlayTimeQuest(BattlePlugin plugin) {
         super(plugin);
@@ -15,7 +15,10 @@ public class PlayTimeQuest extends QuestExecutor {
     public void run(BattlePlugin plugin) {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                this.execute("playtime", player, 5, result -> result);
+                this.executionBuilder("playtime")
+                        .player(player)
+                        .progress(5)
+                        .buildAndExecute();
             }
         }, 100, 100);
     }

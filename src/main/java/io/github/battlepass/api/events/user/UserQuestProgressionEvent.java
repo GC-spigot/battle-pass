@@ -2,10 +2,11 @@ package io.github.battlepass.api.events.user;
 
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
-import me.hyfe.simplespigot.annotations.NotNull;
+import io.github.battlepass.quests.service.executor.QuestExecution;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.util.function.Consumer;
@@ -17,10 +18,10 @@ public class UserQuestProgressionEvent extends Event implements Cancellable {
     private BigInteger addedProgress;
     private boolean isCancelled;
 
-    public UserQuestProgressionEvent(User user, Quest quest, BigInteger progression) {
-        this.user = user;
+    public UserQuestProgressionEvent(QuestExecution execution, Quest quest) {
+        this.user = execution.getUser();
         this.quest = quest;
-        this.addedProgress = progression;
+        this.addedProgress = execution.getProgress();
     }
 
     public User getUser() {
@@ -60,8 +61,7 @@ public class UserQuestProgressionEvent extends Event implements Cancellable {
     }
 
     @Override
-    public @NotNull
-    HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return HANDLER_LIST;
     }
 }

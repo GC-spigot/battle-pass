@@ -1,9 +1,14 @@
 package io.github.battlepass.logger.containers;
 
+import io.github.battlepass.quests.service.executor.QuestExecution;
 import org.bukkit.entity.Player;
 
 public abstract class LogContainer implements Comparable<LogContainer> {
-    private final Long time;
+    private final long time;
+
+    public LogContainer() {
+        this.time = System.currentTimeMillis();
+    }
 
     public static LogContainer of(String message) {
         return new BasicContainer(message);
@@ -13,11 +18,11 @@ public abstract class LogContainer implements Comparable<LogContainer> {
         return new BasicPlayerContainer(message, player);
     }
 
-    public LogContainer() {
-        this.time = System.currentTimeMillis();
+    public static LogContainer of(QuestExecution questExecution) {
+        return new QuestExecutionContainer(questExecution);
     }
 
-    public Long getTime() {
+    public long getTime() {
         return this.time;
     }
 
