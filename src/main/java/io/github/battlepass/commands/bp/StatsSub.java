@@ -14,19 +14,21 @@ public class StatsSub extends BpSubCommand<Player> {
     private final UserCache userCache;
     private final PassLoader passLoader;
     private final BattlePassApi api;
+    private final boolean blockPermissionEnabled;
 
     public StatsSub(BattlePlugin plugin) {
         super(plugin);
         this.userCache = plugin.getUserCache();
         this.passLoader = plugin.getPassLoader();
         this.api = plugin.getLocalApi();
+        this.blockPermissionEnabled = plugin.getConfig("settings").bool("enable-ban-permission");
 
         this.addFlat("stats");
     }
 
     @Override
     public void onExecute(Player sender, String[] args) {
-        if (sender.hasPermission("battlepass.block") && this.plugin.getConfig("settings").bool("enable-ban-permission") && !sender.isOp()) {
+        if (this.blockPermissionEnabled && sender.hasPermission("battlepass.block") && !sender.hasPermission("battlepass.admin")) {
             this.lang.external("disallowed-permission").to(sender);
             return;
         }

@@ -19,14 +19,14 @@ public class QuestPipeline {
     private final DebugLogger logger;
     private final UserCache userCache;
     private final QuestCache questCache;
-    private final BattlePlugin plugin;
+    private final boolean banPermissionEnabled;
 
     public QuestPipeline(BattlePlugin plugin) {
         this.questValidationStep = new QuestValidationStep(plugin);
         this.logger = plugin.getDebugLogger();
         this.userCache = plugin.getUserCache();
         this.questCache = plugin.getQuestCache();
-        this.plugin = plugin;
+        this.banPermissionEnabled = plugin.getConfig("settings").bool("enable-ban-permission");
     }
 
     /**
@@ -39,7 +39,7 @@ public class QuestPipeline {
 
     public void handle(QuestExecution questExecution) {
         Player player = questExecution.getPlayer();
-        if (player.hasPermission("battlepass.block") && this.plugin.getConfig("settings").bool("enable-ban-permission") && !player.isOp()) {
+        if (this.banPermissionEnabled && player.hasPermission("battlepass.block") && !player.hasPermission("battlepass.admin")) {
             this.logger.log(LogContainer.of("(PIPELINE) Player %battlepass-player% is blocked from the battlepass so dropping them.", player));
             return;
         }

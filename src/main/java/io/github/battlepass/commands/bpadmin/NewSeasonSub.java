@@ -31,7 +31,7 @@ public class NewSeasonSub extends BpSubCommand<CommandSender> {
                 user.getPendingTiers().clear();
                 user.getQuestStore().clear();
                 user.updatePoints(current -> BigInteger.ZERO);
-                user.updateTier(current -> 0);
+                user.updateTier(current -> 1);
             });
             this.lang.local("new-season-reset").to(sender);
             return;

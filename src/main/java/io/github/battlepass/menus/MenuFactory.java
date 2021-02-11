@@ -22,15 +22,17 @@ public class MenuFactory {
     private final Lang lang;
     private final Map<UUID, Menu> openMenus = Maps.newHashMap();
     private final Map<Collection<String>, Function<Player, Menu>> menus = Maps.newHashMap();
+    private final boolean banPermissionEnabled;
 
     public MenuFactory(BattlePlugin plugin) {
         this.plugin = plugin;
         this.lang = plugin.getLang();
+        this.banPermissionEnabled = plugin.getConfig("settings").bool("enable-ban-permission");
         this.putDefaults();
     }
 
     public Menu createMenu(String menuName, Player player) {
-        if (player.hasPermission("battlepass.block") && this.plugin.getConfig("settings").bool("enable-ban-permission") && !player.isOp()) {
+        if (this.banPermissionEnabled && player.hasPermission("battlepass.block") && !player.hasPermission("battlepass.admin")) {
             this.lang.external("disallowed-permission").to(player);
             return null;
         }
