@@ -4,6 +4,7 @@ import io.github.battlepass.objects.quests.variable.ExecutableQuestResult;
 import io.github.battlepass.objects.quests.variable.QuestResult;
 import io.github.battlepass.quests.workers.pipeline.QuestPipeline;
 import io.github.battlepass.service.CheckHelper;
+import me.hyfe.simplespigot.annotations.Nullable;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,8 +29,10 @@ public class QuestExecutionBuilderImpl implements QuestExecutionBuilder {
 
     @Override
     public void buildAndExecute() {
-        QuestExecution execution = this.build();
-        this.pipeline.handle(execution);
+        if (this.player != null) {
+            QuestExecution execution = this.build();
+            this.pipeline.handle(execution);
+        }
     }
 
     @Override
@@ -51,8 +54,7 @@ public class QuestExecutionBuilderImpl implements QuestExecutionBuilder {
     }
 
     @Override
-    public QuestExecutionBuilder player(Player player) {
-        CheckHelper.notNull(player, "Quest execution player");
+    public QuestExecutionBuilder player(@Nullable Player player) {
         this.player = player;
         return this;
     }
