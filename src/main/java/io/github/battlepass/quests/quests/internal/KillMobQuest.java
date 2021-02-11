@@ -2,7 +2,6 @@ package io.github.battlepass.quests.quests.internal;
 
 import com.bgsoftware.wildstacker.api.WildStackerAPI;
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.quests.QuestExecutor;
 import io.github.battlepass.quests.service.base.QuestContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;

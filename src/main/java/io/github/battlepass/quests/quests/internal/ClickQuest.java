@@ -1,8 +1,6 @@
 package io.github.battlepass.quests.quests.internal;
 
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.objects.quests.variable.QuestResult;
-import io.github.battlepass.quests.QuestExecutor;
 import io.github.battlepass.quests.service.base.QuestContainer;
 import io.github.battlepass.quests.service.executor.QuestExecutionBuilder;
 import org.bukkit.Material;

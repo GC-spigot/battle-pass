@@ -3,7 +3,6 @@ package io.github.battlepass.quests.quests.internal;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import io.github.battlepass.BattlePlugin;
-import io.github.battlepass.quests.QuestExecutor;
 import io.github.battlepass.quests.service.base.QuestContainer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -44,7 +43,6 @@ public class SmeltQuest extends QuestContainer {
             return;
         }
 
-        int finalAmount = amount;
         this.executionBuilder("smelt")
                 .player(player)
                 .progress(amount)
