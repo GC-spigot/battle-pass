@@ -9,10 +9,12 @@ import me.hyfe.simplespigot.annotations.NotNull;
 import me.hyfe.simplespigot.annotations.Nullable;
 
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("unused")
 public interface BattlePassApi {
 
     /**
@@ -97,6 +99,16 @@ public interface BattlePassApi {
      * @return {@link BattlePassApi#getCurrentWeek} but accounting for the max possible week. It cannot be larger than the number of configured weeks
      */
     long getCurrentDisplayWeek();
+
+    /**
+     * @return The end date of the season calculated as the number of weeks configured since {@link BattlePassApi#getSeasonStartDate}
+     */
+    ZonedDateTime getSeasonEndDate();
+
+    /**
+     * @return The start date of the season set in the settings.yml
+     */
+    ZonedDateTime getSeasonStartDate();
 
     /**
      * Fetches the pass from the pass id and sets the user's pass to it.

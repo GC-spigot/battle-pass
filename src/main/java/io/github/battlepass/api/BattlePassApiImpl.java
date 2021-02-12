@@ -112,6 +112,16 @@ public class BattlePassApiImpl implements BattlePassApi {
     }
 
     @Override
+    public ZonedDateTime getSeasonEndDate() {
+        return this.plugin.getSeasonEndDate();
+    }
+
+    @Override
+    public ZonedDateTime getSeasonStartDate() {
+        return this.plugin.getSeasonStartDate();
+    }
+
+    @Override
     public void setPassId(User user, String passId) throws PassNotFoundException {
         String currentPassId = user.getPassId();
         if (currentPassId.equals(passId)) {
