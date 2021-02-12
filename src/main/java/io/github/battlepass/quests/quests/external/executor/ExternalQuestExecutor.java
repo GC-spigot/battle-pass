@@ -55,7 +55,7 @@ public class ExternalQuestExecutor extends ExternalQuestContainer {
 
     @Deprecated
     protected void execute(String name, Player player, BigInteger progress, UnaryOperator<QuestResult> result, Replace replace) {
-        this.execute(this.prefix.concat(name), player, progress, result, replace, false);
+        this.execute(name, player, progress, result, replace, false);
     }
 
     @Deprecated
