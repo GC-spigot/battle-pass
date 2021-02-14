@@ -4,6 +4,7 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.objects.user.User;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,7 +29,7 @@ public class GiveBalanceSub extends BpSubCommand<CommandSender> {
 
     @Override
     public void onExecute(CommandSender sender, String[] args) {
-        Optional<User> maybeUser = this.parseArgument(args, 3);
+        Optional<User> maybeUser = this.parseArgument(args, 2);
         if (!maybeUser.isPresent()) {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
             return;
@@ -39,7 +40,12 @@ public class GiveBalanceSub extends BpSubCommand<CommandSender> {
             this.lang.local("invalid-number-input");
             return;
         }
-        this.lang.local("given-user-balance").to(sender);
+        OfflinePlayer player = Bukkit.getOfflinePlayer(user.getUuid());
+        if (player.getName() != null) {
+            this.lang.local("given-user-balance", amount.toString(), player.getName()).to(sender);
+        } else {
+            this.lang.local("given-user-balance", amount.toString()).to(sender);
+        }
         user.updateCurrency(current -> current.add(amount));
     }
 }

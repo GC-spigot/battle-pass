@@ -31,6 +31,7 @@ public class UserStorage extends Storage<User> {
             json.addProperty("pass-id", user.getPassId());
             json.addProperty("tier", user.getTier());
             json.addProperty("points", user.getPoints().toString());
+            json.addProperty("currency", user.getCurrency().toString());
             json.addProperty("bypass-locked-weeks", user.bypassesLockedWeeks());
             json.addProperty("pending-rewards", gson.toJson(user.getPendingTiers()));
             return json;
