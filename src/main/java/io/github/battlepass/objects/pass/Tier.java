@@ -1,5 +1,6 @@
 package io.github.battlepass.objects.pass;
 
+import me.hyfe.simplespigot.annotations.Nullable;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,14 +13,16 @@ public class Tier {
     private final ItemStack lockedTierItem;
     private final ItemStack unlockedTierItem;
     private final ItemStack claimedTierItem;
+    private final ItemStack doesntHavePassItem;
 
-    public Tier(int number, int requiredPoints, List<String> rewardIds, ItemStack lockedTierItem, ItemStack unlockedTierItem, ItemStack claimedTierItem) {
+    public Tier(int number, int requiredPoints, List<String> rewardIds, ItemStack lockedTierItem, ItemStack unlockedTierItem, ItemStack claimedTierItem, ItemStack doesntHavePassItem) {
         this.tier = number;
         this.requiredPoints = requiredPoints;
         this.rewardIds = rewardIds;
         this.lockedTierItem = lockedTierItem;
         this.unlockedTierItem = unlockedTierItem;
         this.claimedTierItem = claimedTierItem;
+        this.doesntHavePassItem = doesntHavePassItem;
     }
 
     public int getTier() {
@@ -34,6 +37,7 @@ public class Tier {
         return this.rewardIds;
     }
 
+    @Nullable
     public ItemStack getItem(String itemKey) {
         switch (itemKey) {
             case "claimed-tier-item":
@@ -42,8 +46,10 @@ public class Tier {
                 return this.unlockedTierItem;
             case "locked-tier-item":
                 return this.lockedTierItem;
+            case "doesnt-have-pass-item":
+                return this.doesntHavePassItem;
             default:
-                return new ItemStack(Material.DIRT);
+                return null;
         }
     }
 }

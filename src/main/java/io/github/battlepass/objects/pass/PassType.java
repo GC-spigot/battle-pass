@@ -43,7 +43,8 @@ public class PassType {
             ItemStack lockedTierItem = SpigotItem.toItem(this.config, "tiers." + key + ".locked-tier-item", replacer -> replacer.set("tier", tier));
             ItemStack unlockedTierItem = SpigotItem.toItem(this.config, "tiers." + key + ".unlocked-tier-item", replacer -> replacer.set("tier", tier));
             ItemStack claimedTierItem = SpigotItem.toItem(this.config, "tiers." + key + ".claimed-tier-item", replacer -> replacer.set("tier", tier));
-            this.tiers.put(tier, new Tier(tier, requiredPoints, rewardIds, lockedTierItem, unlockedTierItem, claimedTierItem));
+            ItemStack doesntHavePassItem = SpigotItem.toItem(this.config, "tiers." + key + ".doesnt-have-pass-item", replacer -> replacer.set("tier", tier));
+            this.tiers.put(tier, new Tier(tier, requiredPoints, rewardIds, lockedTierItem, unlockedTierItem, claimedTierItem, doesntHavePassItem));
         }
         for (String action : config.stringList("tier-up-actions")) {
             this.tierUpActions.add(Action.parse(action));
