@@ -71,9 +71,9 @@ public class ExecutableQuestResult implements QuestResult {
 
     @Override
     public boolean isEligible(Player player, Variable variable) {
-        for (String root : variable.getRoots()) {
-            boolean noVariableRoot = root.equalsIgnoreCase("none");
-            if (this.areSubRootsValid(player, variable)) {
+        if (this.areSubRootsValid(player, variable)) {
+            for (String root : variable.getRoots()) {
+                boolean noVariableRoot = root.equalsIgnoreCase("none");
                 if (noVariableRoot) {
                     return true;
                 }
