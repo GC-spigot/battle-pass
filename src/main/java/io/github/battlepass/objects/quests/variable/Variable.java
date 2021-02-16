@@ -57,7 +57,7 @@ public class Variable {
         Map<String, List<String>> subRoots = Maps.newHashMap();
         BiConsumer<String, Supplier<String>> consumer = (path, supplier) -> subRoots.put(path, Arrays.asList(supplier.get().split(" OR ")));
         if (config.get(section.concat("variable")) instanceof MemorySection) {
-            String root = config.has("variable.root") ? config.string(section.concat("variable.root")) : "none";
+            String root = config.has(section.concat("variable.root")) ? config.string(section.concat("variable.root")) : "none";
             String variableSection = section.concat("variable.");
             if (config.has(variableSection.concat("holding"))) {
                 apply(consumer, config, variableSection, "holding.item");
