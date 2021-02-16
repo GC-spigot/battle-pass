@@ -30,7 +30,7 @@ public class ShopGuiPlusQuests extends ExternalQuestExecutor {
         String shopId = shopItem.getId();
         int amount = transaction.getAmount();
         int cost = (int) Math.ceil(transaction.getPrice());
-        UnaryOperator<QuestResult> questResult = result -> result.root(shopItem.getItem()).subRoot("shop", shopId).subRoot("itemId", shopItem.getId());
+        UnaryOperator<QuestResult> questResult = result -> result.root(shopItem.getItem()).subRoot("shop", shopId).subRoot("item-id", shopItem.getId());
         if (shopAction == ShopManager.ShopAction.BUY) {
             super.execute("buy", player, amount, questResult);
             super.execute("buy_singular", player, questResult);
