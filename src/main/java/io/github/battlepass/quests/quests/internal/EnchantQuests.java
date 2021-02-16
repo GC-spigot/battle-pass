@@ -81,7 +81,6 @@ public class EnchantQuests extends QuestExecutor {
                 result.subRoot(enchantedItem);
                 return result.root(enchantName);
             };
-
             this.execute("enchant-anvil", ((Player) event.getWhoClicked()).getPlayer(), resultOperator);
             this.execute("enchant-all", ((Player) event.getWhoClicked()).getPlayer(), resultOperator);
         }
@@ -89,7 +88,7 @@ public class EnchantQuests extends QuestExecutor {
 
     private String getEnchantName(Enchantment enchantment) {
         if (ServerVersion.isOver_V1_12()) {
-            String possibleName = enchantment.getKey().getNamespace();
+            String possibleName = enchantment.getKey().getKey();
             return possibleName.startsWith("minecraft:") ? possibleName.split("minecraft:")[1] : possibleName;
         }
         return enchantment.getName();
