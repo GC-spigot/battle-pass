@@ -73,6 +73,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -81,7 +82,7 @@ import java.util.function.Predicate;
 public class QuestRegistryImpl implements QuestRegistry {
     private final BattlePlugin plugin;
     private final PluginManager manager;
-    private final Set<String> disabledHooks = Sets.newHashSet();
+    private final List<String> disabledHooks;
     private final Set<String> registeredHooks = Sets.newHashSet();
     private final Map<String, ImmutablePair<AtomicInteger, BukkitTask>> attempts = Maps.newHashMap();
 
@@ -89,9 +90,7 @@ public class QuestRegistryImpl implements QuestRegistry {
         this.plugin = plugin;
         this.manager = Bukkit.getPluginManager();
 
-        for (String disabledHook : plugin.getConfig("settings").stringList("disabled-plugin-hooks")) {
-            this.disabledHooks.add(disabledHook.toLowerCase());
-        }
+        this.disabledHooks = plugin.getConfig("settings").stringList("disabled-plugin-hooks");
     }
 
     @Override
@@ -171,7 +170,7 @@ public class QuestRegistryImpl implements QuestRegistry {
     }
 
     @Override
-    public Set<String> getDisabledHooks() {
+    public List<String> getDisabledHooks() {
         return this.disabledHooks;
     }
 

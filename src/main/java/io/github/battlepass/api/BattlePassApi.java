@@ -4,7 +4,6 @@ import io.github.battlepass.objects.pass.Tier;
 import io.github.battlepass.objects.reward.Reward;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.registry.quest.QuestRegistry;
-import io.github.battlepass.registry.quest.QuestRegistryImpl;
 import me.hyfe.simplespigot.annotations.NotNull;
 import me.hyfe.simplespigot.annotations.Nullable;
 
@@ -18,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 public interface BattlePassApi {
 
     /**
-     * @return the {@link QuestRegistryImpl} which should be used to register internal & external quests.
+     * @return the {@link QuestRegistry} which should be used to register internal & external quests.
      */
     @NotNull
     QuestRegistry getQuestRegistry();

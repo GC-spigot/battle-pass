@@ -4,6 +4,8 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.api.events.user.UserQuestProgressionEvent;
 import lombok.SneakyThrows;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -14,10 +16,10 @@ public class BStats implements Listener {
     public BStats(BattlePlugin plugin) {
         plugin.registerListeners(this);
         Metrics metrics = new Metrics(plugin, 9650);
-        metrics.addCustomChart(new Metrics.SimplePie("number_of_weeks", () -> {
+        metrics.addCustomChart(new SimplePie("number_of_weeks", () -> {
             return String.valueOf(plugin.getQuestCache().getMaxWeek());
         }));
-        metrics.addCustomChart(new Metrics.SingleLineChart("single_quest_progressions", () -> {
+        metrics.addCustomChart(new SingleLineChart("single_quest_progressions", () -> {
             int questProgressions = this.questProgressions;
             this.questProgressions = 0;
             return questProgressions;

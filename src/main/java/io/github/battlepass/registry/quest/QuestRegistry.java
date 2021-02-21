@@ -6,6 +6,7 @@ import io.github.battlepass.registry.quest.object.PluginVersion;
 import me.hyfe.simplespigot.annotations.NotNull;
 import me.hyfe.simplespigot.registry.Registry;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -24,7 +25,7 @@ public interface QuestRegistry extends Registry {
      * @return The hooks explicitly disabled via the settings.yml value
      */
     @NotNull
-    Set<String> getDisabledHooks();
+    List<String> getDisabledHooks();
 
     /**
      * This does not check simply if the hook is not registered, it checks whether it's explicitly
