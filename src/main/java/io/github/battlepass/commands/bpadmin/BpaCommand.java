@@ -59,8 +59,6 @@ public class BpaCommand extends SimpleCommand<CommandSender> {
                         + "/bpa remove balance <player> <amount> - Takes away internal balance"
                         + "/bpa set balance <player> <amount> - Sets a player's internal balance")
                 : "")
-                + "/bpa debug dump - Dumps a debug log with lots of information."
-                + "/bpa debug dump <player> - Dumps a debug log with player pertinent information."
                 + "/bpa set pass <player/online/all> <pass type> - Sets a player/group of players' pass type."
                 + "/bpa set points <player> <points> - Set a players points."
                 + "/bpa give points <player> <points> - Give a player points."
