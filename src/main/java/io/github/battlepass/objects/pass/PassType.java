@@ -2,6 +2,7 @@ package io.github.battlepass.objects.pass;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.actions.Action;
 import io.github.battlepass.cache.RewardCache;
 import io.github.battlepass.objects.user.User;
@@ -87,12 +88,12 @@ public class PassType {
         return this.tierUpActions;
     }
 
-    public ItemStack tierToItem(RewardCache rewardCache, User user, String passId, Tier tier, boolean hasTier) {
+    public ItemStack tierToItem(BattlePlugin plugin, RewardCache rewardCache, User user, String passId, Tier tier, boolean hasTier) {
         boolean hasPass = user.hasPassId(passId) && (passId.equals("premium") || user.getPassId().equals("free") || !this.config.bool("dont-give-premium-free-rewards")); // Second part is to allow for premium rewards only
         boolean hasClaimed = user.getPendingTiers(passId) != null && !user.getPendingTiers(passId).contains(tier.getTier());
         Replace replace = replacer -> replacer.set("tier", tier.getTier())
                 .set("points", user.getPoints())
-                .set("required_points", tier.getRequiredPoints());
+                .set("required_points", plugin.getLocalApi().getRequiredPoints(tier.getTier(), passId));
         String itemKey;
         ItemStack itemStack;
         if (this.config.has("items.".concat("doesnt-have-pass-item"))) {

@@ -68,10 +68,6 @@ public class DailyQuestReset {
         return this.currentQuests;
     }
 
-    public ZonedDateTime getResetTime() {
-        return this.resetTime;
-    }
-
     public void start() {
         if (this.shouldNotDoDailyQuests()) {
             this.currentQuests.clear();
