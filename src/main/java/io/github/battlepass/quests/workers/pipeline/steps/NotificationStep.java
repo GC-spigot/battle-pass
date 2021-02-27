@@ -53,6 +53,9 @@ public class NotificationStep implements Listener {
     }
 
     public void process(Player player, User user, Quest quest, BigInteger originalProgress, BigInteger updatedProgress) {
+        if (originalProgress.compareTo(updatedProgress) == 0) {
+            return;
+        }
         // this.questController.isQuestDone was removed as a check here as I think below does the same with just... less computation?
         // If any weird behaviour happens with messages it's below
         if (updatedProgress.compareTo(quest.getRequiredProgress()) > -1) {

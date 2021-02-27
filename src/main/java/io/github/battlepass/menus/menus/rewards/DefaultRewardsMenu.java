@@ -140,7 +140,7 @@ public class DefaultRewardsMenu extends ConfigMenu implements PageMethods, UserD
                 continue;
             }
             this.item(MenuItem
-                    .builderOf(passType.tierToItem(this.rewardCache, this.user, passId, tier, this.user.getTier() >= index))
+                    .builderOf(passType.tierToItem(this.plugin, this.rewardCache, this.user, passId, tier, this.user.getTier() >= index))
                     .rawSlot(slots.get(index - (slots.size() * (this.page - 1) + 1)))
                     .onClick((menuItem, clickType) -> {
                         int tierNum = tier.getTier();
