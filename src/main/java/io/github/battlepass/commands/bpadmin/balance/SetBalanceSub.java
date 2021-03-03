@@ -28,7 +28,7 @@ public class SetBalanceSub extends BpSubCommand<CommandSender> {
 
     @Override
     public void onExecute(CommandSender sender, String[] args) {
-        Optional<User> maybeUser = this.parseArgument(args, 3);
+        Optional<User> maybeUser = this.parseArgument(args, 2);
         if (!maybeUser.isPresent()) {
             this.lang.external("could-not-find-user", replacer -> replacer.set("player", args[2])).to(sender);
             return;

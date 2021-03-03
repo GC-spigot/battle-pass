@@ -22,7 +22,7 @@ public class RefreshDailyQuestsSub extends BpSubCommand<CommandSender> {
             this.plugin.getDailyQuestReset().reset();
             this.lang.local("successful-refresh-daily").to(sender);
         } else {
-            this.lang.local("cooldown-has-seconds", Math.max(Integer.parseInt(String.valueOf(millisSinceUse / 1000)), 1)).to(sender);
+            this.lang.local("cooldown-has-seconds", 5 - Math.max(Integer.parseInt(String.valueOf(millisSinceUse / 1000)), 1)).to(sender);
         }
     }
 }

@@ -22,10 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 public class DailyQuestReset {
@@ -34,13 +31,13 @@ public class DailyQuestReset {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final int amount;
     private final ZoneId timeZone;
+    private ScheduledFuture<?> resetTask;
     private ZonedDateTime resetTime;
 
     protected final QuestCache questCache;
     protected final UserCache userCache;
     protected Set<Quest> currentQuests;
     protected Set<Quest> permanentQuests;
-    // All quests with permanent removed
     protected List<Quest> availableQuests;
 
     public DailyQuestReset(BattlePlugin plugin, Set<Quest> currentQuests) {
@@ -73,7 +70,7 @@ public class DailyQuestReset {
             this.currentQuests.clear();
             return;
         }
-        this.executorService.schedule(() -> {
+        this.resetTask = this.executorService.schedule(() -> {
             this.reset();
             this.start();
             for (User user : this.plugin.getUserCache().values()) {
@@ -83,6 +80,10 @@ public class DailyQuestReset {
                 }
             }
         }, this.timeToResetSeconds(), TimeUnit.SECONDS);
+    }
+
+    public void stop() {
+        this.resetTask.cancel(true);
     }
 
     public void reset() {

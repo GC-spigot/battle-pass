@@ -311,6 +311,7 @@ public final class BattlePlugin extends SpigotPlugin {
         this.userCache.save();
         this.userCache.getSubCache().invalidateAll();
         this.resetStorage.save("daily-data", this.dailyQuestReset);
+        this.dailyQuestReset.stop();
         this.userStorage.closeBack();
         this.resetStorage.closeBack();
         for (UUID uuid : this.menuFactory.getOpenMenus().keySet()) {
