@@ -57,7 +57,9 @@ public class Lang {
         this.localLang.put("blocked-from-pass", "&c%s is blocked from the battlepass.");
         this.localLang.put("closed-player-menu", "&aClosed %s's open menu if they had one.");
         this.localLang.put("invalid-number-input", "&cCould not parse number amount.");
-        this.localLang.put("given-user-balance", "&cGiven %s balance to %s");
+        this.localLang.put("given-user-balance", "&aGiven %s balance to %s.");
+        this.localLang.put("removed-user-balance", "&aRemoved %s from %s's balance.");
+        this.localLang.put("set-user-balance", "&aSet %s's balance to %s.");
         this.load();
     }
 

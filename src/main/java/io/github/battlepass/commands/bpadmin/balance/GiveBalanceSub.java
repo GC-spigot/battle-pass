@@ -43,8 +43,6 @@ public class GiveBalanceSub extends BpSubCommand<CommandSender> {
         OfflinePlayer player = Bukkit.getOfflinePlayer(user.getUuid());
         if (player.getName() != null) {
             this.lang.local("given-user-balance", amount.toString(), player.getName()).to(sender);
-        } else {
-            this.lang.local("given-user-balance", amount.toString()).to(sender);
         }
         user.updateCurrency(current -> current.add(amount));
     }

@@ -4,6 +4,7 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.commands.BpSubCommand;
 import io.github.battlepass.objects.user.User;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,7 +40,10 @@ public class SetBalanceSub extends BpSubCommand<CommandSender> {
             this.lang.local("invalid-number-input").to(sender);
             return;
         }
-        this.lang.local("set-user-balance").to(sender);
+        OfflinePlayer player = Bukkit.getOfflinePlayer(user.getUuid());
+        if (player.getName() != null) {
+            this.lang.local("set-user-balance", player.getName(), amount.toString()).to(sender);
+        }
         user.updateCurrency(current -> amount);
     }
 }
