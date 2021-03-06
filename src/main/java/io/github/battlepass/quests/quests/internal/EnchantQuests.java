@@ -32,30 +32,20 @@ public class EnchantQuests extends QuestExecutor {
         Player player = event.getEnchanter();
         ItemStack item = event.getItem();
         int levelCost = event.getExpLevelCost();
-        Iterator<Enchantment> iterator = event.getEnchantsToAdd().keySet().iterator();
-        String enchantment;
-        int enchantLevel;
-        if (!iterator.hasNext()) {
-            enchantment = "none";
-            enchantLevel = 0;
-        } else if (ServerVersion.isOver_V1_12()) {
-            Enchantment enchant = iterator.next();
-            enchantment = this.getEnchantName(enchant);
-            enchantLevel = event.getEnchantsToAdd().get(enchant);
-        } else {
-            Enchantment enchant = iterator.next();
-            enchantLevel = event.getEnchantsToAdd().get(enchant);
-            enchantment = enchant.getName();
-        }
 
-        UnaryOperator<QuestResult> resultOperator = result -> {
-            result.subRoot("cost", String.valueOf(levelCost));
-            result.subRoot("level", String.valueOf(enchantLevel));
-            result.subRoot(item);
-            return result.root(enchantment);
-        };
-        this.execute("enchant", player, resultOperator);
-        this.execute("enchant-all", player, resultOperator);
+        Map<Enchantment, Integer> toAdd = event.getEnchantsToAdd();
+        for (Enchantment enchantment : toAdd.keySet()) {
+            String name = ServerVersion.isOver_V1_12() ? this.getEnchantName(enchantment) : enchantment.getName();
+            int level = toAdd.get(enchantment);
+            UnaryOperator<QuestResult> resultOperator = result -> {
+                result.subRoot("cost", String.valueOf(levelCost));
+                result.subRoot("level", String.valueOf(level));
+                result.subRoot(item);
+                return result.root(name);
+            };
+            this.execute("enchant", player, resultOperator);
+            this.execute("enchant-all", player, resultOperator);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
