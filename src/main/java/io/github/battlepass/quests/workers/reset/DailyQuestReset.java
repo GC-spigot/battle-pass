@@ -7,11 +7,13 @@ import io.github.battlepass.api.events.server.DailyQuestsRefreshEvent;
 import io.github.battlepass.cache.QuestCache;
 import io.github.battlepass.cache.UserCache;
 import io.github.battlepass.enums.Category;
+import io.github.battlepass.lang.Lang;
 import io.github.battlepass.objects.quests.Quest;
 import io.github.battlepass.objects.user.User;
 import io.github.battlepass.validator.DailyQuestValidator;
 import me.hyfe.simplespigot.config.Config;
 import me.hyfe.simplespigot.service.simple.Simple;
+import me.hyfe.simplespigot.service.simple.services.TimeService;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,6 +36,7 @@ public class DailyQuestReset {
     private ScheduledFuture<?> resetTask;
     private ZonedDateTime resetTime;
 
+    private final TimeService.SimpleTimeFormat timeFormat;
     protected final QuestCache questCache;
     protected final UserCache userCache;
     protected Set<Quest> currentQuests;
@@ -45,6 +48,7 @@ public class DailyQuestReset {
         Config settings = plugin.getConfig("settings");
         this.plugin = plugin;
         this.api = plugin.getLocalApi();
+        this.timeFormat = this.createTimeFormat(plugin.getLang());
         this.questCache = plugin.getQuestCache();
         this.userCache = plugin.getUserCache();
         this.amount = settings.integer("current-season.daily-quest-amount");
@@ -114,7 +118,9 @@ public class DailyQuestReset {
     }
 
     public String asString() {
-        return Simple.time().format(TimeUnit.SECONDS, this.timeToResetSeconds());
+        TimeService timeService = Simple.time();
+        long timeToReset = this.timeToResetSeconds();
+        return this.timeFormat == null ? timeService.format(TimeUnit.SECONDS, timeToReset) : timeService.format(this.timeFormat, TimeUnit.SECONDS, timeToReset);
     }
 
     private boolean shouldNotDoDailyQuests() {
@@ -130,5 +136,17 @@ public class DailyQuestReset {
     private ZonedDateTime parseTime(ZonedDateTime date, String time) {
         String[] timeSplit = time.split(":");
         return date.withHour(StringUtils.isNumeric(timeSplit[0]) ? Integer.parseInt(timeSplit[0]) : 0).withMinute(timeSplit.length > 1 ? StringUtils.isNumeric(timeSplit[1]) ? Integer.parseInt(timeSplit[1]) : 0 : 0);
+    }
+
+    private TimeService.SimpleTimeFormat createTimeFormat(Lang lang) {
+        return lang.has("daily-quest-time-format") ? new TimeService.SimpleTimeFormat(
+                null,
+                lang.external("daily-quest-time-format.with-months-weeks").toString(),
+                lang.external("daily-quest-time-format.with-weeks-days").toString(),
+                lang.external("daily-quest-time-format.with-days-hours").toString(),
+                lang.external("daily-quest-time-format.with-hours-minutes").toString(),
+                lang.external("daily-quest-time-format.with-minutes-seconds").toString(),
+                lang.external("daily-quest-time-format.with-seconds").toString()
+        ) : null;
     }
 }
