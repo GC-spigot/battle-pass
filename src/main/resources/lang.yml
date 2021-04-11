@@ -24,6 +24,14 @@ stats-command:
   - '  &8- &eTotal Points: &f%total_points%'
   #- '  &8- &eBalance: &f%balance%' # Only used if you use internal for excess points in the settings.yml
 
+daily-quest-time-format: # The time format used for saying how long until daily quests expire.
+  with-months-weeks: "%dmo %dw %dd %dh %dm %ds"
+  with-weeks-days: "%dw %dd %dh %dm %ds"
+  with-days-hours: "%dd %dh %dm %ds"
+  with-hours-minutes: "%dh %dm %ds"
+  with-minutes-seconds: "%dm %ds"
+  with-seconds: "%ds"
+
 quests:
   # The base message will be used for all quests unless another message is set.
   base-message-progressed: "&8[&eQuests&8] &7You progressed the quest &e%quest_name% &8(&e%progress%&7/&8&e%required_progress%&8)"
