@@ -17,6 +17,14 @@ progress-bar:
   incomplete-color: '&c'
   symbol: '|'
 
+help-command: # /bp help
+  - ''
+  - '&eBattlePass &7by Hyfe and Zak Shearman'
+  - '&e/battlepass - Opens the portal menu.'
+  - '&e/battlepass stats - View your BattlePass stats.'
+  - '&e/battlepass open <portal/daily/quests/rewards> - Directly opens a menu.'
+  - ''
+
 stats-command:
   - '&eYour BattlePass Stats:'
   - '  &8- &ePass Type: &f%pass_type%'
