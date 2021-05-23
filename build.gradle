@@ -25,7 +25,7 @@ repositories {
     maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' } // PlaceholderAPI
 
     maven { url 'https://gitlab.com/api/v4/projects/14122684/packages/maven' } // BedWars1058
-    maven { url 'https://dl.bintray.com/tastybento/maven-repo' } // ASkyBlock
+    maven { url 'https://repo.codemc.org/repository/maven-public' } // ASkyBlock
     maven { url 'https://repo.citizensnpcs.co/' } // Citizens
     maven { url 'https://mvn.lumine.io/repository/maven-public/' } // MythicMobs
     maven { url 'https://bitbucket.org/kangarko/libraries/raw/master' } // All mineacademy, e.g BossTM
