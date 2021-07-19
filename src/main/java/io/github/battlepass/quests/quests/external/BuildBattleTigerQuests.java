@@ -4,9 +4,9 @@ import io.github.battlepass.BattlePlugin;
 import io.github.battlepass.quests.quests.external.executor.ExternalQuestExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import pl.plajer.buildbattle.api.event.game.BBGameEndEvent;
-import pl.plajer.buildbattle.api.event.game.BBGameJoinEvent;
-import pl.plajer.buildbattle.api.event.game.BBGameStartEvent;
+import plugily.projects.buildbattle.api.event.game.BBGameEndEvent;
+import plugily.projects.buildbattle.api.event.game.BBGameJoinEvent;
+import plugily.projects.buildbattle.api.event.game.BBGameStartEvent;
 
 public class BuildBattleTigerQuests extends ExternalQuestExecutor {
 
