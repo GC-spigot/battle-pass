@@ -1,0 +1,22 @@
+name: New Quest Type
+description: Request a new quest type to be added for BattlePass
+labels: ["Quest Request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for creating a quest request. Before you fill this out, please read the following:
+        1. Ensure this is not yet achieveable with current quests or placeholderapi quest support.
+        2. Be sure that this feature doesn't only benefit you but other issues, we will not accept requests which are specific or do not benefit others.
+  - type: textarea
+    id: quest-description
+    attributes:
+      label: Describe the quest
+      description: Describe the quest with as much detail as possible.
+    validations:
+      required: true
+  - type: input
+    id: plugin-link
+    attributes:
+      label: Required plugin for quest
+      description: If your quest type requires a specific plugin, link it here
