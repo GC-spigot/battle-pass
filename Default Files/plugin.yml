@@ -1,0 +1,71 @@
+name: "BattlePass"
+version: 4.6.11
+main: io.github.battlepass.BattlePlugin
+api-version: 1.13
+folia-supported: true
+softdepend:
+  - AdvancedEnchantments
+  - AdvancedSpawners
+  - AdvancedHeads
+  - ASkyBlock
+  - AuctionHouse
+  - Bedwars1058
+  - BuildBattle
+  - ChatReaction
+  - ChestShop
+  - Clans
+  - Citizens
+  - ClueScrolls
+  - CrateReloaded
+  - CratesPlus
+  - CrazyCrates
+  - CrazyEnvoy
+  - CrazyEnvoys
+  - DiscordMinecraft
+  - ExcellentCrates
+  - Factions
+  - Jobs
+  - SkillAPI
+  - KoTH
+  - Lands
+  - PlaceholderAPI
+  - MoneyHunters
+  - PlotSquared
+  - ProCosmetics
+  - Shopkeepers
+  - StrikePractice
+  - SuperiorSkyblock2
+  - TheLab
+  - TokenEnchant
+  - USkyBlock
+  - Votifier
+  - VotifierPlus
+  - UltraSkyWars
+  - LuxuryQuests
+  - LobbyPresents
+  - MMOCore
+  - mcMMO
+
+commands:
+  battlepass:
+    description: Main BattlePass command.
+    aliases: [pass, bp, bpass, battlep]
+  battlepassadmin:
+    aliases: [bpa, battlepassa, bpadmin]
+    permission: battlepass.admin
+  battlepassdebug:
+    aliases: [bpd, bpdebug]
+    permission: battlepass.admin
+
+permissions:
+  battlepass.admin:
+    description: none
+  battlepass.use:
+    description: none
+  battlepass.debug.id:
+    description: Show ID of week/quest in menu
+
+libraries:
+  - org.apache.commons:commons-lang3:3.12.0
+  - com.zaxxer:HikariCP:3.4.5
+  - org.apache.commons:commons-lang3:3.12.0
