@@ -1,0 +1,46 @@
+menu-title: 'Leaderboard'
+menu-rows: 4
+
+leaderboard:
+  slots: '11,12,13,14,15,20,21,22,23,24'
+
+item:
+  material: head:%battlepass_top_quests_name_%position%%
+  name: '&e✦ &a&l%battlepass_top_quests_name_%position%% &a#%position% '
+  lore:
+    - '&7Completed Quests: &a%battlepass_top_quests_value_%position%%'
+
+menu:
+  '27':
+    item:
+      material: arrow:0
+      name: '&eBack To The Main Menu'
+      lore:
+        - ''
+        - '&7&o(( Click to go to the menu ))'
+    actions:
+      - '[menu]{portal}' # If the page is 1, take them to the portal page
+  '30':
+    item:
+      material: book:0
+      name: '&eMy stats'
+      lore:
+        - '&7My completed quests: &e%battlepass_top_quests_value_me%'
+        - '&7My place: &e#%battlepass_top_quests_place_me%'
+    actions: []
+  '32':
+    item:
+      material: clock:0
+      name: '&eNext refresh: &6%battlepass_top_time%'
+      lore: []
+    actions: [ ]
+  filler2:
+    slots: '9...26'
+    item:
+      material: black_stained_glass_pane
+      name: '&r '
+  filler:
+    slots: fill # This will fill all empty slots. You can also do 'startslot...endslot', e.g '2...8' to fill slots 2 to 8.
+    item:
+      material: gray_stained_glass_pane
+      name: '&r '

@@ -1,0 +1,60 @@
+name: 'Free'
+default-points-required: 100
+dont-give-premium-free-rewards: false # This will mean that premium users will not receive free rewards
+
+items:
+  doesnt-have-pass-item: # This is ONLY shown/used if you have dont-give-premium-free-rewards: true. This is used to make it so premium users can only have premium rewards.
+    material: 'minecart:0'
+    name: '&eTier %tier%'
+    lore:
+      - ''
+      - '&cYou can only claim premium rewards'
+  locked-tier-item:
+    material: 'furnace_minecart:0'
+    name: '&eTier %tier%'
+    lore:
+      - ''
+      - '&7Rewards:'
+      - '%lore_addon%'
+      - ''
+      - '&7Status: &cLocked'
+  unlocked-tier-item:
+    material: 'chest_minecart:0'
+    name: '&aTier %tier%'
+    lore:
+      - ''
+      - '&7Rewards:'
+      - '%lore_addon%'
+      - ''
+      - '&7Status: &aUnlocked'
+  claimed-tier-item:
+    material: 'minecart:0'
+    name: '&aTier %tier%'
+    lore:
+      - ''
+      - '&7Rewards:'
+      - '%lore_addon%'
+      - ''
+      - '&7Status: &aClaimed'
+
+tier-up-actions:
+  - '[message] {&7You reached tier &e%tier%}'
+
+tiers:
+  '2': # The tier number
+    rewards: ['1'] # The reward numbers to give to the player (see rewards.yml).
+    required-points: 120 # The amount of points the player must get to advance to the tier.
+  '4':
+    rewards: ['4', '2']
+  '10':
+    rewards: ['1', '2', '3', '4']
+    required-points: 500
+    locked-tier-item: # You can specify any of the items in the 'items' section above per tier. They're completely optional for each tier.
+      material: 'barrier:0'
+      name: '&eTier %tier%'
+      lore:
+        - ''
+        - '&7Rewards:'
+        - '%lore_addon%'
+        - ''
+        - '&7Status: &cSpecial Locked Item'

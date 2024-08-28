@@ -1,0 +1,64 @@
+name: 'Premium :)'
+default-points-required: 100
+#required-permission: 'battlepass.premium'
+
+items:
+  doesnt-have-pass-item: # The item if a player does not have the premium pass.
+    material: 'minecart:0'
+    #customModelData: 0 #Set custom model data
+    name: '&eTier %tier%'
+    lore:
+      - ''
+      - '&7Rewards:'
+      - '%lore_addon%'
+      - ''
+      - '&7Status: &eNot Eligible'
+      - '&cPurchase the battle pass to'
+      - '&cbe able to earn premium rewards.'
+  locked-tier-item: # The item if the player has not yet reached the tier.
+    material: 'furnace_minecart:0'
+    name: '&eTier %tier%'
+    lore:
+      - ''
+      - '&7Rewards:'
+      - '%lore_addon%'
+      - ''
+      - '&7Status: &cLocked'
+  unlocked-tier-item:
+    material: 'chest_minecart:0'
+    name: '&aTier %tier%'
+    lore:
+      - ''
+      - '&7Rewards:'
+      - '%lore_addon%'
+      - ''
+      - '&7Status: &aUnlocked'
+  claimed-tier-item:
+    material: 'minecart:0'
+    name: '&aTier %tier%'
+    lore:
+      - ''
+      - '&7Rewards:'
+      - '%lore_addon%'
+      - ''
+      - '&7Status: &aClaimed'
+
+tier-up-actions:
+  - '[message] {&7You reached tier &e%tier%}'
+
+tiers:
+  '2': # The tier number
+    rewards: ['1'] # The reward numbers to give to the player (see rewards.yml).
+    required-points: 10 # The amount of points the player must get to advance to the tier.
+  '3':
+    rewards: ['2']
+    required-points: 50
+  '5':
+    rewards: ['2', '4']
+    required-points: 100
+  '7':
+    rewards: ['4']
+    required-points: 150
+  '10':
+    rewards: ['1', '2', '3', '4']
+    required-points: 500

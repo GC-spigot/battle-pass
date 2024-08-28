@@ -1,0 +1,43 @@
+'1': # The id of the reward
+  type: command
+  name: 'First Reward (%value%)'
+  variables:
+    value: "(2 * %tier%) * (1 + (%booster% / 100))"
+  lore-addon:
+    - '&7 - &eA cool message (%value%)'
+  commands:
+    - 'msg %player% Sweet x%value%!'
+
+'2':
+  type: item
+  variables:
+    value: "(8 * %tier%) * (1 + (%booster% / 100))"
+  lore-addon:
+    - '&7 - &eWOAH! Something cool (maybe %value%)'
+  items:
+    '1': # The first item reward (required)
+      material: diamond_block:0
+      amount: 1
+      name: '' # If left null, the item will have the default Minecraft name.
+      lore: [] # If left null, the item will have no lore.
+      glow: true # Whether the item will have an enchantment 'glow'.
+    '2': # The second item reward (not required) -> You can have more than two.
+      material: coal_block:0
+      amount: '%value%'
+      name: ''
+      lore:
+        - '&7An &bawesome &7lore, for an &eawesome &7coal block'
+
+'3':
+  type: command # You can still use commands to give items :)
+  lore-addon:
+    - '&6 - &eLegacy Item Giving'
+  commands:
+    - 'give %player% diamond_block 32'
+
+'4':
+  type: command
+  lore-addon:
+    - '&6 - Announces you achievement.'
+  commands:
+    - 'broadcast &6%player% reached a key BattlePass tier!!'

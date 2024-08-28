@@ -1,0 +1,38 @@
+menu-title: 'Week %week%'
+menu-rows: 5
+
+quest-slots:
+  slots: '11...15, 20...24'
+
+menu:
+  '39':
+    item:
+      material: arrow:0
+      name: '&ePrevious Page'
+      lore:
+        - ''
+        - '&7&o(( Click to go to the previous page ))'
+    actions:
+      - '[menu](page = 1) {quest-overview}' # If the page is 1, take them to the portal page
+      - '[menu](page ! 1) {previous-page}' # If their page is not 1, take them to the previous page
+  '40':
+    item:
+      material: book:0
+      name: '&eWhat are these quests?'
+      lore:
+        - ''
+        - '&7Complete these quests to'
+        - '&7acquire &epoints&7 to tier'
+        - '&7up your battle pass to receive'
+        - '&7amazing rewards'
+    actions:
+      - "[menu] {close}"
+  '41':
+    item:
+      material: arrow:0
+      name: '&eNext Page'
+      lore:
+        - ''
+        - '&7&o(( Click to go to the next page ))'
+    actions:
+      - '[menu] {next-page}'

@@ -1,0 +1,52 @@
+menu-title: 'Quest Overview'
+menu-rows: 4
+
+week-slots:
+  slots: '11...18' # ... is used to signify all of the ones in between. It functions the same as 11, 12, 13, 14, 15, 16, 17, 18
+
+menu:
+  '30':
+    item:
+      material: arrow:0
+      name: '&ePrevious Page &7(Click)'
+      lore:
+        - ''
+        - '&7&o(( Click to go to the previous page ))'
+    actions:
+      - '[menu](page = 1) {portal}' # If the page is 1, take them to the portal page
+      - '[menu](page ! 1) {previous-page}' # If their page is not 1, take them to the previous page
+  '31':
+    item:
+      material: clock:0
+      name: '&eDaily Quests &7(%daily_time_left%)'
+    actions:
+      - '[menu] {daily-quests}'
+  '32':
+    item:
+      material: arrow:0
+      name: '&eNext Page &7(Click)'
+      lore:
+        - ''
+        - '&7&o(( Click to go to the next page ))'
+    actions:
+      - '[menu] {next-page}'
+
+static-items:
+  week-item:
+    material: writable_book:0
+    name: '&eWeek %week% &7(%status%&7)'
+    lore:
+      - ''
+      - '&7&o(( Click to view quests ))'
+  locked-week-item:
+    material: writable_book:0
+    name: '&eWeek %week% &7(%status%&7)'
+    lore:
+      - ''
+      - '&7&o(( Click to view quests ))'
+  requires-previous-completion-item: # Only used if you have require previous completion set to true in your settings.yml.
+    material: writable_book:0
+    name: '&eWeek %week% &7(%status%&7)'
+    lore:
+      - ''
+      - '&7&o(( Click to view quests ))'

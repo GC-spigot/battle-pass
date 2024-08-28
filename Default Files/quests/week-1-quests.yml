@@ -1,0 +1,158 @@
+actions-version: 2
+
+quests:
+  1: # Quest id
+    name: 'Week 1 - Miner' # The name given to the quest.
+    type: block-break # The type of quest
+    variable: coal_ore OR diamond_ore # The block the player must break.
+    required-progress: 10 # The amount of times the player should break the coal ore block.
+    special-progress:
+      - "diamond_ore 5" # Diamond ore will give 5 progress instead of 1
+    points: 10 # The amount of points that will be rewarded
+    item: # The item that will be displayed in menus.
+      material: diamond_pickaxe:0
+      amount: 1
+      name: '&eMiner'
+      lore:
+        - '&7Mine &e10 coal or 2 diamond'
+        - ''
+        - '%progress_bar% &7(&a%percentage_progress%&7)' # If you wish, you can use a progress/required (23/1000) style format instead. Take a look a bit further down for examples.
+  2: # Quest id
+    name: 'Week 1 - Social' # The name given to the quest.
+    type: chat # The type of quest
+    variable: none # The block the player must break.
+    required-progress: 300 # The amount of times the player should break the coal ore block.
+    points: 10 # The amount of points that will be rewarded
+    item: # The item that will be displayed in menus.
+      material: paper:0
+      amount: 1
+      name: '&eSocial'
+      lore:
+        - '&7Talk in chat &e300 times'
+        - ''
+        - '%progress_bar% &7(&a%percentage_progress%&7)'
+  3: # Quest id
+    name: 'Week 1 - Premium Social' # The name given to the quest.
+    type: chat # The type of quest
+    variable: coal_ore # The block the player must break.
+    required-progress: 150 # The amount of times the player should break the coal ore block.
+    points: 10 # The amount of points that will be rewarded
+    exclusive: premium
+    item: # The item that will be displayed in menus.
+      material: paper:0
+      amount: 1
+      name: '&ePremium Only - Social'
+      lore:
+        - '&7Talk in chat &e150 times'
+        - '&7&oExclusive to premium members only.'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  4:
+    name: 'Week 1 - Money'
+    type: block-place
+    variable: gold_block
+    required-progress: 10
+    points: 10
+    item:
+      material: gold_block:0
+      name: '&eMoney'
+      lore:
+        - '&7Place &e10 gold blocks'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  5:
+    name: 'Week 1 - Ready for Battle'
+    type: craft
+    variable: diamond_sword
+    required-progress: 1
+    points: 10
+    item:
+      material: diamond_sword:0
+      name: '&eReady for Battle'
+      lore:
+        - '&7Craft a &ediamond sword'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  6:
+    name: 'Week 1 - Farmer'
+    type: milk
+    variable: none
+    required-progress: 5
+    points: 10
+    item:
+      material: milk_bucket:0
+      name: '&eFarmer'
+      lore:
+        - '&7Milk &e5 cows'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  7:
+    name: 'Week 1 - Blacksmith'
+    type: smelt
+    variable: iron_ingot
+    required-progress: 20
+    points: 10
+    item:
+      material: iron_ingot:0
+      name: '&eBlacksmith'
+      lore:
+        - '&7Smelt &e20 iron ores'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  8:
+    name: 'Week 1 - Farmer 2'
+    type: shear
+    variable: none
+    required-progress: 10
+    points: 10
+    item:
+      material: white_wool:0
+      name: '&eFarmer 2'
+      lore:
+        - '&7Sheer &e10 sheep'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  9:
+    name: 'Week 1 - Pet'
+    type: tame
+    variable: wolf
+    required-progress: 1
+    points: 10
+    item:
+      material: monster_egg:0
+      name: '&ePet'
+      lore:
+        - '&7Tame &e1 wolf'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  10: # Multiple step quest
+    name: 'Week 1 - Advanced Miner'
+    steps:
+      1:
+        type: block-break
+        variable: coal_ore
+        required-progress: 10
+        points: 0
+        info:
+          - "&7Mine &e10 coal ores"
+      2:
+        type: block-break
+        variable: iron_ore
+        required-progress: 10
+        points: 5
+        info:
+          - "&7Mine &e10 iron ores"
+      3:
+        type: block-break
+        variable: diamond_ore
+        required-progress: 10
+        points: 25
+        info:
+          - "&7Mine &e10 diamond ores"
+    item:
+      material: golden_pickaxe
+      name: '&eAdvanced Miner &7(&e%step%&7/&6%steps%&7)'
+      lore:
+        - '%info%'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'

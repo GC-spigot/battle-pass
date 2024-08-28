@@ -1,0 +1,393 @@
+actions-version: 2
+
+quests:
+  1: # Quest id
+    type: tame
+    variable: wolf
+    name: 'Dog Whisperer'
+    required-progress: 5
+    points: 10
+    item:
+      material: bone
+      name: '&eDog Whisperer'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7tame 5 wolves'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  2: # Quest id
+    type: chat-stripped
+    variable: how are you?
+    name: 'Very Chatty'
+    required-progress: 2
+    points: 10
+    item:
+      material: paper
+      name: '&eVery Chatty'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7say "how are you?" in chat 2 times'
+        - ''
+        - '&7(&a%percentage_progress%&7'
+  3: # Quest id
+    type: gain-experience
+    variable: none
+    name: 'Magic Magnet'
+    required-progress: 315
+    points: 10
+    item:
+      material: book
+      name: '&eMagic Magnet'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7reach EXP level 15'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  4: # Quest id
+    type: kill-player
+    variable: none
+    name: 'Murder Mystery'
+    required-progress: 2
+    points: 10
+    item:
+      material: stone_sword
+      name: '&eMurder Mystery'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7kill 2 players in pvp'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  5: # Quest id
+    type: sprint
+    variable: none
+    name: 'Runner'
+    required-progress: 2500
+    points: 10
+    item:
+      material: leather_boots
+      name: '&eMarathoner'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7sprint over 2500 blocks.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  6: # Quest id
+    type: throw-projectile
+    variable: none
+    name: 'Throw and Throw'
+    required-progress: 200
+    points: 10
+    item:
+      material: snowball
+      name: '&eBaller'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7throw/shoot 200 projectiles.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  7: # Quest id
+    type: block-break
+    variable: stone
+    name: 'Miner'
+    required-progress: 500
+    points: 100
+    item:
+      material: cobblestone
+      name: '&eMiner'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7mine 500 stone blocks.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  8: # Quest id
+    type: block-break
+    variable: jungle_log OR jungle_wood
+    name: 'Timber Man'
+    required-progress: 350
+    points: 10
+    item:
+      material: jungle_log
+      name: '&eTimber Man'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7mine over 350 jungle wood blocks or logs.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  9: # Quest id
+    type: craft
+    variable: ___SWORD # Anything that contains _SWORD
+    name: 'Blacksmith'
+    required-progress: 4
+    points: 10
+    item:
+      material: iron_sword
+      name: '&eBlacksmith'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7craft 4 swords of any material.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  10:
+    type: enchant-all
+    variable:
+      root: FEATHER_FALLING
+      level: 2
+    name: 'Fall Harder'
+    required-progress: 1
+    points: 10
+    item:
+      material: enchanting_table
+      name: '&eFall Harder'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7enchant boots with feather falling level 2.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  11:
+    type: consume
+    variable: enchanted_golden_apple
+    name: 'Really Magical Apple'
+    required-progress: 2
+    points: 10
+    item:
+      material: enchanted_golden_apple
+      name: '&eReally Magical Apple'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7eat/consume 2 enchanted golden apples.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  12: # Quest id
+    type: left-click
+    variable: none
+    name: 'Autoclicker'
+    required-progress: 28200
+    points: 10
+    item:
+      material: anvil:0
+      name: '&eAutoclicker'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7left click 28200 blocks.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  13: # Quest id
+    type: chat-stripped
+    variable: this is fun
+    name: 'Very Chatty'
+    required-progress: 1
+    points: 10
+    item:
+      material: paper
+      name: '&eVery Chatty'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7say "this is fun" in chat.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  14: # Quest id
+    type: regenerate
+    variable: SATIATED
+    name: 'Hunger Games'
+    required-progress: 1
+    points: 10
+    item:
+      material: cooked_beef
+      name: '&eHunger Games'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7eat food to fill your hunger and regen health.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  15: # Quest id
+    type: shear
+    variable: none
+    name: 'Wooly Jumper'
+    required-progress: 12
+    points: 10
+    item:
+      material: white_wool
+      name: '&eWooly Jumper'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7shear 12 wild sheep.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  16: # Quest id
+    type: swim
+    variable: none
+    name: 'Keep on swimmin'
+    required-progress: 600
+    points: 10
+    item:
+      material: water_bucket
+      name: '&eKeep on swimmin'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7swim 600 blocks of water'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  17: # Quest id
+    type: block-break
+    variable: grass_block OR dirt
+    name: 'Dirty Day'
+    required-progress: 333
+    points: 10
+    item:
+      material: grass_block
+      name: '&eDirty Day'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7mine 333 blocks of dirt/grass'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  18: # Quest id
+    type: bucket-place
+    variable: lava_bucket
+    name: 'Griefer'
+    required-progress: 3
+    points: 10
+    item:
+      material: lava_bucket
+      name: '&eGriefer'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7place 3 lava buckets'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  19: # Quest id
+    type: fish
+    variable: none
+    name: 'Fish Catcher'
+    required-progress: 3
+    points: 10
+    item:
+      material: salmonmak
+      name: '&eFish Catcher'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7cacth 3 items/fish from fishing'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  20: # Quest id
+    type: sneak
+    variable: none
+    name: 'Creepy Crawlie'
+    required-progress: 55
+    points: 10
+    item:
+      material: leather_boots
+      name: '&eCreepy Crawlie'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7sneak over 55 blocks in any direction'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  21: # Quest id
+    type: kill-mob
+    variable: cow
+    name: 'Cow Killer'
+    required-progress: 10
+    points: 10
+    item:
+      material: leather
+      name: '&eCow Killer'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7kill 10 cows.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  22:
+    type: glide
+    variable: none
+    name: 'Glider'
+    required-progress: 150
+    points: 10
+    item:
+      material: elytra
+      name: '&eGlider'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7glide over 150 blocks.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  23: # Quest id
+    type: block-break
+    variable:
+      root: oak_log
+    name: 'Lumberjack'
+    required-progress: 50
+    points: 10
+    item:
+      material: oak_log
+      name: '&eLumberjack'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7break 50 oak logs.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  24: # Quest id
+    type: enchant-all
+    variable:
+      root: SHARPNESS
+      level: 1
+      item: diamond_sword
+    name: 'Enchanter'
+    required-progress: 1
+    points: 10
+    item:
+      material: enchanting_table
+      name: '&eEnchanter'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7enchant a diamond sword with Sharpness 1'
+        - '&7using an anvil or enchanting table.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  25: # Quest id
+    type: fish
+    variable: none
+    name: 'Fisherman'
+    required-progress: 10
+    points: 10
+    item:
+      material: fishing_rod
+      name: '&eFisherman'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7successfully fish 10 times.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  26: # Quest id
+    type: enchant-anvil
+    variable:
+      root: PROTECTION
+      level: 1
+      item: diamond_chestplate
+    name: 'Protector'
+    required-progress: 1
+    points: 10
+    item:
+      material: diamond_chestplate
+      name: '&eProtector'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7enchant a diamond chestplate with Protection 1 using an anvil.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'
+  27: # Quest id
+    type: smelt
+    variable:
+      root: iron_ingot
+      amount: 10
+    name: 'Smelter'
+    required-progress: 10
+    points: 10
+    item:
+      material: furnace
+      name: '&eSmelter'
+      lore:
+        - '&7To complete this quest, you must'
+        - '&7smelt 10 iron ingots.'
+        - ''
+        - '&7(&a%percentage_progress%&7)'

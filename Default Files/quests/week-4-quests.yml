@@ -1,0 +1,136 @@
+actions-version: 2
+
+quests:
+  1:
+    name: 'Week 4 - Magic'
+    type: regenerate
+    variable: none
+    required-progress: 50
+    points: 10
+    item:
+      material: apple:0
+      amount: 1
+      name: '&eMagic'
+      lore:
+        - '&7Regenerate &e50 health points'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  2:
+    name: 'Week 4 - Explorer'
+    type: move
+    variable: none
+    required-progress: 1000
+    points: 10
+    item:
+      material: paper:0
+      amount: 1
+      name: '&eExplorer'
+      lore:
+        - '&7Walk &e1000 meters'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  3:
+    name: 'Week 4 - Swimmer'
+    type: swim
+    variable: none
+    required-progress: 500
+    points: 10
+    item:
+      material: water_bucket:0
+      amount: 1
+      name: '&eSwimmer'
+      lore:
+        - '&7Talk in chat &e500 times'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  4:
+    name: 'Week 4 - Active'
+    type: login
+    variable: none
+    required-progress: 10
+    points: 10
+    item:
+      material: clock:0
+      name: '&eActive'
+      lore:
+        - '&7Login &e10 times'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  5:
+    name: 'Week 4 - Murderer'
+    type: kill-player
+    variable: none
+    required-progress: 1
+    points: 10
+    item:
+      material: wooden_sword:0
+      name: '&eMurderer'
+      lore:
+        - '&7Kill &e1 player'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  6:
+    name: 'Week 4 - Grinder'
+    type: kill-mob
+    variable: zombie
+    required-progress: 10
+    points: 10
+    item:
+      material: gold_sword:0
+      name: '&eGrinder'
+      lore:
+        - '&7Kill &e10 zombies'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  7:
+    name: 'Week 4 - Worn out'
+    type: item-break
+    variable: stone_pickaxe
+    required-progress: 1
+    points: 10
+    item:
+      material: :0
+      name: '&eWorn out'
+      lore:
+        - '&7Break &e1 stone pickaxe'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  8:
+    name: 'Week 4 - Grinder 2'
+    type: gain-experience
+    variable: none
+    required-progress: 500
+    points: 10
+    item:
+      material: experience_bottle:0
+      name: '&eGrinder 2'
+      lore:
+        - '&7Gain &e500 experience'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  9:
+    name: 'Week 4 - Fisherman'
+    type: fish
+    variable: none
+    required-progress: 10
+    points: 10
+    item:
+      material: fishing_rod:0
+      name: '&eFisherman'
+      lore:
+        - '&7Fish &e10 items'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  10:
+    name: 'Week 4 - New'
+    type: execute-command
+    variable: '/help'
+    required-progress: 1
+    points: 10
+    item:
+      material: saddle:0
+      name: '&eNew'
+      lore:
+        - '&7Execute the command &e/help'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'

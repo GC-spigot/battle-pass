@@ -1,0 +1,36 @@
+menu-title: 'Daily Quests'
+menu-rows: 5
+
+quest-slots:
+  slots: '11...15, 20...24'
+
+menu:
+  '39':
+    item:
+      material: arrow:0
+      name: '&ePrevious Page'
+      lore:
+        - ''
+        - '&7&o(( Click to go to the previous page ))'
+    actions:
+      - '[menu](page = 1) {portal}' # If the page is 1, take them to the portal page
+      - '[menu](page ! 1) {previous-page}' # If their page is not 1, take them to the previous page
+  '40':
+    item:
+      material: book:0
+      name: '&eHow long until new quests?'
+      lore:
+        - '&7New daily quests in &e%daily_time_left%...'
+    actions:
+      - "[menu] {close}"
+  '41':
+    item:
+      material: arrow:0
+      name: '&eNext Page'
+      lore:
+        - ''
+        - '&7&o(( Click to go to the next page ))'
+    actions:
+      - '[menu] {next-page}' # Take the user to the next page
+
+# You can also use %page% placeholder to show the current page number

@@ -1,0 +1,51 @@
+menu-title: 'Rewards'
+menu-rows: 5
+draw-past-max-tier: true # Whether the stained glass in the middle of the page will go past the max tier in the menu.
+hide-tiers-without-rewards: false # If set to true, tiers that are defined but have no associated rewards will be hidden.
+close-on-reward-claim: false # If set to true, the menu will be closed when a reward is claimed
+
+free-reward-slots:
+  slots: '0...8' # Feel free to just use slot, slot, slot such as 0, 1, 2 instead if it's easier.
+
+premium-reward-slots:
+  slots: '18...26'
+
+progress-track-slots:
+  slots: '9...17'
+
+menu:
+  '39':
+    item:
+      material: arrow:0
+      name: '&ePrevious Page'
+      lore:
+        - ''
+        - '&7&o(( Click to go to the previous page ))'
+    actions:
+      - '[menu](page = 1) {portal}' # If the page is 1, take them to the portal page
+      - '[menu](page ! 1) {previous-page}' # If their page is not 1, take them to the previous page
+  '40':
+    item:
+      material: book:0
+      name: '&eWhat are rewards?'
+      lore:
+        - ''
+    actions:
+      - "[menu] {close}"
+  '41':
+    item:
+      material: arrow:0
+      name: '&eNext Page'
+      lore:
+        - ''
+        - '&7&o(( Click to go to the next page ))'
+    actions:
+      - '[menu] {next-page}'
+
+static-items:
+  progress-track-locked-item:
+    material: 'black_stained_glass_pane:0'
+    name: 'Tier %tier%'
+  progress-track-unlocked-item:
+    material: 'lime_stained_glass_pane:0'
+    name: 'Tier %tier%'

@@ -1,0 +1,138 @@
+actions-version: 2
+
+quests:
+  1: # Quest id
+    name: 'Week 3 - Miner' # The name given to the quest.
+    type: block-break # The type of quest
+    variable: coal_ore # The block the player must break.
+    required-progress: 10 # The amount of times the player should break the coal ore block.
+    points: 10 # The amount of points that will be rewarded
+    item: # The item that will be displayed in menus.
+      material: diamond_pickaxe:0
+      amount: 1
+      name: '&eMiner'
+      lore:
+        - '&7Mine &e10 coal'
+        - ''
+        - '&7Progress &e%progress_bar%'
+  2: # Quest id
+    name: 'Week 3 - Social' # The name given to the quest.
+    type: chat # The type of quest
+    variable: none # The block the player must break.
+    required-progress: 300 # The amount of times the player should break the coal ore block.
+    points: 10 # The amount of points that will be rewarded
+    item: # The item that will be displayed in menus.
+      material: paper:0
+      amount: 1
+      name: '&eSocial'
+      lore:
+        - '&7Talk in chat &e300 times'
+        - ''
+        - '&7Progress &e%progress_bar%'
+  3: # Quest id
+    name: 'Week 3 - Premium Social' # The name given to the quest.
+    type: chat # The type of quest
+    variable: none # The block the player must break.
+    required-progress: 150 # The amount of times the player should break the coal ore block.
+    points: 10 # The amount of points that will be rewarded
+    exclusive: premium
+    item: # The item that will be displayed in menus.
+      material: paper:0
+      amount: 1
+      name: '&ePremium Only - Social'
+      lore:
+        - '&7Talk in chat &e150 times'
+        - '&7&oExclusive to premium members only.'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  4:
+    name: 'Week 3 - Money'
+    type: block-place
+    variable: gold_block
+    required-progress: 10
+    points: 10
+    item:
+      material: gold_block:0
+      name: '&eMoney'
+      lore:
+        - '&7Place &e10 gold blocks'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  5:
+    name: 'Week 3 - Ready for Battle'
+    type: craft
+    variable: diamond_sword
+    required-progress: 1
+    points: 10
+    item:
+      material: diamond_sword:0
+      name: '&eReady for Battle'
+      lore:
+        - '&7Craft a &ediamond sword'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  6:
+    name: 'Week 3 - Farmer'
+    type: milk
+    variable: none
+    required-progress: 5
+    points: 10
+    item:
+      material: milk_bucket:0
+      name: '&eFarmer'
+      lore:
+        - '&7Milk &e5 cows'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  7:
+    name: 'Week 3 - Blacksmith'
+    type: smelt
+    variable: iron_ingot
+    required-progress: 20
+    points: 10
+    item:
+      material: :0
+      name: '&eBlacksmith'
+      lore:
+        - '&7Smelt &e20 iron ores'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  8:
+    name: 'Week 3 - Farmer 2'
+    type: shear
+    variable: none
+    required-progress: 10
+    points: 10
+    item:
+      material: white_wool:0
+      name: '&eFarmer 2'
+      lore:
+        - '&7Sheer &e10 sheep'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  9:
+    name: 'Week 3 - Pet'
+    type: tame
+    variable: wolf
+    required-progress: 1
+    points: 10
+    item:
+      material: monster_egg:0
+      name: '&ePet'
+      lore:
+        - '&7Tame &e1 wolf'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'
+  10:
+    name: 'Week 3 - Equestrian'
+    type: ride-mob
+    variable: horse
+    required-progress: 1
+    points: 10
+    item:
+      material: saddle:0
+      name: '&eEquestrian'
+      lore:
+        - '&7Ride &e1 horse'
+        - ''
+        - '&7Progress &e%total_progress%&7/&e%required_progress%'

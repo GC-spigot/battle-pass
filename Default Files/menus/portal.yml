@@ -1,0 +1,64 @@
+menu-title: 'Portal'
+menu-rows: 2
+
+menu:
+  '2': # The slot the item is in
+    item:
+      material: chest_minecart:0 # The material of the item. TIP: Use /bpa material item or /bpa material block.
+      name: '&eRewards &7(Click)' # The name of the item in the GUI.
+      lore:
+        - ''
+        - '&7Click this to explore the rewards'
+    actions:
+      - '[menu] {rewards}'
+  '4':
+    item:
+      material: anvil:0
+      name: '&eSeason 1 Battle Pass'
+      lore:
+        - '&7%pass_type% Battle Pass'
+        - ''
+        - '&7Week &f%week%'
+        - ''
+        - '&eStatistics'
+        - '&f&l * &7Tier &f%tier%'
+        - '&f&l * &7Points &f%points%&8/&f%required_points%'
+    actions:
+      - "[menu] {close}"
+  '6':
+    item:
+      material: enchanted_book:0
+      name: '&eQuests &7(Click)'
+      lore:
+        - ''
+        - '&7Click this to view the quests'
+    actions:
+      - '[menu] {quest-overview}'
+  '12':
+    item:
+      material: golden_helmet
+      name: '&eLeaderboard'
+      lore:
+        - '&7Click to open leaderboard menu'
+    actions:
+      - '[menu] {leaderboard}'
+  '14':
+    item:
+      material: book:0
+      name: '&eWhat is the Battle Pass?'
+      lore:
+        - ''
+        - '&7Level up your &eBattle Pass&7 by'
+        - '&7completing challenging quests.'
+        - ''
+        - '&7Be an active player, and in'
+        - '&7return receive amazing rewards.'
+        - ''
+        - '&7You can purchase the premium'
+        - '&eBattle Pass&7 over at our store.'
+    actions:
+      - "[menu] {close}"
+  filler: # Fills all empty slots with the following item
+    slots: fill # This will fill all empty slots. You can also do 'startslot...endslot', e.g '2...8' to fill slots 2 to 8.
+    item:
+      material: stained_glass_pane:0

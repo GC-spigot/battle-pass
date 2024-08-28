@@ -1,0 +1,155 @@
+# NOTE: Remember to check each update for language file changes or you may receive 'null' messages in chat.
+
+could-not-find-user: "&7Could not find the user &e%player%"
+no-permission: "&7You do not have permission to execute this command."
+inventory-full: "&cYour inventory is full."
+disallowed-permission: "&7You do not have permission to use Battlepass." # This is used if you give a user battlepass.block to disallow them from using the battlepass.
+collectable-rewards-notification: "&e&lHEY! &eYou have rewards available to claim. Check them out in /bp open rewards."
+
+daily-quest-reset: '&eThere have been some quests that have reset.'
+
+week-status-locked: '&cLocked'
+week-status-unlocked: '&aUnlocked'
+
+season-finished-message: '&aFinished' # This is displayed as the %week% if the season is finished. Remove this line to have it go to the minimum week.
+
+progress-bar:
+  complete-color: '&a'
+  incomplete-color: '&c'
+  symbol: '|'
+
+boosters:
+  points: "Points"
+  progress: "Progress"
+  rewards: "Rewards"
+  serverStarted: "&7&l+&a&l%percent%% &6&l%type% &r&eserver booster started for &6&l%time%&7. &eIt affects &6&l%affects%"
+  playerStarted: "&7&l+&a&l%percent%% &6&l%type% &r&ebooster started for &6&l%time%&7. &eIt affects &6&l%affects%"
+  serverEnded: "&7&l+&a&l%percent%% &4&l%type% &r&cserver booster ended. &cIt affected &6&l%affects%"
+  playerEnded: "&7&l+&a&l%percent%% &4&l%type% &r&cbooster ended. &cIt affected &6&l%affects%"
+  menu: "&6✰ &2&l+%booster%% &a%type% booster"
+  command:
+    booster: "&6✰ &2&l+%booster%% &a%type% booster which affects &2&l%affects% &7(&c%time%&7)"
+    server: "&7» &2&lServer Boosters"
+    player: "&7» &2&lPlayer Boosters"
+  affects:
+    join: "&r&f, "
+    all: "everything"
+    daily: "daily quests"
+    week: "weekly quests"
+    n-week: "week %num%"
+    tier: "tier %tier%"
+
+bpa:
+  command:
+    - ''
+    - '&bBattlePass Admin Help:'
+    - '/bpa - This page.'
+    - '/bpa reload - Reloads all the reloadable files.'
+    - '/bpa editor - Open In-Game quests editor.'
+    - '/bpa set pass <player/online/all> <pass type> - Sets a player/group of players'' pass type.'
+    - '/bpa set points <player> <points> - Set a players points.'
+    - '/bpa give points <player> <points> - Give a player points.'
+    - '/bpa delete user <player> - Delete all data of a user.'
+    - '/bpa quest ids <week> - List all of the weeks quest ids and their names.'
+    - '/bpa daily quest ids - List all of the daily quest ids and their names.'
+    - '/bpa reset quest <player> <week> <id> - Resets a specific quest of a player.'
+    - '/bpa progress quest <player> <week> <quest id> <amount> - Progresses a specific quest of a player.'
+    - '/bpa progress daily quest <player> <quest id> <amount> - Progress a specific quest of a player.'
+    - '/bpa refresh daily quests - Refresh daily quests.'
+    - '/bpa new season - Resets user tiers, pending rewards and points.'
+    - '/bpa material <block/item> - Get the config name of the item you''re holding or block you''re looking at.'
+    - '/bpa bypass locked quests <player> - Allows the player to bypass week locks and complete quests anyway.'
+    - '/bpa boosters add <player/all> <PROGRESS/POINTS/REWARDS> <percent> <hours> <affects> - Adds booster'
+    - '/bpa boosters clear <player/all> - Removes boosters'
+    - '/bpa close menu <player> - Closes a player''s open menu'
+  internal-balance:
+    - '/bpa give balance <player> <amount> - Gives internal balance.'
+    - '/bpa remove balance <player> <amount> - Takes away internal balance.'
+    - '/bpa set balance <player> <amount> - Sets a player''s internal balance.'
+
+help-command: # /bp help
+  - ''
+  - '&eBattlePass &7by AdvancedPlugins'
+  - '&e/battlepass - Opens the portal menu.'
+  - '&e/battlepass stats - View your BattlePass stats.'
+  - '&e/battlepass open <portal/daily/quests/rewards> - Directly opens a menu.'
+  - ''
+
+stats-command:
+  - '&eYour BattlePass Stats:'
+  - '  &8- &ePass Type: &f%pass_type%'
+  - '  &8- &eTier: &f%tier%'
+  - '  &8- &eTotal Points: &f%total_points%'
+  #- '  &8- &eBalance: &f%balance%' # Only used if you use internal for excess points in the settings.yml
+
+daily-quest-time-format: # The time format used for saying how long until daily quests expire.
+  with-months-weeks: "%dmo %dw %dd %dh %dm %ds"
+  with-weeks-days: "%dw %dd %dh %dm %ds"
+  with-days-hours: "%dd %dh %dm %ds"
+  with-hours-minutes: "%dh %dm %ds"
+  with-minutes-seconds: "%dm %ds"
+  with-seconds: "%ds"
+
+quests:
+  # The base message will be used for all quests unless another message is set.
+  base-message-progressed: "&8[&eQuests&8] &7You progressed the quest &e%quest_name% &8(&e%progress%&7/&8&e%required_progress%&8)"
+  base-message-completed: "&8[&eQuests&8] &7You completed the quest &e%quest_name%"
+
+  boss-bar-message-progressed: "&7&e%quest_name% Quest Progressed &8(&e%progress%&7/&8&e%required_progress%&8)"
+  boss-bar-message-completed: "&7&e%quest_name% Quest Completed"
+
+  # The message set below will overwrite the one set as the base message.
+  # <quest name>-progressed: "<Your  message>"
+  # <quest-name>-completed: "<Your Message>"
+  # These are here as examples, and you can make as many as necessary.
+  askyblock_createisland-progressed: "&eQuests >> &7Custom ASkyblock progression message :D. &8(&e%progress%&7/&8%required_progress%&8)"
+  askyblock_createisland-completed: "&eQuests >> &7You completed the ASkyblock island quest!"
+
+  steps:
+    completed-info: "&7Already completed"
+    base-message-step-completed: "&8[&eQuests&8] &7You completed one step of the quest &e%quest_name%"
+    boss-bar-message-step-completed: "&7&e%quest_name% Step Completed"
+
+quest-select:
+  cancel: "&cClick LMB to cancel quest"
+  select: "&aClick LMB to select quest"
+  limit: "&cYou can't select more quests!"
+
+daily-quests:
+  # This section will only be used if the quest is daily. If messages aren't present here but are in the quest section, it will fall back onto that message.
+  # This section is coded so you can remove it entirely and only use the quests messages if you wish.
+  base-message-progressed: "&8[&eQuests&8] &7You progressed the daily quest &e%quest_name% &8(&e%progress%&7/&8&e%required_progress%&8)"
+  base-message-completed: "&8[&eQuests&8] &7You completed the daily quest &e%quest_name%"
+
+  boss-bar-message-progressed: "&7&e%quest_name% Quest Progressed &8(&e%progress%&7/&8&e%required_progress%&8)"
+  boss-bar-message-completed: "&7&e%quest_name% Quest Completed"
+
+  askyblock_createisland-progressed: "&8[&eQuests&8] &7ASkyblock quests progressed. &8(&e%progress%&7/&8%required_progress%&8)"
+  askyblock_createisland-completed: "&8[&eQuests&8] &7You completed the ASkyblock island daily quest!"
+
+  steps:
+    base-message-step-completed: "&8[&eQuests&8] &7You completed one step of the daily quest &e%quest_name%"
+    boss-bar-message-step-completed: "&7&e%quest_name% Step Completed"
+    
+    
+leaderboard-command:
+  tier-leaderboard:
+    - "&7&m=====&r&7[ &2Tier Leaderboard &7]&m====="
+    - "&7>> &b1. &r&a%battlepass_top_tier_name_1% &7- &2%battlepass_top_tier_value_1%"
+    - "&7>> &b2. &r&a%battlepass_top_tier_name_2% &7- &2%battlepass_top_tier_value_2%"
+    - "&7>> &b3. &r&a%battlepass_top_tier_name_3% &7- &2%battlepass_top_tier_value_3%"
+    - "&7>> &b4. &r&a%battlepass_top_tier_name_4% &7- &2%battlepass_top_tier_value_4%"
+    - "&7>> &b5. &r&a%battlepass_top_tier_name_5% &7- &2%battlepass_top_tier_value_5%"
+    - "&7>> ..."
+    - "&7>> &aYour score: &2%battlepass_top_tier_value_me% &7(&2&b%battlepass_top_tier_place_me%&r&7)"
+    - "&7>> &aNext refresh: &2%battlepass_top_time%"
+  quests-leaderboard:
+    - "&7&m=====&r&7[ &2Completed Quests Leaderboard &7]&m====="
+    - "&7>> &b1. &r&a%battlepass_top_quests_name_1% &7- &2%battlepass_top_quests_value_1%"
+    - "&7>> &b2. &r&a%battlepass_top_quests_name_2% &7- &2%battlepass_top_quests_value_2%"
+    - "&7>> &b3. &r&a%battlepass_top_quests_name_3% &7- &2%battlepass_top_quests_value_3%"
+    - "&7>> &b4. &r&a%battlepass_top_quests_name_4% &7- &2%battlepass_top_quests_value_4%"
+    - "&7>> &b5. &r&a%battlepass_top_quests_name_5% &7- &2%battlepass_top_quests_value_5%"
+    - "&7>> ..."
+    - "&7>> &aYour score: &2%battlepass_top_quests_value_me% &7(&2&b%battlepass_top_quests_place_me%&r&7)"
+    - "&7>> &aNext refresh: &2%battlepass_top_time%"
