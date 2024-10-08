@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: "Get in touch with our support team"
+  - name: "✨ Feature Requests"
+    about: "We now accept feature requests only through Discord!"
+    url: "https://discord.com/channels/376425582139015168/1292004436952219690/1293177616576024687"
+  - name: "🛠️ Get Support"
+    about: "Need help using BattlePass? Join our Discord Server for assistance!."
     url: "https://discord.gg/GzdQdMw"
-    about: "Need help using BattlePass? Join our Discord Server for help!"
